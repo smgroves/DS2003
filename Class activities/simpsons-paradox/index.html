@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simpson's Paradox: Does School Spending Hurt Test Scores?</title>
+<style>
+  :root {
+    --navy: #1E2761;
+    --navy-dark: #141B4D;
+    --accent: #E8823D;
+    --accent-dark: #C96A2B;
+    --body: #2B2B2B;
+    --muted: #6B7280;
+    --rule: #E0E0E0;
+    --bg-tint: #F4F6F7;
+    --dot: #55607a;
+    --low: #0072B2;
+    --mid: #E69F00;
+    --high: #009E73;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--body); background: #FAFAFA;
+  }
+  main { max-width: 1080px; margin: 0 auto; padding: 32px 24px 70px; }
+
+  .eyebrow { font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  h1 { color: var(--navy); font-size: 28px; margin: 6px 0 10px; }
+  p.lede { font-size: 15.5px; line-height: 1.6; max-width: 760px; }
+  .cite { font-size: 12.5px; color: var(--muted); background: var(--bg-tint); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 14px; margin: 14px 0 30px; max-width: 760px; }
+
+  h2 { color: var(--navy); font-size: 18px; margin: 0 0 4px; }
+  .panel-sub { font-size: 13.5px; color: var(--muted); margin-bottom: 14px; }
+
+  .panels { display: flex; align-items: flex-start; gap: 24px; flex-wrap: wrap; margin-bottom: 10px; }
+  .panel {
+    flex: 1; min-width: 420px;
+    background: white; border: 1px solid var(--rule); border-radius: 12px;
+    padding: 20px 22px 16px;
+  }
+
+  .chart-wrap { position: relative; }
+  svg { width: 100%; height: auto; display: block; }
+  .dot { fill: var(--dot); opacity: 0.85; }
+  .dot.low { fill: var(--low); }
+  .dot.mid { fill: var(--mid); }
+  .dot.high { fill: var(--high); }
+  .dot:hover { stroke: var(--navy); stroke-width: 1.5px; }
+  .axis-label { font-size: 11px; fill: var(--muted); font-family: inherit; }
+  .axis-line { stroke: var(--rule); stroke-width: 1; }
+  .gridline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 3; }
+
+  .reg-line { stroke-width: 2.5px; fill: none; opacity: 0; transition: opacity 0.25s; }
+  .reg-line.shown { opacity: 1; }
+  .reg-line.pooled { stroke: var(--accent-dark); }
+  .reg-line.low { stroke: var(--low); }
+  .reg-line.mid { stroke: var(--mid); }
+  .reg-line.high { stroke: var(--high); }
+
+  .slope-tag {
+    font-size: 12px; font-weight: 700; opacity: 0; transition: opacity 0.25s;
+    font-family: "SF Mono", Consolas, monospace;
+  }
+  .slope-tag.shown { opacity: 1; }
+  .slope-tag.pooled { fill: var(--accent-dark); }
+  .slope-tag.low { fill: var(--low); }
+  .slope-tag.mid { fill: #9c7300; }
+  .slope-tag.high { fill: var(--high); }
+
+  .btn {
+    display: inline-block; background: var(--navy); color: white; border: none;
+    font-size: 14px; font-weight: 700; padding: 9px 18px; border-radius: 7px;
+    cursor: pointer; margin-top: 10px;
+  }
+  .btn:hover { background: var(--navy-dark); }
+  .btn.on { background: var(--accent); }
+  .btn.on:hover { background: var(--accent-dark); }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; font-size: 12.5px; color: var(--body); }
+  .legend .sw { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+
+  .callout {
+    margin-top: 14px; padding: 12px 14px; border-radius: 8px; font-size: 13.5px;
+    line-height: 1.5; background: var(--bg-tint); border-left: 3px solid var(--accent);
+    opacity: 0; max-height: 0; overflow: hidden; transition: opacity 0.3s;
+  }
+  .callout.shown { opacity: 1; max-height: 300px; }
+
+  .debrief {
+    margin-top: 32px; padding: 20px 24px; background: white; border: 1px solid var(--rule);
+    border-radius: 12px; max-width: 900px;
+  }
+  .debrief h2 { margin-bottom: 10px; }
+  .debrief p { font-size: 14.5px; line-height: 1.6; }
+  .debrief ul { font-size: 14.5px; line-height: 1.6; padding-left: 20px; }
+
+  @media (max-width: 900px) {
+    .panel { min-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">DS 2003 &middot; Communicating with Data &middot; Class Activity</div>
+  <h1>Simpson's Paradox: Does School Spending Hurt Test Scores?</h1>
+  <p class="lede">
+    In 1994, columnist George Will looked at exactly this data &mdash; state-level spending
+    per student vs. average SAT score &mdash; and concluded that pouring more money into
+    schools doesn't help, and might even hurt. He wasn't lying about the trend line. He was
+    missing a variable.
+  </p>
+  <div class="cite">
+    Data: per-pupil expenditure, teacher salary, and SAT scores for all 50 U.S. states,
+    1994&ndash;95 school year (National Center for Education Statistics / College Board, via
+    Deborah Guber, <i>"Getting What You Pay For: The Debate Over Equity in Public School
+    Expenditures,"</i> Journal of Statistics Education 7(2), 1999). Real, unmodified state data.
+  </div>
+
+  <div class="panels">
+    <div class="panel">
+      <h2>1. The Headline Version</h2>
+      <div class="panel-sub">Each dot is one state: spending per student vs. average SAT score.</div>
+      <div class="chart-wrap">
+        <svg id="chartA" viewBox="0 0 480 380"></svg>
+      </div>
+      <button class="btn" id="btnA" onclick="toggleA()">Show regression line</button>
+      <div class="callout" id="calloutA">
+        <b>Slope: about &minus;21 SAT points per additional $1,000 spent per student.</b>
+        Read literally, that says higher-spending states do <i>worse</i> &mdash; exactly the
+        conclusion Will drew in his column. Before you believe it: what isn't shown here that
+        might differ from state to state?
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. The Same 50 States, One More Variable</h2>
+      <div class="panel-sub">Colored by the share of each state's students who even took the SAT.</div>
+      <div class="chart-wrap">
+        <svg id="chartB" viewBox="0 0 480 380"></svg>
+      </div>
+      <div class="legend">
+        <span><span class="sw" style="background:var(--low)"></span>Low participation (4&ndash;11%)</span>
+        <span><span class="sw" style="background:var(--mid)"></span>Mid participation (12&ndash;55%)</span>
+        <span><span class="sw" style="background:var(--high)"></span>High participation (57&ndash;81%)</span>
+      </div>
+      <button class="btn" id="btnB" onclick="toggleB()">Show regression lines</button>
+      <div class="callout" id="calloutB">
+        <b>Within every participation-rate group, the slope is flat or slightly positive</b>
+        &mdash; not negative. Spending isn't hurting scores. States differ enormously in
+        <i>who</i> takes the SAT: in low-participation states, only the strongest,
+        most college-bound students bother &mdash; inflating the average. In
+        high-participation states (often ones that push the SAT statewide, or where the ACT
+        isn't the regional norm), nearly everyone takes it, pulling the average down. That
+        single confound&nbsp;&mdash; participation rate&nbsp;&mdash; explains the "headline" trend.
+      </div>
+    </div>
+  </div>
+
+  <div class="debrief">
+    <h2>Why this matters</h2>
+    <p>
+      This isn't a hypothetical statistics trick &mdash; it's a real case where a public,
+      influential misreading of aggregate data fed directly into a real policy argument
+      about school funding. Guber's 1999 paper was written specifically to correct it.
+    </p>
+    <p><b>Discuss:</b></p>
+    <ul>
+      <li>Before you saw Panel 2, would you have thought to ask "who's in the denominator?"
+        What made the pooled trend line in Panel 1 look so convincing?</li>
+      <li>Is there a "real" effect of spending here at all, once you control for
+        participation rate? What would you need to know to answer that more confidently?</li>
+      <li>Where else might you encounter this exact shape of mistake &mdash; a pooled
+        average hiding a confound that flips the story once you split the groups?</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+const STATES = [
+  {state:"Alabama",expend:4.405,sat:1029,frac:8},
+  {state:"Alaska",expend:8.963,sat:934,frac:47},
+  {state:"Arizona",expend:4.778,sat:944,frac:27},
+  {state:"Arkansas",expend:4.459,sat:1005,frac:6},
+  {state:"California",expend:4.992,sat:902,frac:45},
+  {state:"Colorado",expend:5.443,sat:980,frac:29},
+  {state:"Connecticut",expend:8.817,sat:908,frac:81},
+  {state:"Delaware",expend:7.03,sat:897,frac:68},
+  {state:"Florida",expend:5.718,sat:889,frac:48},
+  {state:"Georgia",expend:5.193,sat:854,frac:65},
+  {state:"Hawaii",expend:6.078,sat:889,frac:57},
+  {state:"Idaho",expend:4.21,sat:979,frac:15},
+  {state:"Illinois",expend:6.136,sat:1048,frac:13},
+  {state:"Indiana",expend:5.826,sat:882,frac:58},
+  {state:"Iowa",expend:5.483,sat:1099,frac:5},
+  {state:"Kansas",expend:5.817,sat:1060,frac:9},
+  {state:"Kentucky",expend:5.217,sat:999,frac:11},
+  {state:"Louisiana",expend:4.761,sat:1021,frac:9},
+  {state:"Maine",expend:6.428,sat:896,frac:68},
+  {state:"Maryland",expend:7.245,sat:909,frac:64},
+  {state:"Massachusetts",expend:7.287,sat:907,frac:80},
+  {state:"Michigan",expend:6.994,sat:1033,frac:11},
+  {state:"Minnesota",expend:6.0,sat:1085,frac:9},
+  {state:"Mississippi",expend:4.08,sat:1036,frac:4},
+  {state:"Missouri",expend:5.383,sat:1045,frac:9},
+  {state:"Montana",expend:5.692,sat:1009,frac:21},
+  {state:"Nebraska",expend:5.935,sat:1050,frac:9},
+  {state:"Nevada",expend:5.16,sat:917,frac:30},
+  {state:"New Hampshire",expend:5.859,sat:935,frac:70},
+  {state:"New Jersey",expend:9.774,sat:898,frac:70},
+  {state:"New Mexico",expend:4.586,sat:1015,frac:11},
+  {state:"New York",expend:9.623,sat:892,frac:74},
+  {state:"North Carolina",expend:5.077,sat:865,frac:60},
+  {state:"North Dakota",expend:4.775,sat:1107,frac:5},
+  {state:"Ohio",expend:6.162,sat:975,frac:23},
+  {state:"Oklahoma",expend:4.845,sat:1027,frac:9},
+  {state:"Oregon",expend:6.436,sat:947,frac:51},
+  {state:"Pennsylvania",expend:7.109,sat:880,frac:70},
+  {state:"Rhode Island",expend:7.469,sat:888,frac:70},
+  {state:"South Carolina",expend:4.797,sat:844,frac:58},
+  {state:"South Dakota",expend:4.775,sat:1068,frac:5},
+  {state:"Tennessee",expend:4.388,sat:1040,frac:12},
+  {state:"Texas",expend:5.222,sat:893,frac:47},
+  {state:"Utah",expend:3.656,sat:1076,frac:4},
+  {state:"Vermont",expend:6.75,sat:901,frac:68},
+  {state:"Virginia",expend:5.327,sat:896,frac:65},
+  {state:"Washington",expend:5.906,sat:937,frac:48},
+  {state:"West Virginia",expend:6.107,sat:932,frac:17},
+  {state:"Wisconsin",expend:6.93,sat:1073,frac:9},
+  {state:"Wyoming",expend:6.16,sat:1001,frac:10}
+];
+
+function groupOf(frac) {
+  if (frac <= 11) return "low";
+  if (frac <= 55) return "mid";
+  return "high";
+}
+
+// ---- chart geometry ----
+const W = 480, H = 380;
+const MARGIN = { top: 14, right: 16, bottom: 40, left: 46 };
+const plotW = W - MARGIN.left - MARGIN.right;
+const plotH = H - MARGIN.top - MARGIN.bottom;
+
+const xMin = 3.2, xMax = 10.2;
+const yMin = 820, yMax = 1130;
+
+function xPix(x) { return MARGIN.left + (x - xMin) / (xMax - xMin) * plotW; }
+function yPix(y) { return MARGIN.top + (1 - (y - yMin) / (yMax - yMin)) * plotH; }
+
+function linreg(points) {
+  const n = points.length;
+  const sx = points.reduce((s, p) => s + p.x, 0);
+  const sy = points.reduce((s, p) => s + p.y, 0);
+  const sxx = points.reduce((s, p) => s + p.x * p.x, 0);
+  const sxy = points.reduce((s, p) => s + p.x * p.y, 0);
+  const slope = (n * sxy - sx * sy) / (n * sxx - sx * sx);
+  const intercept = (sy - slope * sx) / n;
+  return { slope, intercept };
+}
+
+function svgNS(tag) { return document.createElementNS("http://www.w3.org/2000/svg", tag); }
+
+function drawAxes(svg) {
+  // gridlines + axis lines
+  for (let gx = 4; gx <= 10; gx += 2) {
+    const l = svgNS("line");
+    l.setAttribute("class", "gridline");
+    l.setAttribute("x1", xPix(gx)); l.setAttribute("x2", xPix(gx));
+    l.setAttribute("y1", MARGIN.top); l.setAttribute("y2", MARGIN.top + plotH);
+    svg.appendChild(l);
+    const t = svgNS("text");
+    t.setAttribute("class", "axis-label");
+    t.setAttribute("x", xPix(gx)); t.setAttribute("y", MARGIN.top + plotH + 16);
+    t.setAttribute("text-anchor", "middle");
+    t.textContent = "$" + gx + "k";
+    svg.appendChild(t);
+  }
+  for (let gy = 850; gy <= 1100; gy += 50) {
+    const l = svgNS("line");
+    l.setAttribute("class", "gridline");
+    l.setAttribute("x1", MARGIN.left); l.setAttribute("x2", MARGIN.left + plotW);
+    l.setAttribute("y1", yPix(gy)); l.setAttribute("y2", yPix(gy));
+    svg.appendChild(l);
+    const t = svgNS("text");
+    t.setAttribute("class", "axis-label");
+    t.setAttribute("x", MARGIN.left - 8); t.setAttribute("y", yPix(gy) + 3);
+    t.setAttribute("text-anchor", "end");
+    t.textContent = gy;
+    svg.appendChild(t);
+  }
+  const xl = svgNS("text");
+  xl.setAttribute("class", "axis-label");
+  xl.setAttribute("x", MARGIN.left + plotW / 2); xl.setAttribute("y", H - 4);
+  xl.setAttribute("text-anchor", "middle");
+  xl.style.fontWeight = "700";
+  xl.textContent = "Spending per student (thousands $)";
+  svg.appendChild(xl);
+
+  const yl = svgNS("text");
+  yl.setAttribute("class", "axis-label");
+  yl.setAttribute("transform", `translate(12, ${MARGIN.top + plotH / 2}) rotate(-90)`);
+  yl.setAttribute("text-anchor", "middle");
+  yl.style.fontWeight = "700";
+  yl.textContent = "Average SAT score";
+  svg.appendChild(yl);
+}
+
+function drawDots(svg, colorClassFn) {
+  STATES.forEach(s => {
+    const c = svgNS("circle");
+    c.setAttribute("class", "dot " + (colorClassFn ? colorClassFn(s) : ""));
+    c.setAttribute("cx", xPix(s.expend));
+    c.setAttribute("cy", yPix(s.sat));
+    c.setAttribute("r", 5);
+    const title = svgNS("title");
+    title.textContent = `${s.state}: $${s.expend}k spent, SAT ${s.sat}, ${s.frac}% participation`;
+    c.appendChild(title);
+    svg.appendChild(c);
+  });
+}
+
+function drawRegLine(svg, points, cssClass, id, labelText, labelX, labelY) {
+  const { slope, intercept } = linreg(points);
+  const x1 = xMin, x2 = xMax;
+  const y1 = slope * x1 + intercept;
+  const y2 = slope * x2 + intercept;
+  const line = svgNS("line");
+  line.setAttribute("class", "reg-line " + cssClass);
+  line.setAttribute("id", id);
+  line.setAttribute("x1", xPix(x1)); line.setAttribute("y1", yPix(Math.max(yMin, Math.min(yMax, y1))));
+  line.setAttribute("x2", xPix(x2)); line.setAttribute("y2", yPix(Math.max(yMin, Math.min(yMax, y2))));
+  svg.appendChild(line);
+
+  const tag = svgNS("text");
+  tag.setAttribute("class", "slope-tag " + cssClass);
+  tag.setAttribute("id", id + "-tag");
+  tag.setAttribute("x", labelX); tag.setAttribute("y", labelY);
+  tag.textContent = (slope >= 0 ? "+" : "") + slope.toFixed(1) + " pts / $1k";
+  svg.appendChild(tag);
+  return { slope, intercept };
+}
+
+// ---- build chart A (pooled) ----
+const svgA = document.getElementById("chartA");
+svgA.setAttribute("viewBox", `0 0 ${W} ${H}`);
+drawAxes(svgA);
+drawDots(svgA, null);
+const pointsAll = STATES.map(s => ({ x: s.expend, y: s.sat }));
+drawRegLine(svgA, pointsAll, "pooled", "regA", "", xPix(7.6), yPix(1100));
+
+let shownA = false;
+function toggleA() {
+  shownA = !shownA;
+  document.getElementById("regA").classList.toggle("shown", shownA);
+  document.getElementById("regA-tag").classList.toggle("shown", shownA);
+  document.getElementById("calloutA").classList.toggle("shown", shownA);
+  document.getElementById("btnA").textContent = shownA ? "Hide regression line" : "Show regression line";
+  document.getElementById("btnA").classList.toggle("on", shownA);
+}
+
+// ---- build chart B (grouped) ----
+const svgB = document.getElementById("chartB");
+svgB.setAttribute("viewBox", `0 0 ${W} ${H}`);
+drawAxes(svgB);
+drawDots(svgB, s => groupOf(s.frac));
+
+const groups = { low: [], mid: [], high: [] };
+STATES.forEach(s => groups[groupOf(s.frac)].push({ x: s.expend, y: s.sat }));
+const labelPos = {
+  low:  { x: xPix(8.6), y: yPix(1075) },
+  mid:  { x: xPix(8.6), y: yPix(1050) },
+  high: { x: xPix(8.6), y: yPix(1025) },
+};
+["low", "mid", "high"].forEach(g => {
+  drawRegLine(svgB, groups[g], g, "reg-" + g, "", labelPos[g].x, labelPos[g].y);
+});
+
+let shownB = false;
+function toggleB() {
+  shownB = !shownB;
+  ["low", "mid", "high"].forEach(g => {
+    document.getElementById("reg-" + g).classList.toggle("shown", shownB);
+    document.getElementById("reg-" + g + "-tag").classList.toggle("shown", shownB);
+  });
+  document.getElementById("calloutB").classList.toggle("shown", shownB);
+  document.getElementById("btnB").textContent = shownB ? "Hide regression lines" : "Show regression lines";
+  document.getElementById("btnB").classList.toggle("on", shownB);
+}
+</script>
+</body>
+</html>
