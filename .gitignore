@@ -4,8 +4,15 @@ __pycache__/
 ~$*
 Private/
 
-# Answer-key / instructor-filled notebooks — never publish these publicly
+# Answer-key / instructor-filled files — never publish these publicly
 *_filled_*.ipynb
+*-KEY.*
 
 # Too large for GitHub (100MB limit) — likely has embedded video; host separately if needed
 Lectures/03-Why we visualize.pptx
+
+# Prior-course (Alvarado) source material used to build Lab 01 — not the published lab
+# itself (W02-W-activity1-KEY is an answer key; W02-F-activity1 is a penguins-dataset
+# worked demo). Keep locally for reference only.
+Labs/W02-W-activity1-KEY.ipynb
+Labs/W02-F-activity1.ipynb

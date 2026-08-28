@@ -993,36 +993,9 @@ function renderResults() {
           notes with classmates who had a different map. Same questions, same city —
           how different was the experience?
         </p>
-
-        ${answerKeyHtml()}
       </div>
     </div>
   `;
-}
-
-function answerKeyHtml() {
-  return `
-  <details class="setup">
-    <summary>Answer key (open after you've answered all three)</summary>
-    <div class="inner">
-      <p><b>1. Astor Place &rarr; Union Square&ndash;14th St.</b> These are one stop apart on
-      the <b>6</b> train, but they're only about <b>0.46 miles</b> apart &mdash; roughly a
-      9&ndash;10 minute walk. A 1-stop subway ride only takes ~2 minutes, but once you add
-      descending, waiting for a train, and re-surfacing, it's rarely faster than just walking.
-      Reasonable answer: <b>walk</b> (or take the <b>6</b> one stop if you'd rather not).</p>
-
-      <p><b>2. Times Square&ndash;42nd St &rarr; Grand Central&ndash;42nd St.</b> These two are
-      connected by the <b>42nd Street Shuttle (S)</b> &mdash; exactly <b>one stop</b>, and one of
-      the shortest rides in the whole system (about 90 seconds).</p>
-
-      <p><b>3. Union Square&ndash;14th St &rarr; 23rd St&ndash;6th Ave.</b> This takes
-      <b>one transfer</b>: ride the <b>L</b> one stop west to <b>6th Ave</b>, then transfer to
-      the <b>F</b> or <b>M</b> and ride one stop north to <b>23rd St</b>. (Walking is also an
-      option here &mdash; it's about 0.7 miles/12&ndash;15 minutes on a diagonal, since there's
-      no direct line between them &mdash; which is itself the point: unlike Q1, this pair
-      actually needs a transfer or a longer walk.)</p>
-    </div>
-  </details>`;
 }
 
 function resultsAsText() {
