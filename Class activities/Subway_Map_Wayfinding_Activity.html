@@ -195,8 +195,8 @@
   }
   .station-marker {
     position: absolute;
-    width: 46px; height: 46px;
-    margin-left: -23px; margin-top: -23px;
+    width: 64px; height: 64px;
+    margin-left: -32px; margin-top: -32px;
     pointer-events: none;
   }
   .station-marker::before {
@@ -204,11 +204,9 @@
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    border: 6px solid #FF2FD0;
-    box-shadow:
-      0 0 0 2px #fff,
-      0 0 0 4px rgba(0,0,0,0.6),
-      0 0 18px 5px rgba(255,47,208,0.9);
+    background: rgba(255,47,208,0.38);
+    border: 2px solid rgba(255,47,208,0.95);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.7);
     animation: markerPulse 1.4s ease-in-out infinite;
   }
   .station-marker::after {
@@ -221,7 +219,7 @@
   }
   @keyframes markerPulse {
     0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(1.1); }
+    50% { opacity: 0.55; transform: scale(1.08); }
   }
   @keyframes markerPing {
     0% { transform: scale(1); opacity: 0.9; }
@@ -429,6 +427,11 @@ const QUESTIONS = [
     tag: "Transfers",
     prompt: "You're at <b>Union Square&ndash;14th St</b> (grey &middot; L) and need to get to <b>23rd St&ndash;6th Ave</b> (orange &middot; F/M). How many transfers does it take, and where?",
     highlight: ["UnionSq", "23St6Av"]
+  },
+  {
+    tag: "Real-world address",
+    prompt: "You're standing at the corner of <b>6th Avenue</b> and <b>18th Street</b>. What's the closest subway stop, and which line(s) serve it? (No highlight this time &mdash; and this one's only answerable if your map actually shows real streets.)",
+    highlight: []
   }
 ];
 
