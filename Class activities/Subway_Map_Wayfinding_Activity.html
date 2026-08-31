@@ -993,9 +993,23 @@ function renderResults() {
           notes with classmates who had a different map. Same questions, same city —
           how different was the experience?
         </p>
+
+        <div class="actions" style="margin-top: 6px;">
+          <button class="btn secondary" onclick="restartActivity()">Restart activity</button>
+        </div>
       </div>
     </div>
   `;
+}
+
+function restartActivity() {
+  state.answers = [];
+  state.frozen = null;
+  state.timerStart = null;
+  state.currentIndex = 0;
+  state.phase = "active";
+  saveState(state);
+  render();
 }
 
 function resultsAsText() {
