@@ -1006,11 +1006,7 @@ function renderResults() {
 }
 
 function restartActivity() {
-  state.answers = [];
-  state.frozen = null;
-  state.timerStart = null;
-  state.currentIndex = 0;
-  state.phase = "active";
+  state = freshState();
   saveState(state);
   render();
 }
