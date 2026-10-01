@@ -76,13 +76,13 @@ WEEKS = [
   # ---- not yet taught: carried over from the previous version of the page ----
   dict(n=7, days=[
     dict(date=d(10,5), noclass="No class (Fall break)"),
-    dict(date=d(10,7), lecture=[("Graphs, networks & trees", None)]),
-    dict(date=d(10,9), lab=[("Lab 6: alluvial diagrams & graphs", None)]),
+    dict(date=d(10,7), lecture=[("Uncertainty & statistics", None)]),
+    dict(date=d(10,9), lab=[("Lab 6: statistical plots", None)]),
   ]),
   dict(n=8, unit="Unit 2: Explanatory visualization: storytelling", days=[
-    dict(date=d(10,12), activity=[("EDA presentations", None)]),
-    dict(date=d(10,14), activity=[("EDA presentations", None)]),
-    dict(date=d(10,16), lecture=[("Data as art / storytelling", None)], deadline=[("Project 1 due", None)]),
+    dict(date=d(10,12), activity=[("Project 1 presentations, day 1", None)]),
+    dict(date=d(10,14), activity=[("Project 1 presentations, day 2", None)]),
+    dict(date=d(10,16), activity=[("Project 1 presentations, day 3", None)], deadline=[("Project 1 due", None)]),
   ]),
   dict(n=9, days=[
     dict(date=d(10,19), lecture=[("Storytelling", None)]),
@@ -108,20 +108,20 @@ WEEKS = [
   dict(n=13, days=[
     dict(date=d(11,16), lecture=[("Interaction taxonomies", None)]),
     dict(date=d(11,18), lecture=[("Plotly", None)]),
-    dict(date=d(11,20), activity=[("Plotly widget challenge / Tableau track", None)], lab=[("Lab 11", None)]),
+    dict(date=d(11,20), activity=[("Plotly widget challenge", None)], lab=[("Lab 11", None)]),
   ]),
   dict(n=14, days=[
-    dict(date=d(11,23), lecture=[("Communicating uncertainty", None)]),
+    dict(date=d(11,23), lecture=[("Graphs, networks & trees", None)]),
     dict(date=d(11,25), noclass="No class (Thanksgiving)"),
     dict(date=d(11,27), noclass="No class (Thanksgiving)"),
   ]),
   dict(n=15, days=[
-    dict(date=d(11,30), activity=[("Draft presentations", None)]),
-    dict(date=d(12,2), activity=[("Draft presentations", None)]),
-    dict(date=d(12,4), activity=[("Draft presentations", None)]),
+    dict(date=d(11,30), activity=[("Final presentations", None)]),
+    dict(date=d(12,2), activity=[("Final presentations", None)]),
+    dict(date=d(12,4), activity=[("Final presentations", None)], deadline=[("Project 2 due", None)]),
   ]),
   dict(n=16, unit="Final week", days=[
-    dict(date=d(12,7), activity=[("Final presentations", None)], deadline=[("Project 2 due", None)]),
+    dict(date=d(12,7), activity=[("Last class: Worst Chart Contest 🍕", None)]),
   ]),
 ]
 
