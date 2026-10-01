@@ -3,193 +3,141 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DS 2003 · Communicating with Data</title>
+<title>DS 2003 &middot; Communicating with Data</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@700&display=swap">
 <style>
-  :root {
-    --bg: #fbfaf7;
-    --bg-elev: #ffffff;
-    --ink: #1f1d1a;
-    --ink-soft: #4a4742;
-    --ink-mute: #8a857d;
-    --rule: #e6e1d6;
-    --accent: #b14a2e;
-    --accent-soft: #e6c7bd;
-    --link: #8e3a22;
-    --serif: "Iowan Old Style", "Charter", Georgia, "Hoefler Text", Cambria, serif;
-    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0; background: var(--bg); color: var(--ink);
-    font-family: var(--serif); font-size: 18px; line-height: 1.62;
-    -webkit-font-smoothing: antialiased;
-  }
-  main { max-width: 900px; margin: 0 auto; padding: 24px 28px 80px; }
-
-  .hero { margin-bottom: 14px; }
-  .eyebrow {
-    font-family: var(--sans); font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.12em; color: var(--ink-mute); margin-bottom: 6px;
-  }
-  h1 { font-family: var(--serif); font-size: 38px; letter-spacing: -0.01em; margin: 6px 0 4px; color: var(--ink); }
-  .subtitle { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--ink-soft); margin: 6px 0 14px; }
-
-  .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 22px 0 30px; font-family: var(--sans); }
-  .meta-card { background: var(--bg-elev); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; }
-  .meta-card .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-mute); margin-bottom: 3px; }
-  .meta-card .v { font-size: 14px; color: var(--ink); }
-
-  h2 {
-    font-family: var(--sans); font-size: 20px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.05em; color: var(--ink); border-top: 1px solid var(--rule);
-    padding-top: 24px; margin-top: 36px;
-  }
-  h2:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
-  p.lede { font-size: 19px; line-height: 1.6; margin-bottom: 18px; }
-
-  a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
-  a:hover { color: var(--accent); }
-
-  .badge {
-    display: inline-block; font-family: var(--sans); font-size: 10.5px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 999px;
-    background: #f3e8fd; color: #7b1fa2; border: 1px solid #e3c9f7; text-decoration: none;
-  }
-
-  table.schedule {
-    width: 100%; border-collapse: collapse; margin: 14px 0 8px; font-family: var(--sans); font-size: 14px;
-  }
-  table.schedule th, table.schedule td { border: 1px solid var(--rule); padding: 9px 12px; text-align: left; vertical-align: top; }
-  table.schedule thead th {
-    background: var(--bg-elev); font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.06em; color: var(--ink-mute); font-weight: 700;
-  }
-  table.schedule tr.week-row td {
-    background: var(--accent); color: white; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; padding: 7px 12px;
-  }
-  table.schedule td.tbd { color: var(--ink-mute); font-style: italic; }
-  table.schedule td.day { font-weight: 600; white-space: nowrap; color: var(--ink-soft); }
-  table.schedule td.day .daylabel { display: block; font-weight: 400; font-size: 11px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.04em; }
-  table.schedule tr.unscheduled td { background: #fffaef; }
-  table.schedule tr.noclass td { color: var(--ink-mute); font-style: italic; background: var(--bg); }
-  table.schedule td.deadline:not(.tbd) { color: var(--accent); font-weight: 700; font-size: 12.5px; }
-
-  .note {
-    font-family: var(--sans); font-size: 13px; color: var(--ink-mute);
-    margin: 8px 0 0; font-style: italic;
-  }
-
-  footer {
-    margin-top: 50px; padding-top: 18px; border-top: 1px solid var(--rule);
-    font-family: var(--sans); font-size: 13px; color: var(--ink-mute);
-  }
+:root {
+  --ink: #1c1c1c; --mute: #6f6f6f; --line: #d9d4d9; --paper: #ffffff; --bg: #f7f5f7;
+  --purple: #b509ac; --purple-dark: #7d0677; --purple-tint: #fbeefa; --purple-light: #ecc2e9;
+  --due: #b71c1c;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 "Source Sans 3", "Segoe UI", system-ui, sans-serif; }
+main { max-width: 1100px; margin: 0 auto; padding: 28px 18px 60px; }
+h1 { font: 700 30px/1.15 "Source Serif 4", Georgia, serif; margin: 0; }
+.info { margin: 6px 0 2px; } .oh { color: var(--mute); font-size: 13.5px; margin: 0 0 10px; }
+a { color: var(--purple); text-underline-offset: 2px; }
+a:hover { color: var(--purple-dark); }
+.blurb { max-width: 720px; }
+nav.tabs { display: flex; gap: 4px; margin: 18px 0 0; border-bottom: 2px solid var(--purple); }
+nav.tabs a { padding: 7px 16px; text-decoration: none; color: var(--purple-dark); font-weight: 600;
+  border: 1px solid var(--purple-light); border-bottom: none; border-radius: 6px 6px 0 0; background: var(--paper); }
+nav.tabs a.on { background: var(--purple); color: #fff; border-color: var(--purple); }
+.grid { display: grid; grid-template-columns: 110px repeat(3, 1fr); border: 1px solid var(--line); border-top: none; background: var(--paper); }
+.grid > div { border-bottom: 1px solid var(--line); padding: 8px 10px; min-width: 0; }
+.grid > div + div { border-left: 1px solid var(--line); }
+.grid .wk { font-weight: 700; } .grid .wk small { display: block; font-weight: normal; color: var(--mute); }
+.grid .wk .unit { display: block; font-weight: normal; font-size: 12px; color: var(--purple-dark); margin-top: 4px; }
+.grid .hd { font-weight: 700; font-size: 13px; border-bottom: 2px solid var(--ink); background: var(--bg); }
+.cell .dt { font: 12px/1 ui-monospace, Menlo, monospace; color: var(--mute); margin-bottom: 4px; }
+.cell .t { font-weight: 600; }
+.cell p { margin: 3px 0 0; font-size: 13.5px; }
+.cell p i { font-style: normal; font-size: 11px; font-weight: 700; color: var(--mute); margin-right: 4px; }
+.cell p.dl, .cell p.dl i { color: var(--due); }
+.sub { font-size: 12.5px; }
+.cell.off { color: var(--mute); font-style: italic; background: repeating-linear-gradient(135deg, #faf8fa 0 6px, #f1edf1 6px 12px); }
+.cell.later { color: #555; }
+.cell.next { box-shadow: inset 3px 0 0 var(--purple); background: var(--purple-tint); }
+.ds { background: var(--paper); border: 1px solid var(--line); border-top: none; padding: 16px 18px; }
+.ds h2 { font: 700 19px/1.2 "Source Serif 4", Georgia, serif; margin: 0 0 4px; }
+.ds .size { font: 12px ui-monospace, Menlo, monospace; color: var(--mute); }
+.ds p { margin: 6px 0; max-width: 760px; }
+.ds ul { margin: 6px 0; padding-left: 20px; }
+.ds .used { font-size: 13.5px; color: var(--mute); }
+.ds code { font-size: 13px; background: var(--bg); padding: 1px 4px; border-radius: 3px; }
+.ds h3 { font-size: 14.5px; margin: 10px 0 2px; }
+.ds:target { box-shadow: inset 4px 0 0 var(--purple); }
+@media (max-width: 760px) {
+  .grid { grid-template-columns: 1fr; } .grid .hd { display: none; }
+  .grid > div + div { border-left: none; } .grid .wk { background: var(--bg); border-top: 2px solid var(--ink); }
+}
 </style>
 </head>
 <body>
 <main>
-  <header class="hero">
-    <div class="eyebrow">DS 2003 &middot; Fall 2026</div>
-    <h1>Communicating with Data</h1>
-    <div class="subtitle">Visualization, storytelling, and design for data science</div>
-  </header>
+<h1>DS 2003: Communicating with Data</h1>
+<p class="info">Fall 2026 &middot; Mon/Wed/Fri &middot; Sarah Groves &middot; <a href="DS2003_Syllabus%20Fall%202026.pdf">Syllabus</a> &middot; <a href="DS2003_Computer_Setup_Guide.pdf">Computer setup guide</a> &middot; <a href="https://canvas.instructure.com">Canvas</a></p>
+<p class="oh">Office hours: Fri 1&ndash;2 pm, Rm 437 (Sarah) &middot; Wed 1&ndash;2 pm, Capital One Hub (Isabelle Lee, TA)</p>
+<nav class="tabs"><a href="index.html" class=on>Schedule</a><a href="datasets.html">Datasets</a></nav>
 
-  <div class="meta-grid">
-    <div class="meta-card"><div class="k">Instructor</div><div class="v">Dr. Sarah Groves</div></div>
-    <div class="meta-card"><div class="k">Meets</div><div class="v">Mon/Wed/Fri &middot; Aug 24 &ndash; Dec 7</div></div>
-    <div class="meta-card"><div class="k">Tools</div><div class="v">Python &middot; pandas &middot; matplotlib</div></div>
-    <div class="meta-card"><div class="k">Course site</div><div class="v"><a href="https://canvas.instructure.com" target="_blank">Canvas</a> (assignments &amp; grades)</div></div>
-  </div>
-
-  <p class="lede">
-    Everything for the course lives in the schedule below: lecture, in-class activity, lab,
-    readings, and deadlines for each day, grouped by week. Items marked
-    <span class="badge">Canvas</span> link to the course's Canvas site and are only visible
-    if you're logged in and enrolled; everything else on this page is public.
-  </p>
-
-  <h2>Schedule</h2>
-  <table class="schedule">
-    <thead>
-      <tr><th>Class</th><th>Lecture</th><th>In-Class Activity</th><th>Lab</th><th>Readings</th><th>Deadlines</th></tr>
-    </thead>
-    <tbody>
-      <tr class="week-row"><td colspan="6">Week 1 &middot; Aug 24–28 &mdash; Unit 1: Exploratory — visual building blocks (marks, channels, style)</td></tr>
-      <tr class="noclass"><td class="day tbd">Mon</td><td class="tbd" colspan="5">No class</td></tr>
-      <tr><td class="day">Class 01<br><span class="daylabel">Wed</span></td><td><a href="Lectures/01-Intro.pptx">Introduction</a></td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline">Pre-test &amp; survey</td></tr>
-      <tr><td class="day">Class 02<br><span class="daylabel">Fri</span></td><td><a href="Lectures/02_Lab0_python.pptx">Pre-Lab 1: Python setup</a></td><td class="tbd">&mdash;</td><td><a href="Labs/Lab0_blank_python.ipynb">Lab 0: environment setup</a></td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr class="week-row"><td colspan="6">Week 2 &middot; Aug 31 – Sep 4</td></tr>
-      <tr><td class="day">Class 03<br><span class="daylabel">Mon</span></td><td>Why we visualize</td><td><a href="Class%20activities/Subway_Map_Wayfinding_Activity.html">Getting Around NYC</a></td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 04<br><span class="daylabel">Wed</span></td><td><a href="Lectures/04-VisualDesign-Data.pptx">Data types &amp; models</a></td><td><a href="Class%20activities/simpsons-paradox/">Simpson's Paradox</a></td><td class="tbd">&mdash;</td><td><a href="Readings/3-TourThroughVisualizationZoo.pdf">The visualization zoo</a></td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 05<br><span class="daylabel">Fri</span></td><td class="tbd">&mdash;</td><td>Sketching workshop</td><td>Lab 1: pandas &amp; DataFrames</td><td class="tbd">&mdash;</td><td class="deadline"><a href="Project%201/Project1_Exploratory_Analysis.md">Project 1 assigned</a></td></tr>
-      <tr class="week-row"><td colspan="6">Week 3 &middot; Sep 9 &amp; 11</td></tr>
-      <tr class="noclass"><td class="day tbd">Mon</td><td class="tbd" colspan="5">No class (Labor Day)</td></tr>
-      <tr><td class="day">Class 06<br><span class="daylabel">Wed</span></td><td>Encodings</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 07<br><span class="daylabel">Fri</span></td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td>Lab 2: Matplotlib &amp; Simpson's paradox</td><td class="tbd">&mdash;</td><td class="deadline">Project 1 topic &amp; dataset picked</td></tr>
-      <tr class="week-row"><td colspan="6">Week 4 &middot; Sep 14–18</td></tr>
-      <tr><td class="day">Class 08<br><span class="daylabel">Mon</span></td><td>Effectiveness &amp; chartjunk</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 09<br><span class="daylabel">Wed</span></td><td>Scales &amp; color</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 10<br><span class="daylabel">Fri</span></td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td>Lab 3: advanced Matplotlib</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr class="week-row"><td colspan="6">Week 5 &middot; Sep 21–25</td></tr>
-      <tr><td class="day">Class 11<br><span class="daylabel">Mon</span></td><td>Perception</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 12<br><span class="daylabel">Wed</span></td><td>Gestalt principles</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 13<br><span class="daylabel">Fri</span></td><td class="tbd">&mdash;</td><td>Peer review</td><td>Lab 4: EDA I (async)</td><td class="tbd">&mdash;</td><td class="deadline">Project 1 checkpoint</td></tr>
-      <tr class="week-row"><td colspan="6">Week 6 &middot; Sep 28 – Oct 2</td></tr>
-      <tr><td class="day">Class 14<br><span class="daylabel">Mon</span></td><td>Task abstractions &amp; activity theory</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 15<br><span class="daylabel">Wed</span></td><td>Taxonomies</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 16<br><span class="daylabel">Fri</span></td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td>Lab 5: EDA II</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr class="week-row"><td colspan="6">Week 7 &middot; Oct 7 &amp; 9</td></tr>
-      <tr class="noclass"><td class="day tbd">Mon</td><td class="tbd" colspan="5">No class (Fall break)</td></tr>
-      <tr><td class="day">Class 17<br><span class="daylabel">Wed</span></td><td>Graphs, networks &amp; trees</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 18<br><span class="daylabel">Fri</span></td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td>Lab 6: alluvial diagrams &amp; graphs</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr class="week-row"><td colspan="6">Week 8 &middot; Oct 12–16 &mdash; Unit 2: Explanatory (storytelling) — media literacy, composing &amp; critiquing</td></tr>
-      <tr><td class="day">Class 19<br><span class="daylabel">Mon</span></td><td class="tbd">&mdash;</td><td>EDA presentations</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 20<br><span class="daylabel">Wed</span></td><td class="tbd">&mdash;</td><td>EDA presentations</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 21<br><span class="daylabel">Fri</span></td><td>Data as art / storytelling</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline">Project 1 due</td></tr>
-      <tr class="week-row"><td colspan="6">Week 9 &middot; Oct 19–23</td></tr>
-      <tr><td class="day">Class 22<br><span class="daylabel">Mon</span></td><td>Storytelling</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 23<br><span class="daylabel">Wed</span></td><td>Data journalism &amp; deceptive plots</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline">Project 2 assigned</td></tr>
-      <tr><td class="day">Class 24<br><span class="daylabel">Fri</span></td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td>Lab 7 (async — family weekend)</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr class="week-row"><td colspan="6">Week 10 &middot; Oct 26–30</td></tr>
-      <tr><td class="day">Class 25<br><span class="daylabel">Mon</span></td><td>Infographics</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 26<br><span class="daylabel">Wed</span></td><td>Infographics II</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 27<br><span class="daylabel">Fri</span></td><td class="tbd">&mdash;</td><td>Final project introduced</td><td>Lab 8: decompose an infographic</td><td class="tbd">&mdash;</td><td class="deadline">Project 2 proposals due</td></tr>
-      <tr class="week-row"><td colspan="6">Week 11 &middot; Nov 2–6</td></tr>
-      <tr><td class="day">Class 28<br><span class="daylabel">Mon</span></td><td>Data quality</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 29<br><span class="daylabel">Wed</span></td><td>Ethics &amp; rhetoric</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 30<br><span class="daylabel">Fri</span></td><td class="tbd">&mdash;</td><td>Infographic challenge + critique</td><td>Lab 9</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr class="week-row"><td colspan="6">Week 12 &middot; Nov 9–13</td></tr>
-      <tr><td class="day">Class 31<br><span class="daylabel">Mon</span></td><td>Science visualizations</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 32<br><span class="daylabel">Wed</span></td><td>Data journalism</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 33<br><span class="daylabel">Fri</span></td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td>Lab 10: Plotly infographics</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr class="week-row"><td colspan="6">Week 13 &middot; Nov 16–20</td></tr>
-      <tr><td class="day">Class 34<br><span class="daylabel">Mon</span></td><td>Interaction taxonomies</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 35<br><span class="daylabel">Wed</span></td><td>Plotly</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 36<br><span class="daylabel">Fri</span></td><td class="tbd">&mdash;</td><td>Plotly widget challenge / Tableau track</td><td>Lab 11</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr class="week-row"><td colspan="6">Week 14 &middot; Nov 23–27</td></tr>
-      <tr><td class="day">Class 37<br><span class="daylabel">Mon</span></td><td>Communicating uncertainty</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr class="noclass"><td class="day tbd">Wed</td><td class="tbd" colspan="5">No class (Thanksgiving)</td></tr>
-      <tr class="noclass"><td class="day tbd">Fri</td><td class="tbd" colspan="5">No class (Thanksgiving)</td></tr>
-      <tr class="week-row"><td colspan="6">Week 15 &middot; Nov 30 – Dec 4</td></tr>
-      <tr><td class="day">Class 38<br><span class="daylabel">Mon</span></td><td class="tbd">&mdash;</td><td>Draft presentations</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 39<br><span class="daylabel">Wed</span></td><td class="tbd">&mdash;</td><td>Draft presentations</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr><td class="day">Class 40<br><span class="daylabel">Fri</span></td><td class="tbd">&mdash;</td><td>Draft presentations</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline tbd">&mdash;</td></tr>
-      <tr class="week-row"><td colspan="6">Week 16 &middot; Dec 7 &mdash; Final week</td></tr>
-      <tr><td class="day">Class 41<br><span class="daylabel">Mon</span></td><td class="tbd">&mdash;</td><td>Final presentations</td><td class="tbd">&mdash;</td><td class="tbd">&mdash;</td><td class="deadline">Project 2 due</td></tr>
-    </tbody>
-  </table>
-  <p class="note">
-    Classes are numbered sequentially from the top (not reset per week). Built from the
-    department's internal planning sheet — double-check dates and details, and note that
-    lecture slides aren't linked yet (add them as the matching files are ready). Weekly
-    quizzes and exit tickets happen as usual but are left off this public page entirely,
-    since it's more than an instructor's private notes should say.
-  </p>
-
-  <footer>
-    DS 2003: Communicating with Data &middot; Fall 2026 &middot; questions? office hours or Piazza.
-  </footer>
+<p class="blurb">Slides, labs, and in-class activities go up here after each class. Submissions and grades are on <a href="https://canvas.instructure.com">Canvas</a>. Anything past this week is tentative and will probably move around.</p>
+<div class="grid">
+<div class="hd"></div><div class="hd">Monday</div><div class="hd">Wednesday</div><div class="hd">Friday</div>
+<div class="wk">Week 1<small>Aug 24–28</small><span class="unit">Unit 1: Exploratory visualization: the building blocks</span></div>
+<div class="cell off" data-date="2026-08-24"><div class="dt">Aug 24</div>No class</div>
+<div class="cell" data-date="2026-08-26"><div class="dt">Aug 26 &middot; #1</div><div class="t"><a href="Lectures/pdf/01-Intro.pdf">Introduction</a></div><p class="dl"><i>DUE</i>Pre-course survey (Canvas)</p></div>
+<div class="cell" data-date="2026-08-28"><div class="dt">Aug 28 &middot; #2</div><div class="t"><a href="Lectures/pdf/02_Lab0_python.pdf">Python setup</a></div><p><i>LAB</i><a href="Labs/Lab%200/Lab0_blank_python.ipynb">Lab 0: Python review</a></p><p><i>DATA</i><a href="datasets.html#penguins">penguins</a></p><p><i>READ</i><a href="DS2003_Computer_Setup_Guide.pdf">Computer setup guide</a></p><p class="dl"><i>DUE</i>Lab 0 due Sun</p></div>
+<div class="wk">Week 2<small>Aug 31 – Sep 4</small></div>
+<div class="cell" data-date="2026-08-31"><div class="dt">Aug 31 &middot; #3</div><div class="t"><a href="Lectures/pdf/03-Why%20we%20visualize.pdf">Why we visualize</a></div><p><i>CLASS</i><a href="Class%20activities/Subway%20maps/Subway_Map_Wayfinding_Activity.html">Getting Around NYC</a></p></div>
+<div class="cell" data-date="2026-09-02"><div class="dt">Sep 2 &middot; #4</div><div class="t"><a href="Lectures/pdf/04-VisualDesign-Data.pdf">Data types, tables &amp; models</a></div><p><i>CLASS</i>Levels of measurement sort, <a href="Class%20activities/simpsons-paradox/">Simpson&#x27;s Paradox</a></p><p><i>READ</i><a href="Readings/3-TourThroughVisualizationZoo.pdf">A Tour through the Visualization Zoo</a></p></div>
+<div class="cell" data-date="2026-09-04"><div class="dt">Sep 4 &middot; #5</div><div class="t"><a href="Lectures/pdf/05-Pandas_lab.pdf">Intro to pandas</a></div><p><i>LAB</i><a href="Labs/Lab01/Lab01_blank_pandas.ipynb">Lab 1: pandas &amp; data types</a> <span class="sub">(<a href="Labs/Lab01/Lab01_Rubric.html">rubric</a>)</span></p><p><i>DATA</i><a href="datasets.html#volcanoes">volcanoes</a></p><p class="dl"><i>DUE</i><a href="Project%201/Project1_Exploratory_Analysis.md">Project 1 assigned</a>; Lab 1 due Sun</p></div>
+<div class="wk">Week 3<small>Sep 7–11</small></div>
+<div class="cell off" data-date="2026-09-07"><div class="dt">Sep 7</div>No class (Labor Day)</div>
+<div class="cell" data-date="2026-09-09"><div class="dt">Sep 9 &middot; #6</div><div class="t"><a href="Lectures/pdf/06-VisualDesign-encodings%2B07%2Bmatplotlib_students.pdf">Visual encodings &amp; scale</a></div><p><i>READ</i>Vis Zoo discussion post</p></div>
+<div class="cell" data-date="2026-09-11"><div class="dt">Sep 11 &middot; #7</div><div class="t"><a href="Lectures/pdf/07-encodings_scale_part2.pdf">Encodings &amp; scale, day 2</a></div><p><i>CLASS</i>Decoding charts</p><p><i>LAB</i><a href="Labs/Lab02/Lab02_blank.ipynb">Lab 2: grouping &amp; aggregating</a></p><p><i>DATA</i><a href="datasets.html#fastfood">fastfood</a>, <a href="datasets.html#flights">flights</a></p><p class="dl"><i>DUE</i>P1 topic &amp; dataset due Sun; Lab 2 due Sun</p></div>
+<div class="wk">Week 4<small>Sep 14–18</small></div>
+<div class="cell" data-date="2026-09-14"><div class="dt">Sep 14 &middot; #8</div><div class="t"><a href="Lectures/pdf/08-VisualDesign-Scale_Effectiveness%20Principles.pdf">Expressiveness &amp; effectiveness</a></div></div>
+<div class="cell" data-date="2026-09-16"><div class="dt">Sep 16 &middot; #9</div><div class="t"><a href="Lectures/pdf/09-color.pdf">Color</a></div><p><i>CLASS</i><a href="Class%20activities/colormap%20designer/Colormap%20Designer%20-%20Guided%20Sandbox.html">Colormap Designer</a> <span class="sub">(<a href="Class%20activities/colormap%20designer/colormap_making.ipynb">notebook</a>)</span></p><p class="dl"><i>DUE</i>Bad-viz discussion post due Thu</p></div>
+<div class="cell" data-date="2026-09-18"><div class="dt">Sep 18 &middot; #10</div><div class="t"><a href="Lectures/pdf/10_matplotlib_lab.pdf">Matplotlib</a></div><p><i>LAB</i><a href="Labs/Lab03/Lab03_blank_in%20class.ipynb">Lab 3: anatomy of a figure</a></p><p><i>DATA</i><a href="datasets.html#penguins">penguins</a>, <a href="datasets.html#fastfood">fastfood</a>, <a href="datasets.html#flights">flights</a>, <a href="datasets.html#volcanoes">volcanoes</a></p><p class="dl"><i>DUE</i>Colormap activity due; End-of-unit-1 survey due Sat; Lab 3 due Sun</p></div>
+<div class="wk">Week 5<small>Sep 21–25</small></div>
+<div class="cell" data-date="2026-09-21"><div class="dt">Sep 21 &middot; #11</div><div class="t"><a href="Lectures/pdf/11-Perception-partI.pdf">Perception I</a></div></div>
+<div class="cell" data-date="2026-09-23"><div class="dt">Sep 23 &middot; #12</div><div class="t"><a href="Lectures/pdf/12-Perception-partII.pdf">Perception II: Gestalt principles</a></div><p><i>CLASS</i>One chart, one flaw</p><p><i>READ</i><a href="Readings/the_chartjunk_debate.pdf">The chartjunk debate</a></p></div>
+<div class="cell" data-date="2026-09-25"><div class="dt">Sep 25 &middot; #13</div><div class="t"><a href="Labs/Lab4/Lab04_blank.ipynb">Lab 4: encodings, color &amp; chart types</a></div><p><i>DATA</i><a href="datasets.html#penguins">penguins</a>, <a href="datasets.html#flights">flights</a>, <a href="datasets.html#fastfood">fastfood</a></p><p class="dl"><i>DUE</i>Lab 4 due Sun</p></div>
+<div class="wk">Week 6<small>Sep 28 – Oct 2</small></div>
+<div class="cell" data-date="2026-09-28"><div class="dt">Sep 28 &middot; #14</div><div class="t"><a href="Lectures/pdf/13-Visual%20Tasks.pdf">Visual tasks: from questions to sketches</a></div><p><i>CLASS</i>Question storm</p><p><i>DATA</i><a href="datasets.html#fastfood">fastfood</a></p></div>
+<div class="cell" data-date="2026-09-30"><div class="dt">Sep 30 &middot; #15</div><div class="t">Applications</div><p><i>CLASS</i><a href="Class%20activities/data_for_bad_charts/9_31_Fixing%20bad%20charts.docx">Fixing bad charts</a></p><p><i>DATA</i><a href="datasets.html#bad-charts">bad-chart data</a></p><p class="dl"><i>DUE</i>P1 question sketches</p></div>
+<div class="cell" data-date="2026-10-02"><div class="dt">Oct 2 &middot; #16</div><div class="t"><a href="Labs/Lab05/Lab05_blank_fixing_bad_design.ipynb">Lab 5: bad chart redesign</a></div><p><i>DATA</i><a href="datasets.html#bad-charts">bad-chart data</a></p><p class="dl"><i>DUE</i>Lab 5 due Sun</p></div>
+<div class="wk">Week 7<small>Oct 5–9</small></div>
+<div class="cell off" data-date="2026-10-05"><div class="dt">Oct 5</div>No class (Fall break)</div>
+<div class="cell" data-date="2026-10-07"><div class="dt">Oct 7 &middot; #17</div><div class="t">Graphs, networks &amp; trees</div></div>
+<div class="cell" data-date="2026-10-09"><div class="dt">Oct 9 &middot; #18</div><div class="t">Lab 6: alluvial diagrams &amp; graphs</div></div>
+<div class="wk">Week 8<small>Oct 12–16</small><span class="unit">Unit 2: Explanatory visualization: storytelling</span></div>
+<div class="cell" data-date="2026-10-12"><div class="dt">Oct 12 &middot; #19</div><div class="t">EDA presentations</div></div>
+<div class="cell" data-date="2026-10-14"><div class="dt">Oct 14 &middot; #20</div><div class="t">EDA presentations</div></div>
+<div class="cell" data-date="2026-10-16"><div class="dt">Oct 16 &middot; #21</div><div class="t">Data as art / storytelling</div><p class="dl"><i>DUE</i>Project 1 due</p></div>
+<div class="wk">Week 9<small>Oct 19–23</small></div>
+<div class="cell" data-date="2026-10-19"><div class="dt">Oct 19 &middot; #22</div><div class="t">Storytelling</div></div>
+<div class="cell" data-date="2026-10-21"><div class="dt">Oct 21 &middot; #23</div><div class="t">Data journalism &amp; deceptive plots</div><p class="dl"><i>DUE</i>Project 2 assigned</p></div>
+<div class="cell" data-date="2026-10-23"><div class="dt">Oct 23 &middot; #24</div><div class="t">Lab 7 (async, family weekend)</div></div>
+<div class="wk">Week 10<small>Oct 26–30</small></div>
+<div class="cell" data-date="2026-10-26"><div class="dt">Oct 26 &middot; #25</div><div class="t">Infographics</div></div>
+<div class="cell" data-date="2026-10-28"><div class="dt">Oct 28 &middot; #26</div><div class="t">Infographics II</div></div>
+<div class="cell" data-date="2026-10-30"><div class="dt">Oct 30 &middot; #27</div><div class="t">Final project introduced</div><p><i>LAB</i>Lab 8: decompose an infographic</p><p class="dl"><i>DUE</i>Project 2 proposals due</p></div>
+<div class="wk">Week 11<small>Nov 2–6</small></div>
+<div class="cell" data-date="2026-11-02"><div class="dt">Nov 2 &middot; #28</div><div class="t">Data quality</div></div>
+<div class="cell" data-date="2026-11-04"><div class="dt">Nov 4 &middot; #29</div><div class="t">Ethics &amp; rhetoric</div></div>
+<div class="cell" data-date="2026-11-06"><div class="dt">Nov 6 &middot; #30</div><div class="t">Infographic challenge + critique</div><p><i>LAB</i>Lab 9</p></div>
+<div class="wk">Week 12<small>Nov 9–13</small></div>
+<div class="cell" data-date="2026-11-09"><div class="dt">Nov 9 &middot; #31</div><div class="t">Science visualizations</div></div>
+<div class="cell" data-date="2026-11-11"><div class="dt">Nov 11 &middot; #32</div><div class="t">Data journalism</div></div>
+<div class="cell" data-date="2026-11-13"><div class="dt">Nov 13 &middot; #33</div><div class="t">Lab 10: Plotly infographics</div></div>
+<div class="wk">Week 13<small>Nov 16–20</small></div>
+<div class="cell" data-date="2026-11-16"><div class="dt">Nov 16 &middot; #34</div><div class="t">Interaction taxonomies</div></div>
+<div class="cell" data-date="2026-11-18"><div class="dt">Nov 18 &middot; #35</div><div class="t">Plotly</div></div>
+<div class="cell" data-date="2026-11-20"><div class="dt">Nov 20 &middot; #36</div><div class="t">Plotly widget challenge / Tableau track</div><p><i>LAB</i>Lab 11</p></div>
+<div class="wk">Week 14<small>Nov 23–27</small></div>
+<div class="cell" data-date="2026-11-23"><div class="dt">Nov 23 &middot; #37</div><div class="t">Communicating uncertainty</div></div>
+<div class="cell off" data-date="2026-11-25"><div class="dt">Nov 25</div>No class (Thanksgiving)</div>
+<div class="cell off" data-date="2026-11-27"><div class="dt">Nov 27</div>No class (Thanksgiving)</div>
+<div class="wk">Week 15<small>Nov 30 – Dec 4</small></div>
+<div class="cell" data-date="2026-11-30"><div class="dt">Nov 30 &middot; #38</div><div class="t">Draft presentations</div></div>
+<div class="cell" data-date="2026-12-02"><div class="dt">Dec 2 &middot; #39</div><div class="t">Draft presentations</div></div>
+<div class="cell" data-date="2026-12-04"><div class="dt">Dec 4 &middot; #40</div><div class="t">Draft presentations</div></div>
+<div class="wk">Week 16<small>Dec 7</small><span class="unit">Final week</span></div>
+<div class="cell" data-date="2026-12-07"><div class="dt">Dec 7 &middot; #41</div><div class="t">Final presentations</div><p class="dl"><i>DUE</i>Project 2 due</p></div>
+<div class="cell off"></div>
+<div class="cell off"></div>
+</div>
 </main>
+<script>
+(function(){
+  var t = new Date(); t.setHours(0,0,0,0); var next = null;
+  document.querySelectorAll('[data-date]').forEach(function(el){
+    var d = new Date(el.getAttribute('data-date') + 'T00:00:00');
+    if (d > t) el.classList.add('later');
+    if (d >= t && !next && !el.classList.contains('off')) { next = el; el.classList.add('next'); }
+  });
+})();
+</script>
 </body>
 </html>

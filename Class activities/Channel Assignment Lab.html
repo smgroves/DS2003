@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Channel Assignment Lab — DS 2003</title>
+</head>
+<body style="margin:0;">
+<div class="enc-app" id="encApp">
+<style>
+.enc-app {
+  --surface-2: #ffffff;
+  --surface-1: #f5f6f4;
+  --surface-0: #f7f8f5;
+  --text-primary: #14161a;
+  --text-secondary: #53564f;
+  --text-muted: #8b8d84;
+  --border: #e0e2da;
+  --border-accent: #1b6350;
+  --bg-accent: #e4f2ec;
+  --text-accent: #14523f;
+  --bg-warning: #fdf3e3;
+  --text-warning: #8a5a00;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: var(--surface-0);
+  padding: 28px 16px;
+  box-sizing: border-box;
+  min-height: 100%;
+}
+.enc-app *, .enc-app *::before, .enc-app *::after { box-sizing: border-box; }
+.enc-wrap { max-width: 800px; margin: 0 auto; }
+
+.enc-header { text-align: center; margin-bottom: 20px; }
+.enc-header h1 { font-size: 24px; font-weight: 500; margin: 0 0 6px; letter-spacing: -0.01em; }
+.enc-header p { font-size: 14px; color: var(--text-secondary); margin: 0; line-height: 1.6; }
+
+.enc-card {
+  background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px;
+  padding: 22px; box-shadow: 0 1px 2px rgba(20,20,30,0.04), 0 8px 24px rgba(20,20,30,0.05);
+  margin-bottom: 16px;
+}
+.enc-card h3 { font-size: 15px; font-weight: 500; margin: 0 0 10px; }
+.enc-card p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; margin: 0 0 8px; }
+
+.pool-area {
+  display: flex; flex-wrap: wrap; gap: 8px; min-height: 52px;
+  padding: 10px; border: 1.5px dashed var(--border); border-radius: 10px; background: var(--surface-1);
+}
+.pool-area.dragover { border-color: var(--border-accent); background: var(--bg-accent); }
+.pool-empty-hint { font-size: 12.5px; color: var(--text-muted); padding: 8px; }
+
+.attr-card {
+  background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 8px;
+  padding: 8px 12px; cursor: grab; user-select: none;
+}
+.attr-card:active { cursor: grabbing; }
+.attr-card .nm { font-size: 13px; font-weight: 500; }
+.attr-card .ty { font-size: 10.5px; color: var(--text-accent); background: var(--bg-accent); display: inline-block; padding: 1px 7px; border-radius: 999px; margin-top: 3px; }
+
+.channel-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 6px; }
+.channel-slot {
+  border: 1.5px dashed var(--border); border-radius: 10px; padding: 10px; min-height: 74px;
+  display: flex; flex-direction: column; gap: 6px; background: var(--surface-1);
+}
+.channel-slot.dragover { border-color: var(--border-accent); background: var(--bg-accent); }
+.channel-slot .ch-label { font-size: 11.5px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+.channel-slot .ch-empty { font-size: 12px; color: var(--text-muted); flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; }
+.slot-card { position: relative; }
+.slot-card .rm-btn {
+  position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--text-secondary); color: white; border: none; font-size: 11px; line-height: 18px;
+  text-align: center; cursor: pointer; padding: 0;
+}
+
+.charttype-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.charttype-btn {
+  font-family: var(--font-sans); font-size: 13px; padding: 8px 16px; border-radius: 999px;
+  border: 0.5px solid var(--border); background: var(--surface-1); color: var(--text-primary); cursor: pointer;
+}
+.charttype-btn:hover { border-color: var(--border-accent); }
+.charttype-btn.active { background: var(--bg-accent); border-color: var(--border-accent); color: var(--text-accent); font-weight: 500; }
+
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.enc-btn {
+  font-family: var(--font-sans); font-size: 13px; padding: 8px 16px; border-radius: 999px;
+  border: 0.5px solid var(--border); background: var(--surface-1); color: var(--text-primary); cursor: pointer;
+}
+.enc-btn:hover { border-color: var(--border-accent); color: var(--text-accent); }
+.enc-btn.primary { background: var(--bg-accent); border-color: var(--border-accent); color: var(--text-accent); font-weight: 500; }
+
+.optimal-banner {
+  background: var(--bg-accent); border: 0.5px solid var(--border-accent); border-radius: 8px;
+  padding: 8px 12px; font-size: 12.5px; color: var(--text-accent); margin-top: 10px; display: none;
+}
+.optimal-banner.show { display: block; }
+
+.incomplete-note { font-size: 13px; color: var(--text-muted); padding: 16px; text-align: center; }
+
+.score-panel { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+.score-num { font-size: 30px; font-weight: 500; }
+.score-max { font-size: 14px; color: var(--text-muted); }
+
+.score-rows { display: flex; flex-direction: column; gap: 6px; }
+.score-row { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; padding: 6px 8px; border-radius: 6px; background: var(--surface-1); }
+.score-badge { flex: 0 0 auto; font-size: 10.5px; font-weight: 500; padding: 2px 8px; border-radius: 999px; margin-top: 1px; white-space: nowrap; }
+.score-badge.excellent { background: #dcefe2; color: #1b6b3a; }
+.score-badge.good { background: #e4f2ec; color: var(--text-accent); }
+.score-badge.fair { background: var(--bg-warning); color: var(--text-warning); }
+.score-badge.poor { background: #fbe4e3; color: #9a2c2b; }
+.score-row .desc { color: var(--text-secondary); }
+.score-row .desc b { color: var(--text-primary); }
+.chart-fit-row { margin-top: 4px; }
+
+.chart-wrap { position: relative; }
+svg.chart { width: 100%; height: auto; display: block; }
+.axis-label { font-size: 12px; fill: var(--text-secondary); font-family: var(--font-sans); }
+.tick-label { font-size: 10px; fill: var(--text-muted); font-family: var(--font-sans); }
+.axis-line { stroke: #c7c9c0; stroke-width: 1; }
+
+.legend-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 8px; font-size: 12px; color: var(--text-secondary); }
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-swatch { width: 12px; height: 12px; border-radius: 3px; flex: 0 0 auto; }
+
+.enc-footer { text-align: center; margin-top: 4px; font-size: 11.5px; color: var(--text-muted); line-height: 1.6; }
+</style>
+
+<div class="enc-wrap">
+  <div class="enc-header">
+    <h1>Channel Assignment Lab</h1>
+    <p>An activity for <b>DS 2003 &mdash; Communicating with Data</b>. Drag 5 of these attributes onto the 5 channels, pick a chart type, and see how close you get to the theoretical best.</p>
+  </div>
+
+  <div class="enc-card">
+    <h3>Attribute pool</h3>
+    <p>60 fictional hiking trails (illustrative data, not a real dataset), 8 attributes. Drag exactly 5 onto the channels below — the rest are fine to leave unused.</p>
+    <div class="pool-area" id="poolArea"></div>
+  </div>
+
+  <div class="enc-card">
+    <h3>Channels</h3>
+    <p>Drop an attribute onto a channel. Dropping onto an occupied channel sends the previous occupant back to the pool.</p>
+    <div class="channel-board" id="channelBoard"></div>
+  </div>
+
+  <div class="enc-card">
+    <h3>Chart type</h3>
+    <p>Different chart types imply different channel jobs — a bar's length only means something if one axis is categorical and the other is a quantity.</p>
+    <div class="charttype-row" id="chartTypeRow"></div>
+  </div>
+
+  <div class="btn-row">
+    <button class="enc-btn" id="randomizeBtn">Randomize</button>
+    <button class="enc-btn primary" id="optimalBtn">Show Mackinlay-optimal assignment</button>
+  </div>
+  <div class="optimal-banner" id="optimalBanner">This is the 5-attribute subset, channel assignment, and chart type that scores 100 &mdash; the best possible combination for this dataset.</div>
+
+  <div class="enc-card" style="margin-top:16px;">
+    <h3>Effectiveness score</h3>
+    <div id="scoreArea"></div>
+  </div>
+
+  <div class="enc-card">
+    <h3>Resulting chart</h3>
+    <div id="chartArea"></div>
+  </div>
+
+  <div class="enc-footer">Scoring follows Mackinlay's (1986) effectiveness rankings, Cleveland &amp; McGill's (1984) channel-accuracy findings, and the chart-type/data-type correspondences from the encodings lecture.<br>Content adapted from Dr. Bako and Dr. Alvarado.</div>
+</div>
+
+<script>
+(function() {
+  var DATA = [{"name": "Trail 01", "region": "East", "difficulty": "Strenuous", "distance_km": 8.0, "elevation_gain_m": 499, "avg_rating": 4.3, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 47}, {"name": "Trail 02", "region": "South", "difficulty": "Easy", "distance_km": 3.6, "elevation_gain_m": 34, "avg_rating": 4.5, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 83}, {"name": "Trail 03", "region": "North", "difficulty": "Moderate", "distance_km": 2.8, "elevation_gain_m": 221, "avg_rating": 4.2, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 32}, {"name": "Trail 04", "region": "North", "difficulty": "Moderate", "distance_km": 1.8, "elevation_gain_m": 151, "avg_rating": 3.7, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 17}, {"name": "Trail 05", "region": "South", "difficulty": "Hard", "distance_km": 6.2, "elevation_gain_m": 488, "avg_rating": 4.3, "crowd_level": "High", "dog_friendly": "Yes", "net_recommend": 47}, {"name": "Trail 06", "region": "East", "difficulty": "Easy", "distance_km": 2.4, "elevation_gain_m": 116, "avg_rating": 4.4, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 60}, {"name": "Trail 07", "region": "West", "difficulty": "Easy", "distance_km": 1.4, "elevation_gain_m": 61, "avg_rating": 4.3, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 49}, {"name": "Trail 08", "region": "West", "difficulty": "Strenuous", "distance_km": 12.9, "elevation_gain_m": 509, "avg_rating": 3.7, "crowd_level": "Low", "dog_friendly": "No", "net_recommend": 22}, {"name": "Trail 09", "region": "West", "difficulty": "Easy", "distance_km": 3.2, "elevation_gain_m": 146, "avg_rating": 4.6, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 83}, {"name": "Trail 10", "region": "South", "difficulty": "Easy", "distance_km": 1.6, "elevation_gain_m": 54, "avg_rating": 4.0, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 33}, {"name": "Trail 11", "region": "East", "difficulty": "Strenuous", "distance_km": 15.9, "elevation_gain_m": 730, "avg_rating": 3.2, "crowd_level": "High", "dog_friendly": "No", "net_recommend": 22}, {"name": "Trail 12", "region": "West", "difficulty": "Moderate", "distance_km": 4.7, "elevation_gain_m": 129, "avg_rating": 4.9, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 56}, {"name": "Trail 13", "region": "South", "difficulty": "Moderate", "distance_km": 9.2, "elevation_gain_m": 75, "avg_rating": 3.8, "crowd_level": "High", "dog_friendly": "Yes", "net_recommend": 30}, {"name": "Trail 14", "region": "North", "difficulty": "Strenuous", "distance_km": 20.2, "elevation_gain_m": 353, "avg_rating": 3.0, "crowd_level": "Low", "dog_friendly": "No", "net_recommend": -16}, {"name": "Trail 15", "region": "North", "difficulty": "Easy", "distance_km": 4.8, "elevation_gain_m": 131, "avg_rating": 4.4, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 73}, {"name": "Trail 16", "region": "East", "difficulty": "Strenuous", "distance_km": 8.6, "elevation_gain_m": 586, "avg_rating": 4.2, "crowd_level": "High", "dog_friendly": "No", "net_recommend": 32}, {"name": "Trail 17", "region": "South", "difficulty": "Hard", "distance_km": 9.6, "elevation_gain_m": 321, "avg_rating": 2.8, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 1}, {"name": "Trail 18", "region": "East", "difficulty": "Moderate", "distance_km": 11.1, "elevation_gain_m": 269, "avg_rating": 3.3, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 18}, {"name": "Trail 19", "region": "North", "difficulty": "Moderate", "distance_km": 7.8, "elevation_gain_m": 117, "avg_rating": 5.0, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 63}, {"name": "Trail 20", "region": "East", "difficulty": "Easy", "distance_km": 5.9, "elevation_gain_m": 92, "avg_rating": 3.0, "crowd_level": "High", "dog_friendly": "Yes", "net_recommend": 4}, {"name": "Trail 21", "region": "West", "difficulty": "Hard", "distance_km": 5.8, "elevation_gain_m": 634, "avg_rating": 3.7, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 51}, {"name": "Trail 22", "region": "North", "difficulty": "Moderate", "distance_km": 8.2, "elevation_gain_m": 365, "avg_rating": 3.3, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 16}, {"name": "Trail 23", "region": "East", "difficulty": "Moderate", "distance_km": 5.8, "elevation_gain_m": 341, "avg_rating": 4.5, "crowd_level": "Medium", "dog_friendly": "No", "net_recommend": 78}, {"name": "Trail 24", "region": "South", "difficulty": "Moderate", "distance_km": 4.0, "elevation_gain_m": 135, "avg_rating": 3.2, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 19}, {"name": "Trail 25", "region": "North", "difficulty": "Moderate", "distance_km": 5.8, "elevation_gain_m": 175, "avg_rating": 4.0, "crowd_level": "Low", "dog_friendly": "No", "net_recommend": 40}, {"name": "Trail 26", "region": "North", "difficulty": "Hard", "distance_km": 13.0, "elevation_gain_m": 407, "avg_rating": 4.1, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 42}, {"name": "Trail 27", "region": "South", "difficulty": "Hard", "distance_km": 16.5, "elevation_gain_m": 272, "avg_rating": 5.0, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 77}, {"name": "Trail 28", "region": "North", "difficulty": "Hard", "distance_km": 6.6, "elevation_gain_m": 187, "avg_rating": 4.8, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 59}, {"name": "Trail 29", "region": "South", "difficulty": "Strenuous", "distance_km": 10.3, "elevation_gain_m": 487, "avg_rating": 5.0, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 80}, {"name": "Trail 30", "region": "East", "difficulty": "Moderate", "distance_km": 3.4, "elevation_gain_m": 145, "avg_rating": 4.0, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 29}, {"name": "Trail 31", "region": "North", "difficulty": "Easy", "distance_km": 4.2, "elevation_gain_m": 73, "avg_rating": 3.8, "crowd_level": "Low", "dog_friendly": "No", "net_recommend": 47}, {"name": "Trail 32", "region": "East", "difficulty": "Moderate", "distance_km": 5.8, "elevation_gain_m": 168, "avg_rating": 3.7, "crowd_level": "Low", "dog_friendly": "No", "net_recommend": 16}, {"name": "Trail 33", "region": "North", "difficulty": "Hard", "distance_km": 9.1, "elevation_gain_m": 318, "avg_rating": 4.7, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 89}, {"name": "Trail 34", "region": "East", "difficulty": "Hard", "distance_km": 4.1, "elevation_gain_m": 758, "avg_rating": 3.3, "crowd_level": "High", "dog_friendly": "Yes", "net_recommend": 13}, {"name": "Trail 35", "region": "South", "difficulty": "Moderate", "distance_km": 4.4, "elevation_gain_m": 96, "avg_rating": 3.2, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": -7}, {"name": "Trail 36", "region": "West", "difficulty": "Easy", "distance_km": 3.4, "elevation_gain_m": 106, "avg_rating": 4.3, "crowd_level": "High", "dog_friendly": "Yes", "net_recommend": 37}, {"name": "Trail 37", "region": "South", "difficulty": "Moderate", "distance_km": 8.8, "elevation_gain_m": 212, "avg_rating": 3.4, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 28}, {"name": "Trail 38", "region": "East", "difficulty": "Moderate", "distance_km": 2.6, "elevation_gain_m": 172, "avg_rating": 5.0, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 64}, {"name": "Trail 39", "region": "East", "difficulty": "Moderate", "distance_km": 4.9, "elevation_gain_m": 321, "avg_rating": 3.8, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 7}, {"name": "Trail 40", "region": "West", "difficulty": "Easy", "distance_km": 2.6, "elevation_gain_m": 69, "avg_rating": 3.4, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 10}, {"name": "Trail 41", "region": "East", "difficulty": "Moderate", "distance_km": 3.8, "elevation_gain_m": 250, "avg_rating": 4.4, "crowd_level": "High", "dog_friendly": "Yes", "net_recommend": 47}, {"name": "Trail 42", "region": "West", "difficulty": "Easy", "distance_km": 4.6, "elevation_gain_m": 48, "avg_rating": 4.9, "crowd_level": "Medium", "dog_friendly": "No", "net_recommend": 57}, {"name": "Trail 43", "region": "North", "difficulty": "Hard", "distance_km": 12.0, "elevation_gain_m": 507, "avg_rating": 3.2, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": -11}, {"name": "Trail 44", "region": "West", "difficulty": "Moderate", "distance_km": 6.9, "elevation_gain_m": 239, "avg_rating": 3.2, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 9}, {"name": "Trail 45", "region": "North", "difficulty": "Hard", "distance_km": 10.1, "elevation_gain_m": 388, "avg_rating": 4.4, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 73}, {"name": "Trail 46", "region": "North", "difficulty": "Moderate", "distance_km": 7.9, "elevation_gain_m": 254, "avg_rating": 2.9, "crowd_level": "Low", "dog_friendly": "No", "net_recommend": -13}, {"name": "Trail 47", "region": "South", "difficulty": "Easy", "distance_km": 1.3, "elevation_gain_m": 111, "avg_rating": 4.2, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 46}, {"name": "Trail 48", "region": "North", "difficulty": "Strenuous", "distance_km": 11.9, "elevation_gain_m": 283, "avg_rating": 3.2, "crowd_level": "Medium", "dog_friendly": "No", "net_recommend": 32}, {"name": "Trail 49", "region": "West", "difficulty": "Easy", "distance_km": 4.3, "elevation_gain_m": 60, "avg_rating": 4.3, "crowd_level": "Low", "dog_friendly": "No", "net_recommend": 52}, {"name": "Trail 50", "region": "North", "difficulty": "Hard", "distance_km": 7.2, "elevation_gain_m": 209, "avg_rating": 3.0, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": -17}, {"name": "Trail 51", "region": "East", "difficulty": "Moderate", "distance_km": 2.6, "elevation_gain_m": 136, "avg_rating": 4.1, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 55}, {"name": "Trail 52", "region": "East", "difficulty": "Moderate", "distance_km": 6.2, "elevation_gain_m": 193, "avg_rating": 3.7, "crowd_level": "Low", "dog_friendly": "Yes", "net_recommend": 44}, {"name": "Trail 53", "region": "East", "difficulty": "Hard", "distance_km": 6.2, "elevation_gain_m": 280, "avg_rating": 4.7, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 81}, {"name": "Trail 54", "region": "West", "difficulty": "Strenuous", "distance_km": 20.3, "elevation_gain_m": 430, "avg_rating": 4.3, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 41}, {"name": "Trail 55", "region": "North", "difficulty": "Strenuous", "distance_km": 10.8, "elevation_gain_m": 409, "avg_rating": 3.5, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 6}, {"name": "Trail 56", "region": "West", "difficulty": "Moderate", "distance_km": 3.8, "elevation_gain_m": 90, "avg_rating": 4.8, "crowd_level": "Low", "dog_friendly": "No", "net_recommend": 90}, {"name": "Trail 57", "region": "West", "difficulty": "Moderate", "distance_km": 4.9, "elevation_gain_m": 130, "avg_rating": 3.6, "crowd_level": "High", "dog_friendly": "Yes", "net_recommend": 0}, {"name": "Trail 58", "region": "West", "difficulty": "Moderate", "distance_km": 6.0, "elevation_gain_m": 178, "avg_rating": 4.0, "crowd_level": "Medium", "dog_friendly": "Yes", "net_recommend": 41}, {"name": "Trail 59", "region": "South", "difficulty": "Easy", "distance_km": 4.6, "elevation_gain_m": 87, "avg_rating": 3.8, "crowd_level": "High", "dog_friendly": "Yes", "net_recommend": 28}, {"name": "Trail 60", "region": "West", "difficulty": "Strenuous", "distance_km": 9.3, "elevation_gain_m": 1144, "avg_rating": 3.9, "crowd_level": "Medium", "dog_friendly": "No", "net_recommend": 22}];
+
+  var ATTRS = {
+    region:           { label: "Region",           type: "nominal",      levels: ["North","South","East","West"] },
+    difficulty:       { label: "Difficulty",       type: "ordinal",      levels: ["Easy","Moderate","Hard","Strenuous"] },
+    crowd_level:      { label: "Crowd Level",       type: "ordinal",      levels: ["Low","Medium","High"] },
+    dog_friendly:     { label: "Dog Friendly",      type: "nominal",      levels: ["Yes","No"] },
+    distance_km:      { label: "Distance (km)",     type: "quantitative", diverging: false },
+    elevation_gain_m: { label: "Elevation Gain (m)",type: "quantitative", diverging: false },
+    avg_rating:       { label: "Avg Rating",        type: "quantitative", diverging: false },
+    net_recommend:    { label: "Net Recommend",     type: "quantitative", diverging: true }
+  };
+  var ALL_KEYS = ["region","difficulty","crowd_level","dog_friendly","distance_km","elevation_gain_m","avg_rating","net_recommend"];
+  var CHANNELS = ["x","y","color","size","shape"];
+  var CHANNEL_LABEL = { x: "X axis", y: "Y axis", color: "Color", size: "Size", shape: "Shape" };
+  var CHART_TYPES = ["bar","scatter","line","bubble"];
+  var CHART_TYPE_LABEL = { bar: "Bar", scatter: "Scatter", line: "Line", bubble: "Bubble" };
+
+  var CHANNEL_FIT = {
+    quantitative: { x:4, y:4, size:3, color:2, shape:1 },
+    ordinal:      { x:4, y:4, color:3, size:2, shape:1 },
+    nominal:      { x:4, y:4, color:3, shape:2, size:1 }
+  };
+  var CHART_FIT_BONUS = 6;
+  var BADGE_FOR_SCORE = { 4:"excellent", 3:"good", 2:"fair", 1:"poor" };
+  var LABEL_FOR_SCORE = { 4:"Excellent", 3:"Good", 2:"Fair", 1:"Poor" };
+  var REASONS = {
+    quantitative: {
+      x: "Position is the most accurately perceived channel for quantitative data — ideal.",
+      y: "Position is the most accurately perceived channel for quantitative data — ideal.",
+      size: "Length/area suit quantitative magnitude well, just below position in accuracy.",
+      color: "Color can carry a quantitative value, but it reads less precisely than position or size.",
+      shape: "Shape has no inherent order — mapping a continuous number here forces it into arbitrary bins."
+    },
+    ordinal: {
+      x: "Position preserves the order of ordinal data perfectly — ideal.",
+      y: "Position preserves the order of ordinal data perfectly — ideal.",
+      color: "A light-to-dark ramp reads ordinal rank well — a strong choice.",
+      size: "Size can show rank, but ranks lower than color for ordinal data.",
+      shape: "Shape has no order, so this hides the rank structure of ordinal data — the weakest fit."
+    },
+    nominal: {
+      x: "Position works for any data type, including unordered categories — ideal.",
+      y: "Position works for any data type, including unordered categories — ideal.",
+      color: "Hue is the strongest channel for unordered categories — a great choice.",
+      shape: "Shape works reasonably well for a handful of unordered categories.",
+      size: "Size implies a magnitude/order that nominal categories don't have — the weakest fit here."
+    }
+  };
+
+  function isCategorical(t) { return t === 'nominal' || t === 'ordinal'; }
+
+  function chartTypeFits(chartType, xType, yType, sizeType) {
+    if (chartType === 'bar') return (isCategorical(xType) && yType === 'quantitative') || (isCategorical(yType) && xType === 'quantitative');
+    if (chartType === 'scatter') return xType === 'quantitative' && yType === 'quantitative';
+    if (chartType === 'line') return (xType === 'quantitative' || xType === 'ordinal') && yType === 'quantitative';
+    if (chartType === 'bubble') return xType === 'quantitative' && yType === 'quantitative' && sizeType === 'quantitative';
+    return false;
+  }
+  var CHART_FIT_EXPLAIN = {
+    bar: "Bar charts need one categorical axis (its length is the comparison) and one quantitative axis.",
+    scatter: "Scatter plots need both axes quantitative — that's what position-position is for.",
+    line: "Line charts need an orderable X (quantitative or ordinal) and a quantitative Y to connect meaningfully.",
+    bubble: "Bubble charts need quantitative X, Y, and Size — size is the whole point of the form."
+  };
+
+  function range(key) {
+    var vals = DATA.map(function(d){ return d[key]; });
+    return { min: Math.min.apply(null, vals), max: Math.max.apply(null, vals) };
+  }
+
+  function hashFrac(i) {
+    var x = Math.sin(i * 12.9898) * 43758.5453;
+    return x - Math.floor(x);
+  }
+
+  function lerpColor(hexA, hexB, t) {
+    function h2r(h) { h = h.replace('#',''); return [parseInt(h.substr(0,2),16), parseInt(h.substr(2,2),16), parseInt(h.substr(4,2),16)]; }
+    var a = h2r(hexA), b = h2r(hexB);
+    var r = Math.round(a[0] + (b[0]-a[0])*t);
+    var g = Math.round(a[1] + (b[1]-a[1])*t);
+    var bl = Math.round(a[2] + (b[2]-a[2])*t);
+    return 'rgb(' + r + ',' + g + ',' + bl + ')';
+  }
+
+  // Sequential: single-hue teal/green ramp
+  function sequentialColor(t) {
+    t = Math.max(0, Math.min(1, t));
+    if (t < 0.5) return lerpColor('#d9f2ea', '#33a084', t / 0.5);
+    return lerpColor('#33a084', '#134a3a', (t - 0.5) / 0.5);
+  }
+  // Diverging: teal <-> gray <-> vermillion
+  function divergingColor(t) {
+    t = Math.max(0, Math.min(1, t));
+    if (t < 0.5) return lerpColor('#009E73', '#efeee9', t / 0.5);
+    return lerpColor('#efeee9', '#D55E00', (t - 0.5) / 0.5);
+  }
+  // Categorical: Okabe-Ito colorblind-safe subset
+  var CAT_COLORS = ['#E69F00', '#56B4E9', '#009E73', '#D55E00'];
+
+  function shapePath(shapeIdx, cx, cy, size) {
+    var s = size;
+    if (shapeIdx === 0) return '<circle cx="' + cx + '" cy="' + cy + '" r="' + s + '" />';
+    if (shapeIdx === 1) return '<rect x="' + (cx-s) + '" y="' + (cy-s) + '" width="' + (s*2) + '" height="' + (s*2) + '" rx="1.5" />';
+    if (shapeIdx === 2) return '<polygon points="' + cx + ',' + (cy-s*1.15) + ' ' + (cx-s*1.15) + ',' + (cy+s*0.9) + ' ' + (cx+s*1.15) + ',' + (cy+s*0.9) + '" />';
+    return '<polygon points="' + cx + ',' + (cy-s*1.2) + ' ' + (cx+s*1.2) + ',' + cy + ' ' + cx + ',' + (cy+s*1.2) + ' ' + (cx-s*1.2) + ',' + cy + '" />';
+  }
+
+  function quantileBins(vals, n) {
+    var sorted = vals.slice().sort(function(a,b){return a-b;});
+    var breaks = [];
+    for (var i = 1; i < n; i++) {
+      var idx = Math.floor(sorted.length * i / n);
+      breaks.push(sorted[Math.min(idx, sorted.length-1)]);
+    }
+    return breaks;
+  }
+  function binIndex(v, breaks) {
+    for (var i = 0; i < breaks.length; i++) { if (v <= breaks[i]) return i; }
+    return breaks.length;
+  }
+
+  // ---------- State ----------
+  var pool = ALL_KEYS.slice();
+  var assignment = { x: null, y: null, color: null, size: null, shape: null };
+  var chartType = 'scatter';
+
+  // ---------- Scoring ----------
+  function rawScore(asg, ct) {
+    var total = 0;
+    CHANNELS.forEach(function(ch) {
+      var key = asg[ch];
+      if (!key) return;
+      total += CHANNEL_FIT[ATTRS[key].type][ch];
+    });
+    if (asg.x && asg.y) {
+      var xType = ATTRS[asg.x].type, yType = ATTRS[asg.y].type;
+      var sizeType = asg.size ? ATTRS[asg.size].type : null;
+      if (chartTypeFits(ct, xType, yType, sizeType)) total += CHART_FIT_BONUS;
+    }
+    return total;
+  }
+
+  function combinations(arr, k) {
+    var result = [];
+    function helper(start, chosen) {
+      if (chosen.length === k) { result.push(chosen.slice()); return; }
+      for (var i = start; i < arr.length; i++) {
+        chosen.push(arr[i]);
+        helper(i + 1, chosen);
+        chosen.pop();
+      }
+    }
+    helper(0, []);
+    return result;
+  }
+  function permutations(arr) {
+    if (arr.length <= 1) return [arr];
+    var result = [];
+    for (var i = 0; i < arr.length; i++) {
+      var rest = arr.slice(0, i).concat(arr.slice(i+1));
+      permutations(rest).forEach(function(p) { result.push([arr[i]].concat(p)); });
+    }
+    return result;
+  }
+
+  var MAX_RAW = null, BEST_COMBO = null;
+  function computeGlobalMax() {
+    var subsets = combinations(ALL_KEYS, 5);
+    var best = -1, bestAsg = null, bestCt = null;
+    subsets.forEach(function(subset) {
+      var perms = permutations(subset);
+      perms.forEach(function(p) {
+        var asg = {};
+        CHANNELS.forEach(function(c, i) { asg[c] = p[i]; });
+        CHART_TYPES.forEach(function(ct) {
+          var sc = rawScore(asg, ct);
+          if (sc > best) { best = sc; bestAsg = asg; bestCt = ct; }
+        });
+      });
+    });
+    MAX_RAW = best;
+    BEST_COMBO = { assignment: bestAsg, chartType: bestCt };
+  }
+
+  function normalizedScore(asg, ct) {
+    if (!MAX_RAW) return 0;
+    return Math.round(rawScore(asg, ct) / MAX_RAW * 100);
+  }
+
+  // ---------- Drag and drop ----------
+  var dragData = null; // { key, from } where from is 'pool' or a channel name
+
+  function attrCardHTML(key, draggable) {
+    var a = ATTRS[key];
+    return '<div class="attr-card" draggable="' + (draggable !== false) + '" data-key="' + key + '">' +
+      '<div class="nm">' + a.label + '</div><div class="ty">' + a.type + '</div></div>';
+  }
+
+  function attachDragHandlers(root) {
+    root.querySelectorAll('.attr-card').forEach(function(card) {
+      card.addEventListener('dragstart', function(e) {
+        var from = card.closest('[data-channel]') ? card.closest('[data-channel]').getAttribute('data-channel') : 'pool';
+        dragData = { key: card.getAttribute('data-key'), from: from };
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', dragData.key);
+      });
+    });
+  }
+
+  function removeFromCurrentLocation(key) {
+    var poolIdx = pool.indexOf(key);
+    if (poolIdx !== -1) pool.splice(poolIdx, 1);
+    CHANNELS.forEach(function(ch) { if (assignment[ch] === key) assignment[ch] = null; });
+  }
+
+  function handleDropOnChannel(ch) {
+    if (!dragData) return;
+    var key = dragData.key;
+    var displaced = assignment[ch];
+    removeFromCurrentLocation(key);
+    assignment[ch] = key;
+    if (displaced && displaced !== key) pool.push(displaced);
+    dragData = null;
+    document.getElementById('optimalBanner').classList.remove('show');
+    renderPool();
+    renderChannels();
+    renderResults();
+  }
+
+  function handleDropOnPool() {
+    if (!dragData) return;
+    var key = dragData.key;
+    if (dragData.from !== 'pool') {
+      removeFromCurrentLocation(key);
+      pool.push(key);
+    }
+    dragData = null;
+    document.getElementById('optimalBanner').classList.remove('show');
+    renderPool();
+    renderChannels();
+    renderResults();
+  }
+
+  function renderPool() {
+    var el = document.getElementById('poolArea');
+    el.innerHTML = pool.length ? pool.map(function(k) { return attrCardHTML(k); }).join('') :
+      '<div class="pool-empty-hint">All attributes assigned.</div>';
+    attachDragHandlers(el);
+    el.ondragover = function(e) { e.preventDefault(); el.classList.add('dragover'); };
+    el.ondragleave = function() { el.classList.remove('dragover'); };
+    el.ondrop = function(e) { e.preventDefault(); el.classList.remove('dragover'); handleDropOnPool(); };
+  }
+
+  function renderChannels() {
+    var el = document.getElementById('channelBoard');
+    el.innerHTML = CHANNELS.map(function(ch) {
+      var key = assignment[ch];
+      var inner = key ?
+        '<div class="slot-card">' + attrCardHTML(key) + '<button class="rm-btn" data-unassign="' + ch + '">&times;</button></div>' :
+        '<div class="ch-empty">Drop here</div>';
+      return '<div class="channel-slot" data-channel="' + ch + '"><div class="ch-label">' + CHANNEL_LABEL[ch] + '</div>' + inner + '</div>';
+    }).join('');
+    attachDragHandlers(el);
+    CHANNELS.forEach(function(ch) {
+      var slot = el.querySelector('[data-channel="' + ch + '"]');
+      slot.ondragover = function(e) { e.preventDefault(); slot.classList.add('dragover'); };
+      slot.ondragleave = function() { slot.classList.remove('dragover'); };
+      slot.ondrop = function(e) { e.preventDefault(); slot.classList.remove('dragover'); handleDropOnChannel(ch); };
+    });
+    el.querySelectorAll('[data-unassign]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var ch = btn.getAttribute('data-unassign');
+        var key = assignment[ch];
+        assignment[ch] = null;
+        if (key) pool.push(key);
+        document.getElementById('optimalBanner').classList.remove('show');
+        renderPool(); renderChannels(); renderResults();
+      });
+    });
+  }
+
+  function renderChartTypeRow() {
+    var el = document.getElementById('chartTypeRow');
+    el.innerHTML = CHART_TYPES.map(function(ct) {
+      return '<button class="charttype-btn' + (ct === chartType ? ' active' : '') + '" data-ct="' + ct + '">' + CHART_TYPE_LABEL[ct] + '</button>';
+    }).join('');
+    CHART_TYPES.forEach(function(ct) {
+      el.querySelector('[data-ct="' + ct + '"]').addEventListener('click', function() {
+        chartType = ct;
+        document.getElementById('optimalBanner').classList.remove('show');
+        renderChartTypeRow();
+        renderResults();
+      });
+    });
+  }
+
+  function isComplete() { return CHANNELS.every(function(ch) { return !!assignment[ch]; }); }
+
+  function renderResults() {
+    var scoreArea = document.getElementById('scoreArea');
+    var chartArea = document.getElementById('chartArea');
+    if (!isComplete()) {
+      scoreArea.innerHTML = '<div class="incomplete-note">Assign an attribute to all 5 channels to see your score.</div>';
+      chartArea.innerHTML = '<div class="incomplete-note">Assign an attribute to all 5 channels to see your chart.</div>';
+      return;
+    }
+    renderScore(scoreArea);
+    renderChart(chartArea);
+  }
+
+  function renderScore(scoreArea) {
+    var score = normalizedScore(assignment, chartType);
+    var rows = CHANNELS.map(function(ch) {
+      var key = assignment[ch];
+      var type = ATTRS[key].type;
+      var s = CHANNEL_FIT[type][ch];
+      return { label: ATTRS[key].label, type: type, channel: ch, score: s, reason: REASONS[type][ch] };
+    });
+    var xType = ATTRS[assignment.x].type, yType = ATTRS[assignment.y].type, sizeType = ATTRS[assignment.size].type;
+    var fits = chartTypeFits(chartType, xType, yType, sizeType);
+
+    var html = '<div class="score-panel"><span class="score-num">' + score + '</span><span class="score-max">/ 100</span></div>';
+    html += '<div class="score-rows">';
+    html += rows.map(function(r) {
+      var badge = BADGE_FOR_SCORE[r.score], label = LABEL_FOR_SCORE[r.score];
+      return '<div class="score-row"><span class="score-badge ' + badge + '">' + label + '</span>' +
+        '<span class="desc"><b>' + r.label + '</b> (' + r.type + ') &rarr; <b>' + CHANNEL_LABEL[r.channel] + '</b>. ' + r.reason + '</span></div>';
+    }).join('');
+    html += '<div class="score-row chart-fit-row"><span class="score-badge ' + (fits ? 'excellent' : 'poor') + '">' + (fits ? 'Fits' : 'Mismatch') + '</span>' +
+      '<span class="desc"><b>' + CHART_TYPE_LABEL[chartType] + ' chart.</b> ' + CHART_FIT_EXPLAIN[chartType] + (fits ? '' : ' Your current axes don\'t satisfy that — try a different chart type or different channel assignment.') + '</span></div>';
+    html += '</div>';
+    scoreArea.innerHTML = html;
+  }
+
+  function renderChart(chartArea) {
+    var W = 680, H = 440;
+    var marginL = 66, marginR = 24, marginT = 20, marginB = 54;
+    var plotW = W - marginL - marginR, plotH = H - marginT - marginB;
+
+    var xKey = assignment.x, yKey = assignment.y, colorKey = assignment.color, sizeKey = assignment.size, shapeKey = assignment.shape;
+    var xAttr = ATTRS[xKey], yAttr = ATTRS[yKey];
+
+    function makePosScale(key, attr, rangeMin, rangeMax) {
+      if (attr.type === 'quantitative') {
+        var r = range(key);
+        var span = (r.max - r.min) || 1;
+        return function(v) { return rangeMin + (v - r.min) / span * (rangeMax - rangeMin); };
+      } else {
+        var levels = attr.levels;
+        var band = (rangeMax - rangeMin) / levels.length;
+        return function(v, idx) {
+          var li = levels.indexOf(v);
+          var center = rangeMin + band * (li + 0.5);
+          var jitter = (hashFrac(idx) - 0.5) * band * 0.55;
+          return center + jitter;
+        };
+      }
+    }
+
+    var xScale = makePosScale(xKey, xAttr, marginL, marginL + plotW);
+    var yScale = makePosScale(yKey, yAttr, marginT + plotH, marginT);
+
+    var colorAttr = ATTRS[colorKey];
+    var colorFn, colorLegendItems = [];
+    if (colorAttr.type === 'quantitative') {
+      var cr = range(colorKey);
+      var cspan = (cr.max - cr.min) || 1;
+      if (colorAttr.diverging) {
+        var half = Math.max(Math.abs(cr.min), Math.abs(cr.max)) || 1;
+        colorFn = function(v) { return divergingColor((v + half) / (2 * half)); };
+        colorLegendItems = [
+          { swatch: divergingColor(0), label: cr.min },
+          { swatch: divergingColor(0.5), label: '0' },
+          { swatch: divergingColor(1), label: cr.max }
+        ];
+      } else {
+        colorFn = function(v) { return sequentialColor((v - cr.min) / cspan); };
+        colorLegendItems = [ { swatch: sequentialColor(0), label: cr.min }, { swatch: sequentialColor(1), label: cr.max } ];
+      }
+    } else if (colorAttr.type === 'ordinal') {
+      var olevels = colorAttr.levels;
+      colorFn = function(v) { var li = olevels.indexOf(v); return sequentialColor(li / (olevels.length - 1)); };
+      colorLegendItems = olevels.map(function(l, i) { return { swatch: sequentialColor(i/(olevels.length-1)), label: l }; });
+    } else {
+      var nlevels = colorAttr.levels;
+      colorFn = function(v) { var li = nlevels.indexOf(v); return CAT_COLORS[li % CAT_COLORS.length]; };
+      colorLegendItems = nlevels.map(function(l, i) { return { swatch: CAT_COLORS[i % CAT_COLORS.length], label: l }; });
+    }
+
+    var sizeAttr = ATTRS[sizeKey];
+    var sizeFn, minR = 4, maxR = 15;
+    if (sizeAttr.type === 'quantitative') {
+      var sr = range(sizeKey);
+      var sspan = (sr.max - sr.min) || 1;
+      sizeFn = function(v) { return minR + Math.sqrt((v - sr.min) / sspan) * (maxR - minR); };
+    } else if (sizeAttr.type === 'ordinal') {
+      var slevels = sizeAttr.levels;
+      sizeFn = function(v) { var li = slevels.indexOf(v); return minR + (li / (slevels.length - 1)) * (maxR - minR); };
+    } else {
+      var slevels2 = sizeAttr.levels;
+      sizeFn = function(v) { var li = slevels2.indexOf(v); return minR + ((li + 1) / slevels2.length) * (maxR - minR); };
+    }
+
+    var shapeAttr = ATTRS[shapeKey];
+    var shapeFn;
+    if (shapeAttr.type === 'quantitative') {
+      var svals = DATA.map(function(d) { return d[shapeKey]; });
+      var breaks = quantileBins(svals, 4);
+      shapeFn = function(v) { return binIndex(v, breaks); };
+    } else {
+      var shlevels = shapeAttr.levels;
+      shapeFn = function(v) { return shlevels.indexOf(v) % 4; };
+    }
+
+    var svg = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg">';
+    svg += '<line class="axis-line" x1="' + marginL + '" y1="' + (marginT+plotH) + '" x2="' + (marginL+plotW) + '" y2="' + (marginT+plotH) + '" />';
+    svg += '<line class="axis-line" x1="' + marginL + '" y1="' + marginT + '" x2="' + marginL + '" y2="' + (marginT+plotH) + '" />';
+
+    if (xAttr.type === 'quantitative') {
+      var xr = range(xKey);
+      [xr.min, (xr.min+xr.max)/2, xr.max].forEach(function(v) {
+        var px = xScale(v);
+        svg += '<text class="tick-label" x="' + px + '" y="' + (marginT+plotH+16) + '" text-anchor="middle">' + (Math.round(v*10)/10) + '</text>';
+      });
+    } else {
+      xAttr.levels.forEach(function(l, i) {
+        var band = plotW / xAttr.levels.length;
+        var px = marginL + band * (i + 0.5);
+        svg += '<text class="tick-label" x="' + px + '" y="' + (marginT+plotH+16) + '" text-anchor="middle">' + l + '</text>';
+      });
+    }
+    svg += '<text class="axis-label" x="' + (marginL + plotW/2) + '" y="' + (H-6) + '" text-anchor="middle">' + xAttr.label + '</text>';
+
+    if (yAttr.type === 'quantitative') {
+      var yr = range(yKey);
+      [yr.min, (yr.min+yr.max)/2, yr.max].forEach(function(v) {
+        var py = yScale(v);
+        svg += '<text class="tick-label" x="' + (marginL-8) + '" y="' + (py+3) + '" text-anchor="end">' + (Math.round(v*10)/10) + '</text>';
+      });
+    } else {
+      yAttr.levels.forEach(function(l, i) {
+        var band = plotH / yAttr.levels.length;
+        var py = (marginT + plotH) - band * (i + 0.5);
+        svg += '<text class="tick-label" x="' + (marginL-8) + '" y="' + (py+3) + '" text-anchor="end">' + l + '</text>';
+      });
+    }
+    svg += '<text class="axis-label" transform="translate(14,' + (marginT+plotH/2) + ') rotate(-90)" text-anchor="middle">' + yAttr.label + '</text>';
+
+    var baselineY = marginT + plotH;
+    var sortedData = DATA.slice();
+    if (chartType === 'line') {
+      sortedData.sort(function(a, b) {
+        if (xAttr.type === 'quantitative') return a[xKey] - b[xKey];
+        return xAttr.levels.indexOf(a[xKey]) - xAttr.levels.indexOf(b[xKey]);
+      });
+    }
+
+    var marks = '';
+    if (chartType === 'bar') {
+      marks = DATA.map(function(d, i) {
+        var cx = xScale(d[xKey], i);
+        var cy = yScale(d[yKey], i);
+        var col = colorFn(d[colorKey]);
+        return '<line x1="' + cx + '" y1="' + baselineY + '" x2="' + cx + '" y2="' + cy + '" stroke="' + col + '" stroke-width="3" opacity="0.8" stroke-linecap="round"/>';
+      }).join('');
+    } else if (chartType === 'line') {
+      var pts = sortedData.map(function(d, i) { return xScale(d[xKey], i) + ',' + yScale(d[yKey], i); }).join(' ');
+      marks = '<polyline points="' + pts + '" fill="none" stroke="#1b6350" stroke-width="2" opacity="0.85"/>';
+      marks += DATA.map(function(d, i) {
+        var cx = xScale(d[xKey], i), cy = yScale(d[yKey], i);
+        var col = colorFn(d[colorKey]);
+        return '<circle cx="' + cx + '" cy="' + cy + '" r="3" fill="' + col + '"/>';
+      }).join('');
+    } else {
+      marks = DATA.map(function(d, i) {
+        var cx = xScale(d[xKey], i);
+        var cy = yScale(d[yKey], i);
+        var col = colorFn(d[colorKey]);
+        var rad = sizeFn(d[sizeKey]);
+        var shIdx = shapeFn(d[shapeKey]);
+        return '<g fill="' + col + '" opacity="0.8">' + shapePath(shIdx, cx, cy, rad) + '</g>';
+      }).join('');
+    }
+
+    svg += marks;
+    svg += '</svg>';
+
+    var legendParts = [];
+    legendParts.push('<span style="color:var(--text-muted); font-weight:500;">Color (' + colorAttr.label + '):</span>');
+    colorLegendItems.forEach(function(it) {
+      legendParts.push('<span class="legend-item"><span class="legend-swatch" style="background:' + it.swatch + '"></span>' + it.label + '</span>');
+    });
+    if (chartType !== 'bar' && chartType !== 'line') {
+      if (shapeAttr.type !== 'quantitative') {
+        legendParts.push('<span style="color:var(--text-muted); font-weight:500; margin-left:10px;">Shape (' + shapeAttr.label + '):</span>');
+        shapeAttr.levels.forEach(function(l, i) {
+          legendParts.push('<span class="legend-item"><svg width="14" height="14"><g fill="var(--text-secondary)">' + shapePath(i % 4, 7, 7, 5) + '</g></svg>' + l + '</span>');
+        });
+      } else {
+        legendParts.push('<span style="color:var(--text-muted); font-weight:500; margin-left:10px;">Shape (' + shapeAttr.label + ', binned into 4 groups):</span>');
+      }
+    }
+
+    chartArea.innerHTML = '<div class="chart-wrap">' + svg + '</div><div class="legend-row">' + legendParts.join('') + '</div>';
+  }
+
+  document.getElementById('randomizeBtn').addEventListener('click', function() {
+    var shuffledAll = ALL_KEYS.slice();
+    for (var i = shuffledAll.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = shuffledAll[i]; shuffledAll[i] = shuffledAll[j]; shuffledAll[j] = tmp;
+    }
+    var chosen = shuffledAll.slice(0, 5);
+    pool = shuffledAll.slice(5);
+    assignment = {};
+    CHANNELS.forEach(function(c, i) { assignment[c] = chosen[i]; });
+    chartType = CHART_TYPES[Math.floor(Math.random() * CHART_TYPES.length)];
+    document.getElementById('optimalBanner').classList.remove('show');
+    renderPool(); renderChannels(); renderChartTypeRow(); renderResults();
+  });
+
+  document.getElementById('optimalBtn').addEventListener('click', function() {
+    if (!BEST_COMBO) computeGlobalMax();
+    assignment = {};
+    CHANNELS.forEach(function(c) { assignment[c] = BEST_COMBO.assignment[c]; });
+    chartType = BEST_COMBO.chartType;
+    var used = CHANNELS.map(function(c) { return assignment[c]; });
+    pool = ALL_KEYS.filter(function(k) { return used.indexOf(k) === -1; });
+    document.getElementById('optimalBanner').classList.add('show');
+    renderPool(); renderChannels(); renderChartTypeRow(); renderResults();
+  });
+
+  renderPool();
+  renderChannels();
+  renderChartTypeRow();
+  renderResults();
+  computeGlobalMax();
+})();
+</script>
+</div>
+
+</body>
+</html>

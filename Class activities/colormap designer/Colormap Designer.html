@@ -1,0 +1,2381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colormap Designer — DS 2003</title>
+</head>
+<body style="margin:0;">
+<div class="cmd-app" id="cmdApp">
+<style>
+.cmd-app {
+  --surface-2: #ffffff;
+  --surface-1: #f5f6f4;
+  --surface-0: #f7f8f5;
+  --text-primary: #14161a;
+  --text-secondary: #53564f;
+  --text-muted: #8b8d84;
+  --border: #e0e2da;
+  --border-accent: #1b6350;
+  --bg-accent: #e4f2ec;
+  --text-accent: #14523f;
+  --bg-warning: #fdf3e3;
+  --text-warning: #8a5a00;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: var(--surface-0);
+  padding: 28px 16px;
+  box-sizing: border-box;
+  min-height: 100%;
+}
+.cmd-app *, .cmd-app *::before, .cmd-app *::after { box-sizing: border-box; }
+.cmd-wrap { max-width: 1080px; margin: 0 auto; }
+
+.cmd-header { text-align: center; margin-bottom: 20px; }
+.cmd-header h1 { font-size: 24px; font-weight: 500; margin: 0 0 6px; letter-spacing: -0.01em; }
+.cmd-header p { font-size: 14px; color: var(--text-secondary); margin: 0 auto; line-height: 1.6; max-width: 660px; }
+
+.cmd-card {
+  background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px;
+  padding: 22px; box-shadow: 0 1px 2px rgba(20,20,30,0.04), 0 8px 24px rgba(20,20,30,0.05);
+  margin-bottom: 16px;
+}
+.cmd-card > h3 { font-size: 15px; font-weight: 500; margin: 0 0 10px; }
+.cmd-card p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; margin: 0 0 8px; }
+.cmd-card p:last-child { margin-bottom: 0; }
+
+.cmd-btn {
+  font-family: var(--font-sans); font-size: 13px; padding: 7px 14px; border-radius: 999px;
+  border: 0.5px solid var(--border); background: var(--surface-1); color: var(--text-primary); cursor: pointer;
+}
+.cmd-btn:hover { border-color: var(--border-accent); color: var(--text-accent); }
+.cmd-btn.primary { background: var(--bg-accent); border-color: var(--border-accent); color: var(--text-accent); font-weight: 500; }
+.cmd-btn.active { background: var(--bg-accent); border-color: var(--border-accent); color: var(--text-accent); font-weight: 500; }
+.cmd-btn.big { font-size: 14px; padding: 10px 22px; }
+.cmd-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+.tool-bar { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 14px;
+  padding-bottom: 14px; border-bottom: 0.5px solid var(--border); }
+.tool-group { display: flex; flex-direction: column; gap: 5px; }
+.tool-group > label { font-size: 10.5px; font-weight: 500; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.04em; }
+.seg { display: flex; }
+.seg .cmd-btn { border-radius: 0; margin-left: -0.5px; }
+.seg .cmd-btn:first-child { border-radius: 999px 0 0 999px; margin-left: 0; }
+.seg .cmd-btn:last-child { border-radius: 0 999px 999px 0; }
+select.cmd-sel {
+  font-family: var(--font-sans); font-size: 13px; padding: 7px 10px; border-radius: 8px;
+  border: 0.5px solid var(--border); background: var(--surface-1); color: var(--text-primary); cursor: pointer;
+}
+.chk { font-size: 12.5px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+.studio {
+  display: grid; gap: 14px;
+  grid-template-columns: minmax(0,1fr) minmax(0,1.22fr);
+  grid-template-areas: "solid solid" "ab jprof";
+}
+.studio .a-solid { grid-area: solid; }
+.studio .a-ab    { grid-area: ab; }
+.studio .a-jprof { grid-area: jprof; display: flex; flex-direction: column; }
+@media (max-width: 780px) {
+  .studio { grid-template-columns: minmax(0,1fr); grid-template-areas: "solid" "ab" "jprof"; }
+}
+.panel { border: 0.5px solid var(--border); border-radius: 10px; background: var(--surface-1); padding: 10px; }
+.panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+.panel-head .t { font-size: 12px; font-weight: 500; }
+.panel-head .h { font-size: 11px; color: var(--text-muted); }
+.panel canvas { display: block; width: 100%; height: auto; border-radius: 6px; background: var(--surface-2);
+  touch-action: none; cursor: crosshair; }
+.panel canvas.grab { cursor: grab; }
+
+.hint { font-size: 12px; color: var(--text-muted); line-height: 1.55; margin-top: 8px; }
+.hint kbd { font-family: var(--font-mono); font-size: 10.5px; background: var(--surface-1);
+  border: 0.5px solid var(--border); border-radius: 4px; padding: 1px 4px; }
+.note-box {
+  margin-top: 10px; padding: 10px 12px; border-radius: 8px;
+  background: var(--bg-accent); border: 0.5px solid #bcd9cd;
+  font-size: 12.5px; line-height: 1.6; color: var(--text-accent);
+}
+.note-box b { font-weight: 600; }
+
+.ramp-strip { height: 34px; border-radius: 6px; border: 0.5px solid var(--border); }
+.ramp-label { font-size: 11px; color: var(--text-muted); margin: 0 0 4px; }
+.ramp-block { margin-bottom: 12px; }
+
+.score-hero { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+.score-num { font-size: 40px; font-weight: 500; line-height: 1; }
+.score-max { font-size: 14px; color: var(--text-muted); }
+.score-grade { font-size: 13px; font-weight: 500; padding: 3px 12px; border-radius: 999px; }
+.score-rows { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+.score-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; padding: 8px 10px;
+  border-radius: 8px; background: var(--surface-1); }
+.score-row .sr-pts { flex: 0 0 66px; font-variant-numeric: tabular-nums; font-weight: 500; }
+.score-row .sr-body { flex: 1 1 auto; }
+.score-row .sr-body .nm { font-weight: 500; }
+.score-row .sr-body .desc { color: var(--text-secondary); line-height: 1.5; }
+.badge { font-size: 10.5px; font-weight: 500; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.badge.excellent { background: #dcefe2; color: #1b6b3a; }
+.badge.good { background: #e4f2ec; color: var(--text-accent); }
+.badge.fair { background: var(--bg-warning); color: var(--text-warning); }
+.badge.poor { background: #fbe4e3; color: #9a2c2b; }
+
+.report-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+/* Two columns so each row is one dataset: normal vision on the left, simulated
+   deficiency on the right. */
+.samples-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px; align-items: start; }
+@media (max-width: 520px) { .samples-grid { grid-template-columns: minmax(0, 1fr); } }
+.sample-cell canvas { display: block; width: 100%; height: auto; border-radius: 6px; border: 0.5px solid var(--border); image-rendering: auto; }
+.sample-cell .cap { font-size: 11px; color: var(--text-muted); margin-top: 4px; min-height: 2.5em; }
+.sample-cell .cap b { color: var(--text-secondary); font-weight: 500; }
+.subhead { font-size: 12px; font-weight: 500; margin: 18px 0 8px; padding-top: 14px; border-top: 0.5px solid var(--border); }
+.subhead:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+.code-out {
+  font-family: var(--font-mono); font-size: 11.5px; line-height: 1.5; background: var(--surface-1);
+  border: 0.5px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 10px;
+  white-space: pre-wrap; word-break: break-all; max-height: 200px; overflow: auto; display: none;
+}
+.code-out.show { display: block; }
+.warn-note { background: var(--bg-warning); border: 0.5px solid #e8cf9a; border-radius: 8px;
+  padding: 8px 12px; font-size: 12.5px; color: var(--text-warning); margin-top: 10px; display: none; }
+.warn-note.show { display: block; }
+.hidden { display: none !important; }
+
+/* Stage gating: the guides stay locked until stage 2. */
+.cmd-app:not(.stage-2) .s2-only { display: none !important; }
+.cmd-app:not(.sandbox) .sandbox-only { display: none !important; }
+.cmd-app.stage-2 .s1-only { display: none !important; }
+.stage-tag {
+  display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
+  text-transform: uppercase; padding: 3px 11px; border-radius: 999px;
+  background: var(--bg-accent); color: var(--text-accent); margin-bottom: 10px;
+}
+.next-stage {
+  margin-top: 18px; padding-top: 16px; border-top: 0.5px solid var(--border);
+}
+/* The head-to-head against jet: sits directly under the score breakdown and is
+   deliberately the loudest thing in the report after the score itself. */
+.jet-target {
+  margin: 18px 0 2px; padding: 16px 20px; border-radius: 10px;
+  font-size: 15px; line-height: 1.65;
+  border: 0.5px solid var(--border); border-left: 5px solid var(--text-muted);
+  background: var(--surface-1);
+  box-shadow: 0 1px 2px rgba(20,20,30,0.04), 0 6px 18px rgba(20,20,30,0.06);
+}
+.jet-target.win {
+  background: var(--bg-accent); border-color: var(--border-accent);
+  border-left-color: var(--border-accent); color: var(--text-accent);
+}
+.jet-target.lose, .jet-target.partial {
+  background: var(--bg-warning); border-color: #e8cf9a;
+  border-left-color: #c98a2a; color: var(--text-warning);
+}
+.jet-target b { font-weight: 600; }
+.pt-readout { font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); margin-top: 6px; }
+</style>
+
+<div class="cmd-wrap">
+
+  <div class="cmd-header">
+    <h1>Colormap Designer</h1>
+    <p>Draw a path through a perceptual color space, then have it graded on perceptual uniformity,
+       grayscale safety, and colorblind accessibility. The space is CAM02&#8209;UCS &mdash; the same
+       one <code>viscm</code> and the makers of <em>viridis</em> used.</p>
+    <p style="margin-top:6px;font-size:13px;">Part 1: build one freehand. Part 2: build a better
+       rainbow than <code>jet</code>. For open-ended exploring, there is also the
+       <b>Guided Sandbox</b> file.</p>
+  </div>
+
+  <!-- ============ THE TASK ============ -->
+  <div class="cmd-card">
+    <div class="stage-tag s1-only">Part 1 of 2 &middot; freehand, no guides</div>
+    <div class="stage-tag s2-only">Part 2 of 2 &middot; build a better rainbow than jet</div>
+    <h3>Your task</h3>
+
+    <div class="s1-only">
+      <p>Click points into the color solid to drop colors, and they get joined into a path. Drag
+        them around until you think the ramp underneath looks like a good colormap. Then hit
+        <b>Evaluate</b>.</p>
+      <p>You get no help on this pass &mdash; no presets, no diagnostic views. Most people score
+        somewhere in the 40s to 60s the first time. That is expected and it is the point: find out
+        by feel what is hard about this before you are shown the instruments.</p>
+    </div>
+
+    <div class="s2-only">
+      <p><b>Build a better rainbow.</b> On the plot are the control points of <b>jet</b> &mdash; the
+        most widely used and most criticized colormap in science. Your job is to move them
+        (add and delete them too) until you beat jet's score, <i>without giving up its colorfulness</i>.</p>
+      <p>The constraint is what makes this hard: the map still has to <b>hit all the colors</b>.
+        Anyone can beat jet by collapsing it to a smooth blue&#8209;to&#8209;yellow ramp &mdash; that
+        is Part 1's answer, and it scores well because the rubric there does not care about hue. Here
+        a fifth criterion, <b>hue coverage</b>, holds you to the rainbow.</p>
+      <p>So you are negotiating a real conflict: sweeping through every hue drags lightness up and
+        down and pushes colors out of gamut, which is exactly why jet fails. This is an open problem,
+        not a solved one. Every published rainbow scores between <b>50 and 60</b> on this rubric
+        &mdash; Google's <b>turbo</b> gets 59, and Kovesi's <b>CET&#8209;R1</b>, the best of them,
+        gets 60 &mdash; because they all buy vividness by letting lightness run bright in the middle
+        and dark at both ends. Beat <b>70</b> and you are ahead of all of them.</p>
+      <p>You now have the instruments they used: the <b>hue &amp; chroma slice</b> and the
+        <b>lightness profile</b>. The way through is usually to give up some <i>saturation</i> in
+        exchange for a lightness ramp that only ever climbs.</p>
+      <p>When you have something you are proud of, export it and use it on real data in the
+        companion notebook, <code>colormap_making.ipynb</code>.</p>
+    </div>
+
+    <p style="margin-top:10px;">You are scored on <span id="rbCount">five</span> things, and they
+      fight each other &mdash; that is the whole lesson:</p>
+    <div class="score-rows" style="margin-top:8px;">
+      <div class="score-row"><span class="sr-pts">30</span><span class="sr-body"><span class="nm">Perceptual uniformity</span><br>
+        <span class="desc">Equal steps in the data must look like equal steps in color, or your
+        colormap invents structure that is not in the numbers. Scored mostly on the
+        <b>derivative of the perceptual&#8209;deltas curve</b> &mdash; the second derivative of
+        perceived color along your path. A flat curve scores well; one that keeps changing slope
+        is rough no matter what its average is.</span></span></div>
+      <div class="score-row"><span class="sr-pts">10</span><span class="sr-body"><span class="nm">Perceptual range</span><br>
+        <span class="desc">The <i>total</i> of that same curve. A map that travels further through
+        perceptual space can resolve more distinct levels; a washed&#8209;out one cannot.</span></span></div>
+      <div class="score-row"><span class="sr-pts" id="rbLight">25</span><span class="sr-body"><span class="nm">Lightness behavior</span><br>
+        <span class="desc">Lightness should climb steadily (sequential) or form a clean symmetric
+        tent (diverging). This is what makes it readable in grayscale and orderable by eye.</span></span></div>
+      <div class="score-row s2-only rainbow-only"><span class="sr-pts">15</span><span class="sr-body"><span class="nm">Hue coverage &mdash; "hit all the colors"</span><br>
+        <span class="desc">What fraction of the hue circle your path actually visits. This is the
+        constraint that keeps Part 2 a <i>rainbow</i> instead of letting you retreat to a safe
+        two&#8209;hue ramp.</span></span></div>
+      <div class="score-row"><span class="sr-pts" id="rbCvd">25</span><span class="sr-body"><span class="nm">Colorblind accessibility</span><br>
+        <span class="desc">Values far apart in your data must stay far apart in color for the
+        ~1 in 12 men with red&ndash;green color vision deficiency.</span></span></div>
+      <div class="score-row"><span class="sr-pts">10</span><span class="sr-body"><span class="nm">Gamut &amp; smoothness</span><br>
+        <span class="desc">Colors a screen cannot actually display get flattened, and kinked paths
+        show up as banding.</span></span></div>
+    </div>
+  </div>
+
+  <!-- ============ DESIGN STUDIO ============ -->
+  <div class="cmd-card">
+    <div class="tool-bar">
+      <div class="tool-group">
+        <label>Path</label>
+        <div class="btn-row">
+          <button class="cmd-btn" id="btnUndo">Undo</button>
+          <button class="cmd-btn" id="btnDelPt">Delete point</button>
+          <button class="cmd-btn" id="btnReverse">Reverse</button>
+          <button class="cmd-btn s2-only rainbow-only" id="btnResetJet">Back to jet</button>
+        </div>
+      </div>
+      <div class="tool-group sandbox-only">
+        <label>Colormap type</label>
+        <div class="seg" id="typeSeg">
+          <button class="cmd-btn active" data-type="sequential">Sequential</button>
+          <button class="cmd-btn" data-type="diverging">Diverging</button>
+          <button class="cmd-btn" data-type="cyclic">Cyclic</button>
+        </div>
+      </div>
+      <div class="tool-group sandbox-only">
+        <label>Lightness</label>
+        <div class="seg" id="lmodeSeg">
+          <button class="cmd-btn active" data-lmode="free">Free (3D)</button>
+          <button class="cmd-btn" data-lmode="ramp">Linear ramp</button>
+        </div>
+      </div>
+      <div class="tool-group sandbox-only">
+        <label>Start from</label>
+        <select class="cmd-sel" id="presetSel">
+          <option value="">— pick a preset —</option>
+        </select>
+      </div>
+      <div class="tool-group sandbox-only">
+        <label>&nbsp;</label>
+        <label class="chk"><input type="checkbox" id="chkEqualize"> arc&#8209;length equalize</label>
+      </div>
+    </div>
+
+    <div class="studio">
+      <div class="panel a-solid">
+        <div class="panel-head">
+          <span class="t">The color solid &mdash; CAM02&#8209;UCS (J&prime;&nbsp;a&prime;&nbsp;b&prime;)</span>
+          <span class="h">drag the background to orbit</span>
+        </div>
+        <canvas id="cv3d" width="1560" height="980"></canvas>
+        <div class="btn-row" style="margin-top:8px;">
+          <button class="cmd-btn active" id="btnGamut">Toggle gamut</button>
+          <button class="cmd-btn" id="btnResetView">Reset view</button>
+          <span class="hint" style="margin:0;">
+            Click empty space to <b>add</b> a point. Drag a point and it follows your cursor,
+            moving in the plane you are currently looking at &mdash; so <b>orbit first, then drag</b>
+            to control which direction you are moving in. Hold <kbd>Shift</kbd> while dragging
+            (or scroll over a point) to change lightness J&prime; only.
+          </span>
+        </div>
+        <div class="note-box">
+          <b>Your points split the colormap into equal shares.</b> With 5 points, the path from
+          point&nbsp;1 to&nbsp;2 covers the first quarter of your data range, 2&nbsp;to&nbsp;3 the
+          next quarter, and so on &mdash; <i>however far apart they are in color</i>. So two points
+          placed close together spend a big slice of your data on almost no color change, and two
+          placed far apart cram a huge color jump into a small slice. Getting the <b>spacing</b>
+          right is most of what perceptual uniformity is asking of you.
+        </div>
+      </div>
+
+      <div class="panel a-ab s2-only">
+        <div class="panel-head">
+          <span class="t">Hue &amp; chroma slice (a&prime;b&prime;)</span>
+          <span class="h" id="sliceJLabel">J&prime; = 50</span>
+        </div>
+        <canvas id="cvAB" width="700" height="700"></canvas>
+        <div class="hint">Click to add a point, drag to move. Gray = no such color exists on a screen
+          at this lightness.</div>
+      </div>
+
+      <div class="panel a-jprof s2-only">
+        <div class="panel-head">
+          <span class="t">Lightness profile (J&prime;)</span>
+          <span class="h">drag points up / down</span>
+        </div>
+        <canvas id="cvJ" width="900" height="520"></canvas>
+        <div class="pt-readout" id="ptReadout">&nbsp;</div>
+        <div class="hint" style="margin-top:auto;">
+          For a <b>sequential</b> map this line should climb steadily and never turn back &mdash;
+          that is what makes it survive a black&#8209;and&#8209;white printout.
+          Keyboard: <kbd>Tab</kbd> next point, arrows nudge hue/chroma,
+          <kbd>PgUp</kbd>/<kbd>PgDn</kbd> lightness, <kbd>Delete</kbd> removes.
+        </div>
+      </div>
+    </div>
+
+    <div class="ramp-block" style="margin-top:16px;">
+      <p class="ramp-label">Live preview</p>
+      <div class="ramp-strip" id="liveRamp"></div>
+    </div>
+    <div class="warn-note" id="gamutWarn"></div>
+
+    <div class="btn-row" style="margin-top:14px;">
+      <button class="cmd-btn primary big" id="btnEval">Evaluate my colormap</button>
+      <button class="cmd-btn" id="btnClear">Start over</button>
+    </div>
+  </div>
+
+  <!-- ============ REPORT ============ -->
+  <div class="cmd-card hidden" id="reportCard">
+    <h3>Evaluation</h3>
+
+    <div class="score-hero">
+      <span class="score-num" id="scoreNum">—</span>
+      <span class="score-max">/ 100</span>
+      <span class="score-grade badge" id="scoreGrade">—</span>
+    </div>
+    <div class="score-rows" id="scoreRows"></div>
+
+    <div class="jet-target s2-only rainbow-only" id="jetTarget"></div>
+
+    <div class="subhead">What it looks like</div>
+    <div class="report-grid">
+      <div>
+        <div class="ramp-block"><p class="ramp-label">Your colormap</p><div class="ramp-strip" id="rampMain"></div></div>
+        <div class="ramp-block"><p class="ramp-label">Printed in black &amp; white</p><div class="ramp-strip" id="rampGray"></div></div>
+      </div>
+      <div>
+        <div class="ramp-block"><p class="ramp-label">Moderate deuteranomaly (~50%) &mdash; the common case</p><div class="ramp-strip" id="rampDeutMod"></div></div>
+        <div class="ramp-block"><p class="ramp-label">Moderate protanomaly (~50%)</p><div class="ramp-strip" id="rampProtMod"></div></div>
+        <div class="ramp-block"><p class="ramp-label">Deuteranopia (no green cone, ~6% of men)</p><div class="ramp-strip" id="rampDeut"></div></div>
+        <div class="ramp-block"><p class="ramp-label">Protanopia (no red cone, ~2% of men)</p><div class="ramp-strip" id="rampProt"></div></div>
+        <div class="ramp-block"><p class="ramp-label">Tritanopia (no blue cone, rare)</p><div class="ramp-strip" id="rampTrit"></div></div>
+        <p class="hint">Simulated with the Machado&nbsp;(2009) dichromacy matrices; the ~50% rows are
+          interpolated toward normal vision, so treat them as indicative rather than exact.</p>
+      </div>
+    </div>
+
+    <div class="subhead">Perceptual step size</div>
+    <p style="font-size:12.5px;">These are the two plots <code>viscm</code> shows. Each is the rate of
+      change along the map, so the <b>dashed line sits exactly where a perfectly uniform colormap
+      would be flat</b>. Every departure from that line is a place where your color scale is lying
+      about the spacing of your data.</p>
+    <div class="report-grid">
+      <div class="sample-cell">
+        <canvas id="cvDeltaE" width="760" height="300"></canvas>
+        <div class="cap">Distance in CAM02&#8209;UCS between neighboring colors. Spikes exaggerate that
+          part of the range; dips toward zero hide it.</div>
+      </div>
+      <div class="sample-cell">
+        <canvas id="cvDeltaJp" width="760" height="300"></canvas>
+        <div class="cap">The same thing for lightness alone. Dropping to zero means lightness has
+          stalled or turned around there.</div>
+      </div>
+      <div class="sample-cell">
+        <canvas id="cvDeltaJ" width="760" height="300"></canvas>
+        <div class="cap">Lightness J&prime; itself. Monotonic = survives grayscale printing and
+          reads correctly as "more".</div>
+      </div>
+    </div>
+
+    <div class="subhead">The same data, three ways</div>
+    <div class="samples-grid" id="samplesGrid"></div>
+
+    <div class="next-stage s1-only">
+      <p style="font-size:13.5px;margin-bottom:10px;">
+        That is your unaided score. Before you move on, look at the plots above and see whether you
+        can say <i>in words</i> what went wrong. Then take on Part 2: you get the diagnostic views,
+        and a harder brief &mdash; beat <b>jet</b> without giving up its colorfulness.
+      </p>
+      <button class="cmd-btn primary big" id="btnStage2">Start Part 2: beat jet &rarr;</button>
+      <span class="hint" style="margin:0 0 0 8px;">loads jet's control points onto the plot</span>
+    </div>
+
+    <div class="subhead">Take it with you</div>
+    <div class="btn-row">
+      <button class="cmd-btn" data-export="py">Python / matplotlib</button>
+      <button class="cmd-btn" data-export="r">R</button>
+      <button class="cmd-btn" data-export="hex">Hex list</button>
+      <button class="cmd-btn" data-export="css">CSS gradient</button>
+      <button class="cmd-btn" data-export="jscm">Download .jscm (viscm)</button>
+      <button class="cmd-btn" id="btnCopyCode">Copy</button>
+    </div>
+    <div class="code-out" id="codeOut"></div>
+    <p class="hint">The <code>.jscm</code> file stores all 256 of your colors exactly, so
+      <code>python -m viscm view my_cmap.jscm</code> will show precisely what you built. Note that
+      reopening it in <code>viscm edit</code> will not round&#8209;trip a free&#8209;form 3D path
+      perfectly, because that editor rebuilds lightness as a straight ramp.</p>
+  </div>
+
+</div>
+
+<script>
+"use strict";
+/* =====================================================================
+   PART 1 — Color science
+   sRGB <-> XYZ <-> CIECAM02 <-> CAM02-UCS (J' a' b'), plus CVD simulation.
+   Viewing conditions match colorspacious' CIECAM02Space.sRGB, which is what
+   viscm uses: D65 white at 100, Y_b = 20, L_A = 64/pi/5, average surround.
+   ===================================================================== */
+const CS = (function () {
+
+  function mv(M, v) {
+    return [M[0][0]*v[0] + M[0][1]*v[1] + M[0][2]*v[2],
+            M[1][0]*v[0] + M[1][1]*v[1] + M[1][2]*v[2],
+            M[2][0]*v[0] + M[2][1]*v[1] + M[2][2]*v[2]];
+  }
+  function inv3(m) {
+    const a=m[0][0],b=m[0][1],c=m[0][2],d=m[1][0],e=m[1][1],f=m[1][2],g=m[2][0],h=m[2][1],i=m[2][2];
+    const A=e*i-f*h, B=-(d*i-f*g), C=d*h-e*g;
+    const det = a*A + b*B + c*C;
+    return [[A/det, (c*h-b*i)/det, (b*f-c*e)/det],
+            [B/det, (a*i-c*g)/det, (c*d-a*f)/det],
+            [C/det, (b*g-a*h)/det, (a*e-b*d)/det]];
+  }
+  const clamp = (x,a,b) => x < a ? a : (x > b ? b : x);
+
+  // ---- sRGB <-> linear <-> XYZ (D65, scale 0..100) ----
+  const M_RGB2XYZ = [[0.4124564, 0.3575761, 0.1804375],
+                     [0.2126729, 0.7151522, 0.0721750],
+                     [0.0193339, 0.1191920, 0.9503041]];
+  const M_XYZ2RGB = inv3(M_RGB2XYZ);
+
+  function srgb_to_lin(u) {
+    return u <= 0.04045 ? u / 12.92 : Math.pow((u + 0.055) / 1.055, 2.4);
+  }
+  function lin_to_srgb(u) {
+    if (u <= 0) return 0;
+    return u <= 0.0031308 ? 12.92 * u : 1.055 * Math.pow(u, 1 / 2.4) - 0.055;
+  }
+
+  // ---- CIECAM02 viewing conditions ----
+  const MCAT02 = [[ 0.7328, 0.4296, -0.1624],
+                  [-0.7036, 1.6975,  0.0061],
+                  [ 0.0030, 0.0136,  0.9834]];
+  const MCAT02_INV = inv3(MCAT02);
+  const MHPE = [[ 0.38971, 0.68898, -0.07868],
+                [-0.22981, 1.18340,  0.04641],
+                [ 0.00000, 0.00000,  1.00000]];
+  const MHPE_INV = inv3(MHPE);
+
+  function makeVC(XYZw, Yb, LA, F, c, Nc) {
+    const RGBw = mv(MCAT02, XYZw);
+    const D = clamp(F * (1 - (1 / 3.6) * Math.exp((-LA - 42) / 92)), 0, 1);
+    const Yw = XYZw[1];
+    const DRGB = RGBw.map(r => D * Yw / r + 1 - D);
+    const k = 1 / (5 * LA + 1);
+    const k4 = k * k * k * k;
+    const FL = 0.2 * k4 * (5 * LA) + 0.1 * (1 - k4) * (1 - k4) * Math.cbrt(5 * LA);
+    const n = Yb / Yw;
+    const z = 1.48 + Math.sqrt(n);
+    const Nbb = 0.725 * Math.pow(1 / n, 0.2);
+    const RGBwc = RGBw.map((r, i) => DRGB[i] * r);
+    const RGBwp = mv(MHPE, mv(MCAT02_INV, RGBwc));
+    const RGBaw = RGBwp.map(r => {
+      const t = Math.pow(FL * r / 100, 0.42);
+      return 400 * t / (27.13 + t) + 0.1;
+    });
+    const Aw = (2 * RGBaw[0] + RGBaw[1] + RGBaw[2] / 20 - 0.305) * Nbb;
+    return { DRGB, FL, n, z, Nbb, Ncb: Nbb, Aw, c, Nc,
+             cz: c * z, chromaK: Math.pow(1.64 - Math.pow(0.29, n), 0.73),
+             FLq: Math.pow(FL, 0.25) };
+  }
+
+  const D65_100 = [95.047, 100.0, 108.883];
+  const VC = makeVC(D65_100, 20.0, 64 / Math.PI / 5, 1.0, 0.69, 1.0);
+
+  function xyz_to_JMh(XYZ, vc) {
+    vc = vc || VC;
+    const RGB = mv(MCAT02, XYZ);
+    const RGBc = [RGB[0]*vc.DRGB[0], RGB[1]*vc.DRGB[1], RGB[2]*vc.DRGB[2]];
+    const RGBp = mv(MHPE, mv(MCAT02_INV, RGBc));
+    const Ra = nonlin(RGBp[0], vc.FL), Ga = nonlin(RGBp[1], vc.FL), Ba = nonlin(RGBp[2], vc.FL);
+    const a = Ra - 12 * Ga / 11 + Ba / 11;
+    const b = (Ra + Ga - 2 * Ba) / 9;
+    let h = Math.atan2(b, a) * 180 / Math.PI;
+    if (h < 0) h += 360;
+    const et = 0.25 * (Math.cos(h * Math.PI / 180 + 2) + 3.8);
+    const A = (2 * Ra + Ga + Ba / 20 - 0.305) * vc.Nbb;
+    const J = 100 * Math.pow(Math.max(A, 0) / vc.Aw, vc.cz);
+    const denom = Ra + Ga + 21 * Ba / 20;
+    const t = (50000 / 13) * vc.Nc * vc.Ncb * et * Math.hypot(a, b) / denom;
+    const C = Math.pow(Math.max(t, 0), 0.9) * Math.sqrt(J / 100) * vc.chromaK;
+    return [J, C * vc.FLq, h];
+  }
+  function nonlin(r, FL) {
+    const s = r < 0 ? -1 : 1;
+    const t = Math.pow(FL * Math.abs(r) / 100, 0.42);
+    return s * 400 * t / (27.13 + t) + 0.1;
+  }
+  function nonlin_inv(ra, FL) {
+    const d = ra - 0.1;
+    const ad = Math.abs(d);
+    const s = d < 0 ? -1 : 1;
+    return s * (100 / FL) * Math.pow(27.13 * ad / Math.max(400 - ad, 1e-9), 1 / 0.42);
+  }
+
+  function JMh_to_xyz(J, M, h, vc) {
+    vc = vc || VC;
+    const C = M / vc.FLq;
+    const hr = h * Math.PI / 180;
+    const sh = Math.sin(hr), ch = Math.cos(hr);
+    const et = 0.25 * (Math.cos(hr + 2) + 3.8);
+    const A = vc.Aw * Math.pow(Math.max(J, 0) / 100, 1 / vc.cz);
+    const p2 = A / vc.Nbb + 0.305;
+    const p3 = 21 / 20;
+    let a = 0, b = 0;
+    const t = Math.pow(C / (Math.sqrt(Math.max(J, 1e-9) / 100) * vc.chromaK), 1 / 0.9);
+    if (isFinite(t) && t > 1e-12) {
+      const p1 = (50000 / 13) * vc.Nc * vc.Ncb * et / t;
+      if (Math.abs(sh) >= Math.abs(ch)) {
+        const p4 = p1 / sh;
+        b = p2 * (2 + p3) * (460 / 1403) /
+            (p4 + (2 + p3) * (220 / 1403) * (ch / sh) - (27 / 1403) + p3 * (6300 / 1403));
+        a = b * (ch / sh);
+      } else {
+        const p5 = p1 / ch;
+        a = p2 * (2 + p3) * (460 / 1403) /
+            (p5 + (2 + p3) * (220 / 1403) - ((27 / 1403) - p3 * (6300 / 1403)) * (sh / ch));
+        b = a * (sh / ch);
+      }
+    }
+    const Ra = (460 * p2 + 451 * a + 288 * b) / 1403;
+    const Ga = (460 * p2 - 891 * a - 261 * b) / 1403;
+    const Ba = (460 * p2 - 220 * a - 6300 * b) / 1403;
+    const RGBp = [nonlin_inv(Ra, vc.FL), nonlin_inv(Ga, vc.FL), nonlin_inv(Ba, vc.FL)];
+    const RGBc = mv(MCAT02, mv(MHPE_INV, RGBp));
+    const RGB = [RGBc[0] / vc.DRGB[0], RGBc[1] / vc.DRGB[1], RGBc[2] / vc.DRGB[2]];
+    return mv(MCAT02_INV, RGB);
+  }
+
+  // ---- CAM02-UCS ----
+  const UCS_C1 = 0.007, UCS_C2 = 0.0228;
+  function JMh_to_Jab(J, M, h) {
+    const Jp = (1 + 100 * UCS_C1) * J / (1 + UCS_C1 * J);
+    const Mp = Math.log(1 + UCS_C2 * M) / UCS_C2;
+    const hr = h * Math.PI / 180;
+    return [Jp, Mp * Math.cos(hr), Mp * Math.sin(hr)];
+  }
+  function Jab_to_JMh(Jp, ap, bp) {
+    const Mp = Math.hypot(ap, bp);
+    const M = (Math.exp(UCS_C2 * Mp) - 1) / UCS_C2;
+    let h = Math.atan2(bp, ap) * 180 / Math.PI;
+    if (h < 0) h += 360;
+    const J = Jp / (1 + 100 * UCS_C1 - UCS_C1 * Jp);
+    return [J, M, h];
+  }
+
+  // ---- top-level conversions ----
+  // rgb components in 0..1
+  function rgb_to_Jab(r, g, b) {
+    const lin = [srgb_to_lin(r), srgb_to_lin(g), srgb_to_lin(b)];
+    const XYZ = mv(M_RGB2XYZ, lin).map(v => v * 100);
+    const JMh = xyz_to_JMh(XYZ);
+    return JMh_to_Jab(JMh[0], JMh[1], JMh[2]);
+  }
+  // returns {rgb:[r,g,b] clipped 0..1, inGamut:bool, raw:[..]}
+  function Jab_to_rgb(Jp, ap, bp) {
+    const jmh = Jab_to_JMh(Jp, ap, bp);
+    const XYZ = JMh_to_xyz(jmh[0], jmh[1], jmh[2]).map(v => v / 100);
+    const lin = mv(M_XYZ2RGB, XYZ);
+    const EPS = 1e-4;
+    let ok = true;
+    for (let i = 0; i < 3; i++) {
+      if (!isFinite(lin[i]) || lin[i] < -EPS || lin[i] > 1 + EPS) { ok = false; break; }
+    }
+    const rgb = [lin_to_srgb(clamp(lin[0], 0, 1)),
+                 lin_to_srgb(clamp(lin[1], 0, 1)),
+                 lin_to_srgb(clamp(lin[2], 0, 1))];
+    return { rgb, inGamut: ok, lin };
+  }
+  function inGamut(Jp, ap, bp) { return Jab_to_rgb(Jp, ap, bp).inGamut; }
+
+  // Pull chroma in (keeping J' and hue) until the color fits in sRGB.
+  // "clipped" only counts a pull-in big enough to actually see (>0.5 in M').
+  const CLIP_VISIBLE = 0.5;
+  function gamutClip(Jp, ap, bp) {
+    const first = Jab_to_rgb(Jp, ap, bp);
+    if (first.inGamut) return { rgb: first.rgb, clipped: false, pull: 0, ap, bp };
+    const Mp = Math.hypot(ap, bp);
+    if (Mp < 1e-9) return { rgb: first.rgb, clipped: false, pull: 0, ap, bp };
+    const ua = ap / Mp, ub = bp / Mp;
+    let lo = 0, hi = Mp;
+    for (let it = 0; it < 22; it++) {
+      const mid = (lo + hi) / 2;
+      if (Jab_to_rgb(Jp, ua * mid, ub * mid).inGamut) lo = mid; else hi = mid;
+    }
+    const out = Jab_to_rgb(Jp, ua * lo, ub * lo);
+    const pull = Mp - lo;
+    return { rgb: out.rgb, clipped: pull > CLIP_VISIBLE, pull, ap: ua * lo, bp: ub * lo };
+  }
+  // Largest in-gamut M' for a given J' and hue angle (radians).
+  function maxMp(Jp, hr) {
+    const ua = Math.cos(hr), ub = Math.sin(hr);
+    if (!Jab_to_rgb(Jp, 0, 0).inGamut) return 0;
+    let lo = 0, hi = 70;
+    for (let it = 0; it < 20; it++) {
+      const mid = (lo + hi) / 2;
+      if (Jab_to_rgb(Jp, ua * mid, ub * mid).inGamut) lo = mid; else hi = mid;
+    }
+    return lo;
+  }
+
+  /* ---- Color vision deficiency simulation (Machado, Oliveira & Fernandes 2009)
+     Matrices below are the severity-1.0 (dichromatic) forms, applied in linear
+     RGB. Intermediate severities are approximated by blending toward identity. */
+  const CVD_FULL = {
+    deuter: [[ 0.367322,  0.860646, -0.227968],
+             [ 0.280085,  0.672501,  0.047413],
+             [-0.011820,  0.042940,  0.968881]],
+    protan: [[ 0.152286,  1.052583, -0.204868],
+             [ 0.114503,  0.786281,  0.099216],
+             [-0.003882, -0.048116,  1.051998]],
+    tritan: [[ 1.255528, -0.076749, -0.178779],
+             [-0.078411,  0.930809,  0.147602],
+             [ 0.004733,  0.691367,  0.303900]]
+  };
+  const cvdCache = {};
+  function cvdMatrix(kind, severity) {
+    const key = kind + ':' + severity;
+    if (cvdCache[key]) return cvdCache[key];
+    const F = CVD_FULL[kind], s = clamp(severity, 0, 1), m = [];
+    for (let i = 0; i < 3; i++) {
+      m.push([0, 1, 2].map(j => (i === j ? 1 - s : 0) + s * F[i][j]));
+    }
+    cvdCache[key] = m;
+    return m;
+  }
+  function simulateCVD(rgb, kind, severity) {
+    if (!kind) return rgb.slice();
+    const lin = [srgb_to_lin(rgb[0]), srgb_to_lin(rgb[1]), srgb_to_lin(rgb[2])];
+    const out = mv(cvdMatrix(kind, severity === undefined ? 1 : severity), lin);
+    return [lin_to_srgb(clamp(out[0], 0, 1)),
+            lin_to_srgb(clamp(out[1], 0, 1)),
+            lin_to_srgb(clamp(out[2], 0, 1))];
+  }
+  // Relative luminance -> what a b&w printer does.
+  function grayOf(rgb) {
+    const y = 0.2126729 * srgb_to_lin(rgb[0]) + 0.7151522 * srgb_to_lin(rgb[1])
+            + 0.0721750 * srgb_to_lin(rgb[2]);
+    const g = lin_to_srgb(clamp(y, 0, 1));
+    return [g, g, g];
+  }
+
+  function hex(rgb) {
+    const c = v => ('0' + Math.round(clamp(v, 0, 1) * 255).toString(16)).slice(-2);
+    return '#' + c(rgb[0]) + c(rgb[1]) + c(rgb[2]);
+  }
+  function css(rgb) {
+    const c = v => Math.round(clamp(v, 0, 1) * 255);
+    return 'rgb(' + c(rgb[0]) + ',' + c(rgb[1]) + ',' + c(rgb[2]) + ')';
+  }
+  function hexToRgb(h) {
+    h = h.replace('#', '');
+    return [parseInt(h.slice(0,2),16)/255, parseInt(h.slice(2,4),16)/255, parseInt(h.slice(4,6),16)/255];
+  }
+
+  return { mv, inv3, clamp, VC, makeVC, xyz_to_JMh, JMh_to_xyz, JMh_to_Jab, Jab_to_JMh,
+           rgb_to_Jab, Jab_to_rgb, inGamut, gamutClip, maxMp, simulateCVD, grayOf,
+           hex, css, hexToRgb, srgb_to_lin, lin_to_srgb, M_RGB2XYZ, M_XYZ2RGB, D65_100 };
+})();
+
+/* =====================================================================
+   PART 2 — The colormap model
+   A colormap is a list of control points in J'a'b'. A Catmull-Rom spline
+   through them, sampled at N points, is the colormap.
+   ===================================================================== */
+const NSAMP = 256;
+
+/* The only line that differs between this file and "Colormap Designer - Guided
+   Sandbox.html". false = the two-part activity (Part 1 freehand, Part 2 beat jet).
+   true  = the open-ended sandbox: guides on from the start, no jet target, and no
+   hue-coverage requirement. */
+const SANDBOX = false;
+
+const App = {
+  stage: 1,                // 1 = freehand 3D only, 2 = diagnostic views unlocked
+  type: 'sequential',      // sequential | diverging | cyclic
+  lmode: 'free',           // free | ramp
+  equalize: false,
+  pts: [],                 // [{J,a,b}]
+  sel: 0,
+  showGamut: true,
+  /* Starts top-down: looking straight down the lightness axis, so J' comes out of
+     the page and the solid reads as a hue/chroma wheel. Elevation is clamped away
+     from edge-on at the low end, where a one-pixel drag would slide a point an
+     enormous distance in depth; straight down (pi/2) is well-conditioned. */
+  view: { az: 0, el: Math.PI / 2 },
+  history: [],
+  cache: null
+};
+
+function clonePts(p) { return p.map(q => ({ J: q.J, a: q.a, b: q.b })); }
+function pushHistory() {
+  App.history.push({ pts: clonePts(App.pts), sel: App.sel });
+  if (App.history.length > 60) App.history.shift();
+}
+function invalidate() { App.cache = null; }
+
+/* ---- Catmull-Rom spline, uniform parameterization by control-point index ---- */
+function catmull(p0, p1, p2, p3, t) {
+  const t2 = t * t, t3 = t2 * t;
+  return 0.5 * ((2 * p1) + (-p0 + p2) * t +
+                (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 +
+                (-p0 + 3 * p1 - 3 * p2 + p3) * t3);
+}
+// Sample the spline through App.pts at n points. Closed loop when cyclic.
+function splineSample(pts, n, closed) {
+  const m = pts.length;
+  if (m === 0) return [];
+  if (m === 1) return new Array(n).fill(0).map(() => ({ J: pts[0].J, a: pts[0].a, b: pts[0].b }));
+  const idx = i => {
+    if (closed) return pts[((i % m) + m) % m];
+    return pts[Math.max(0, Math.min(m - 1, i))];
+  };
+  const segs = closed ? m : m - 1;
+  const out = [];
+  for (let k = 0; k < n; k++) {
+    const u = (n === 1) ? 0 : (k / (n - 1)) * segs;
+    let s = Math.floor(u);
+    if (s >= segs) s = segs - 1;
+    const t = u - s;
+    const p0 = idx(s - 1), p1 = idx(s), p2 = idx(s + 1), p3 = idx(s + 2);
+    out.push({ J: catmull(p0.J, p1.J, p2.J, p3.J, t),
+               a: catmull(p0.a, p1.a, p2.a, p3.a, t),
+               b: catmull(p0.b, p1.b, p2.b, p3.b, t) });
+  }
+  return out;
+}
+
+// Overwrite J' with a straight (or tent) ramp — this is the constraint viscm imposes.
+function applyLightnessMode(samp) {
+  if (App.lmode !== 'ramp' || samp.length < 2 || App.pts.length < 2) return samp;
+  const P = App.pts;
+  const n = samp.length;
+  if (App.type === 'diverging') {
+    const mid = P[Math.floor((P.length - 1) / 2)];
+    const J0 = P[0].J, J1 = P[P.length - 1].J, Jm = mid.J;
+    for (let i = 0; i < n; i++) {
+      const t = i / (n - 1);
+      samp[i].J = t < 0.5 ? J0 + (Jm - J0) * (t / 0.5) : Jm + (J1 - Jm) * ((t - 0.5) / 0.5);
+    }
+  } else {
+    const J0 = P[0].J, J1 = P[P.length - 1].J;
+    for (let i = 0; i < n; i++) samp[i].J = J0 + (J1 - J0) * (i / (n - 1));
+  }
+  return samp;
+}
+
+// Resample a dense curve down to exactly `n` points that are equally spaced in
+// CAM02-UCS arc length, so equal steps in the data become equal steps to the eye.
+function arcResample(samp, n) {
+  const m = samp.length;
+  if (m < 3) return samp;
+  const cum = [0];
+  for (let i = 1; i < m; i++) {
+    cum.push(cum[i - 1] + Math.hypot(samp[i].J - samp[i-1].J, samp[i].a - samp[i-1].a,
+                                     samp[i].b - samp[i-1].b));
+  }
+  const total = cum[m - 1];
+  if (total < 1e-9) return samp.slice(0, n);
+  const out = [];
+  let j = 0;
+  for (let k = 0; k < n; k++) {
+    const target = (k / (n - 1)) * total;
+    while (j < m - 2 && cum[j + 1] < target) j++;
+    const seg = cum[j + 1] - cum[j];
+    const f = seg < 1e-12 ? 0 : (target - cum[j]) / seg;
+    out.push({ J: samp[j].J + (samp[j+1].J - samp[j].J) * f,
+               a: samp[j].a + (samp[j+1].a - samp[j].a) * f,
+               b: samp[j].b + (samp[j+1].b - samp[j].b) * f });
+  }
+  return out;
+}
+
+/* ---- The colormap: sampled, lightness-constrained, equalized, gamut-clipped ---- */
+function buildColormap() {
+  if (App.cache) return App.cache;
+  const closed = App.type === 'cyclic';
+  let samp = splineSample(App.pts, App.equalize ? NSAMP * 4 : NSAMP, closed);
+  samp = applyLightnessMode(samp);
+  if (App.equalize) samp = arcResample(samp, NSAMP);
+  const rgb = [], jab = [], flags = [];
+  let nClipped = 0;
+  for (let i = 0; i < samp.length; i++) {
+    const s = samp[i];
+    const c = CS.gamutClip(s.J, s.a, s.b);
+    if (c.clipped) nClipped++;
+    rgb.push(c.rgb);
+    flags.push(c.clipped);
+    // measure in the space of the colors actually shown, not the ideal ones
+    jab.push(CS.rgb_to_Jab(c.rgb[0], c.rgb[1], c.rgb[2]));
+  }
+  App.cache = { samp, rgb, jab, clipped: flags,
+                clippedFrac: samp.length ? nClipped / samp.length : 0 };
+  return App.cache;
+}
+function hasMap() { return App.pts.length >= 2; }
+
+/* ---- Presets: anchor colors converted into control points ---- */
+const PRESETS = {
+  'viridis (approx.)':  { type:'sequential', hex:['#440154','#414487','#2a788e','#22a884','#7ad151','#fde725'] },
+  'plasma (approx.)':   { type:'sequential', hex:['#0d0887','#6a00a8','#b12a90','#e16462','#fca636','#f0f921'] },
+  'magma (approx.)':    { type:'sequential', hex:['#000004','#3b0f70','#8c2981','#de4968','#fe9f6d','#fcfdbf'] },
+  'grayscale':          { type:'sequential', hex:['#000000','#808080','#ffffff'] },
+  'jet (a cautionary tale)': { type:'sequential',
+                          hex:['#00008f','#0020ff','#00ffff','#51ff77','#fdff00','#ff0000','#800000'] },
+  'hot (approx.)':      { type:'sequential', hex:['#0b0000','#7a0000','#e60000','#ff8c00','#ffcc00','#ffe680','#ffffff'] },
+  'rainbow (HSV)':      { type:'cyclic', hex:['#ff0000','#ffff00','#00ff00','#00ffff','#0000ff','#ff00ff'] },
+  'coolwarm (diverging)': { type:'diverging', hex:['#3b4cc0','#7b9ff9','#dddddd','#f49a7b','#b40426'] },
+  'red–green (bad diverging)': { type:'diverging', hex:['#d7191c','#ffffbf','#1a9641'] }
+};
+function loadPreset(name) {
+  const p = PRESETS[name];
+  if (!p) return;
+  pushHistory();
+  App.type = p.type;
+  App.pts = p.hex.map(h => {
+    const c = CS.hexToRgb(h);
+    const j = CS.rgb_to_Jab(c[0], c[1], c[2]);
+    return { J: j[0], a: j[1], b: j[2] };
+  });
+  App.sel = 0;
+  invalidate();
+}
+
+/* =====================================================================
+   PART 3 — Scoring
+   Four criteria, 100 points. Thresholds calibrated so that real viridis
+   lands in the 90s and real jet lands in the 30s.
+   ===================================================================== */
+const clamp01 = x => (x < 0 ? 0 : x > 1 ? 1 : x);
+function dE(p, q) { return Math.hypot(p[0]-q[0], p[1]-q[1], p[2]-q[2]); }
+function arcLen(jab) {
+  let s = 0;
+  for (let i = 1; i < jab.length; i++) s += dE(jab[i], jab[i-1]);
+  return s;
+}
+// Smallest perceptual gap between colors that are far apart in the data.
+function minFarGap(jab, fracApart) {
+  const n = jab.length, k = Math.max(2, Math.round(n * fracApart));
+  let best = Infinity;
+  for (let i = 0; i + k < n; i++) {
+    for (let j = i + k; j < n; j++) {
+      const d = dE(jab[i], jab[j]);
+      if (d < best) best = d;
+    }
+  }
+  return best === Infinity ? 0 : best;
+}
+/* "Hits all the colors": how much of the hue circle does the path actually visit?
+   Samples too close to neutral are skipped, because hue is meaningless there.
+   Reference coverage: jet 69%, HSV rainbow 100%, viridis 64%, grayscale 0%. */
+function hueCoverage(jab, minChroma, nbins) {
+  minChroma = minChroma === undefined ? 4 : minChroma;
+  nbins = nbins || 36;
+  const seen = new Array(nbins).fill(false);
+  for (const p of jab) {
+    if (Math.hypot(p[1], p[2]) < minChroma) continue;
+    let h = Math.atan2(p[2], p[1]);
+    if (h < 0) h += 2 * Math.PI;
+    seen[Math.min(nbins - 1, Math.floor(h / (2 * Math.PI) * nbins))] = true;
+  }
+  let n = 0;
+  for (const s of seen) if (s) n++;
+  return n / nbins;
+}
+
+function monoFrac(vals) {
+  let net = 0, tot = 0;
+  for (let i = 1; i < vals.length; i++) { const d = vals[i] - vals[i-1]; net += d; tot += Math.abs(d); }
+  return { frac: tot < 1e-9 ? 0 : Math.abs(net) / tot, dir: Math.sign(net), span: tot };
+}
+function smoothSeries(vals, w) {
+  const out = [];
+  for (let i = 0; i < vals.length; i++) {
+    let s = 0, c = 0;
+    for (let k = -w; k <= w; k++) { const j = i + k; if (j >= 0 && j < vals.length) { s += vals[j]; c++; } }
+    out.push(s / c);
+  }
+  return out;
+}
+// How many times does the series genuinely turn around? Small wobbles ignored.
+function reversals(vals) {
+  const sm = smoothSeries(vals, 7);
+  let lo = Infinity, hi = -Infinity;
+  for (const v of sm) { if (v < lo) lo = v; if (v > hi) hi = v; }
+  const thr = Math.max(1.5, (hi - lo) * 0.10);
+  // Track the running high and low separately: until the first leg is
+  // established (dir === 0) either one may be the turning point.
+  let rev = 0, dir = 0, hiRef = sm[0], loRef = sm[0];
+  for (let i = 1; i < sm.length; i++) {
+    const v = sm[i];
+    if (v > hiRef) hiRef = v;
+    if (v < loRef) loRef = v;
+    if (dir >= 0 && hiRef - v > thr) {         // turned downward
+      if (dir > 0) rev++;
+      dir = -1; hiRef = v; loRef = v;
+    } else if (dir <= 0 && v - loRef > thr) {  // turned upward
+      if (dir < 0) rev++;
+      dir = 1; hiRef = v; loRef = v;
+    }
+  }
+  return rev;
+}
+
+function scoreColormap() {
+  const cm = buildColormap();
+  const jab = cm.jab, n = jab.length;
+  const d = [];
+  for (let i = 1; i < n; i++) d.push(dE(jab[i], jab[i-1]));
+  const mean = d.reduce((a,b)=>a+b,0) / d.length;
+  const sd = Math.sqrt(d.reduce((a,x)=>a+(x-mean)*(x-mean),0) / d.length);
+  const cv = mean < 1e-9 ? 9 : sd / mean;
+  const minStep = Math.min.apply(null, d);
+  const total = arcLen(jab);
+  /* Second derivative of perceived color along the path: the derivative of the
+     perceptual-deltas curve. Summing |d[i+1] - d[i]| is the integral of the
+     second derivative; dividing by (count x mean) makes it dimensionless and
+     scale-free, and gives it a directly readable meaning on the plot -- the
+     average step-to-step jump as a fraction of the flat ideal line's height.
+     Independent of spread: a smooth ramp and a sawtooth can share a CV while
+     differing here by two orders of magnitude. */
+  let tv = 0;
+  for (let i = 1; i < d.length; i++) tv += Math.abs(d[i] - d[i-1]);
+  const d2 = mean < 1e-9 ? 9 : tv / (d.length * mean);
+  const cats = [];
+  /* Stage 2 sets a different brief — a better rainbow — so it carries an extra
+     "hits all the colors" criterion. Those points come out of lightness and
+     colorblind safety, because a full-hue map cannot fully satisfy either. */
+  const RAINBOW = !SANDBOX && App.stage >= 2;
+  const MAX_LIGHT = RAINBOW ? 20 : 25;
+  const MAX_CVD   = RAINBOW ? 15 : 25;
+
+  /* --- 1. Perceptual uniformity (30) --- two independent defects of the
+     perceptual-deltas curve: how level it sits (spread) and how much it wobbles
+     from step to step (its derivative). A gentle ramp is uneven but not rough;
+     a sawtooth is rough even when its average is exactly right. --- */
+  const u1 = clamp01((0.50 - cv) / 0.42);          // spread: full under ~8%, gone by 50%
+  const u2 = clamp01((minStep / Math.max(mean, 1e-9)) / 0.45);   // worst flat spot
+  /* Calibrated on the real 256-entry colormaps: viridis 0.0002, inferno 0.0006,
+     cividis 0.013, gray 0.018, coolwarm 0.020, hot 0.026, jet 0.033, hsv 0.037,
+     nipy_spectral 0.126, prism 0.475. */
+  const u3 = clamp01((0.040 - d2) / 0.035);        // second derivative
+  const uPts = 30 * (0.40 * u1 + 0.15 * u2 + 0.45 * u3);
+  cats.push({ name: 'Perceptual uniformity', pts: uPts, max: 30,
+    detail: 'The deltas curve wobbles by <b>' + (d2*100).toFixed(2) + '%</b> of its ideal height ' +
+      'per step &mdash; that is the second derivative of perceived color along your path ' +
+      '(real viridis: 0.02%, real jet: 3.3%, matplotlib&rsquo;s notorious <code>prism</code>: 48%). ' +
+      'Its overall level varies by <b>' + (cv*100).toFixed(0) + '%</b>. ' +
+      (u3 > 0.85
+        ? (cv < 0.15 ? 'Level and smooth — equal data steps really do look like equal color steps. This is the hard part and you got it.'
+                     : 'Smooth, but the curve sits higher in some places than others, so those stretches of your data are exaggerated relative to the rest.')
+        : (u3 > 0.4 ? 'The curve is visibly choppy: the rate of color change keeps changing, which stipples false texture into smooth data.'
+                    : 'The curve is a mess of spikes and dips. Your colormap races through some values and crawls through others, inventing edges and flat patches that are not in the numbers.')) +
+      (minStep / Math.max(mean,1e-9) < 0.3 ? ' There is also a near-flat spot where different values look identical.' : '') });
+
+  /* --- 2. Perceptual range (10) --- the total of the deltas curve.
+     This is the map's resolving power: total perceptual distance travelled is
+     roughly how many distinguishable levels a reader can pull out of it. --- */
+  const rPts = 10 * clamp01((total - 40) / 90);
+  cats.push({ name: 'Perceptual range', pts: rPts, max: 10,
+    detail: 'Total perceptual delta <b>&Delta;E = ' + total.toFixed(1) + '</b> ' +
+      '(viridis: 122, pure grayscale: 100). ' +
+      (total >= 130 ? 'Plenty of range &mdash; a reader can pull a lot of distinct levels out of this.'
+       : total >= 90 ? 'Workable, but a wider span would let readers separate more levels.'
+       : 'Too little range: genuinely different values in your data will look nearly the same. ' +
+         'Push the ends further apart in lightness, or use more of the chroma available to you.') });
+
+  /* --- 3. Lightness behavior (25) --- */
+  const Js = jab.map(p => p[0]);
+  let lPts = 0, lDetail = '';
+  const rangeJ = Math.max.apply(null, Js) - Math.min.apply(null, Js);
+  const rev = reversals(Js);
+  if (App.type === 'sequential') {
+    const m = monoFrac(Js);
+    const l1 = clamp01((m.frac - 0.6) / 0.4);
+    const l2 = clamp01(Math.abs(Js[n-1] - Js[0]) / 65);
+    lPts = MAX_LIGHT * (0.65 * l1 + 0.35 * l2);
+    lDetail = 'Lightness is <b>' + (m.frac*100).toFixed(0) + '% monotonic</b> over a span of <b>' +
+      Math.abs(Js[n-1]-Js[0]).toFixed(0) + ' J&prime;</b>. ' +
+      (m.frac > 0.97 ? 'It only ever moves one direction, so it survives grayscale printing and reads as an ordered scale.'
+       : m.frac > 0.85 ? 'Mostly one direction, with a reversal or two that will read as false contours.'
+       : 'Lightness goes up and down, so light-vs-dark no longer tells the reader which value is bigger — and photocopying destroys it.');
+  } else if (App.type === 'diverging') {
+    const h = Math.floor(n/2);
+    const mA = monoFrac(Js.slice(0, h+1)), mB = monoFrac(Js.slice(h));
+    const opposed = (mA.dir !== 0 && mB.dir !== 0 && mA.dir !== mB.dir) ? 1 : 0.25;
+    const tentOK = rev === 1 ? 1 : 0.5;   // a diverging map should turn exactly once
+    const l1 = clamp01((Math.min(mA.frac, mB.frac) - 0.6) / 0.4) * opposed * tentOK;
+    const sym = clamp01(1 - Math.abs(Js[0] - Js[n-1]) / 25);
+    const ext = clamp01(Math.abs(Js[h] - (Js[0]+Js[n-1])/2) / 38);
+    lPts = MAX_LIGHT * (0.4 * l1 + 0.3 * sym + 0.3 * ext);
+    lDetail = 'Each arm is ' + (Math.min(mA.frac,mB.frac)*100).toFixed(0) + '% monotonic; the two ends differ by ' +
+      Math.abs(Js[0]-Js[n-1]).toFixed(0) + ' J&prime; and the midpoint stands out by ' +
+      Math.abs(Js[h]-(Js[0]+Js[n-1])/2).toFixed(0) + ' J&prime;. ' +
+      (!opposed || opposed < 1 ? 'For a diverging map the two halves should move in <i>opposite</i> lightness directions from a neutral middle.'
+       : sym < 0.6 ? 'The two ends are unequal in lightness, so one extreme will look more important than the other.'
+       : 'Balanced arms with a clear neutral midpoint — readers can see direction and magnitude away from the center.');
+  } else {
+    const wrap = dE(jab[0], jab[n-1]);
+    const close = clamp01(1 - wrap / 8);
+    const tent = rev <= 1 ? 1 : clamp01(1 - (rev - 1) * 0.4);
+    lPts = MAX_LIGHT * (0.40 * close + 0.35 * tent + 0.25 * clamp01(rangeJ / 40));
+    lDetail = 'The two ends are <b>&Delta;E = ' + wrap.toFixed(1) + '</b> apart and lightness turns around <b>' +
+      rev + (rev === 1 ? ' time' : ' times') + '</b>. ' +
+      (wrap < 3 ? 'They join seamlessly, so there is no false seam in cyclic data like wind direction or phase. '
+                : 'A cyclic map must end where it began — this visible seam will read as a discontinuity in continuous data. ') +
+      (rev <= 1 ? 'One smooth rise and fall in lightness, so no part of the cycle grabs the eye more than the rest.'
+                : 'Lightness zigzags, which invents bright and dark bands that are not in your data.');
+  }
+  cats.push({ name: 'Lightness / grayscale safety', pts: lPts, max: MAX_LIGHT, detail: lDetail });
+
+  /* --- 3b. Hue coverage (15, stage 2 only) --- the rainbow brief --- */
+  const hueCov = hueCoverage(jab, 4, 36);
+  if (RAINBOW) {
+    const hPts = 15 * clamp01((hueCov - 0.35) / 0.50);   // jet 69% -> 0.68, full at 85%
+    cats.push({ name: 'Hue coverage', pts: hPts, max: 15,
+      detail: 'Your path visits <b>' + (hueCov*100).toFixed(0) + '%</b> of the hue circle ' +
+        '(jet: 69%, a full HSV rainbow: 100%, viridis: 64%). ' +
+        (hueCov >= 0.85 ? 'That is a genuine rainbow — you are hitting essentially every hue.'
+         : hueCov >= 0.69 ? 'Broad, and at least as colorful as jet. Pushing into the hues you are still missing will buy you more.'
+         : 'Not yet a rainbow: this covers less of the hue circle than jet does. Swing the path further around the a&prime;b&prime; plane.') });
+  }
+
+  /* --- 4. Colorblind accessibility --- */
+  const kinds = [['deuter','deuteranopia',0.375], ['protan','protanopia',0.375], ['tritan','tritanopia',0.25]];
+  let cbSum = 0;
+  const cbBits = [];
+  for (const [kind, label, w] of kinds) {
+    const sim = cm.rgb.map(c => CS.simulateCVD(c, kind, 1.0));
+    const sjab = sim.map(c => CS.rgb_to_Jab(c[0], c[1], c[2]));
+    const preserved = total < 1e-9 ? 0 : arcLen(sjab) / total;
+    const gap = minFarGap(sjab, 0.20);
+    // Keeping the total range matters far less than never letting two distant
+    // values collapse onto the same color, so weight the collision term higher.
+    const coll = clamp01(gap / (0.12 * Math.max(total, 1e-9)));
+    const ks = 0.35 * clamp01(preserved / 0.85) + 0.65 * coll;
+    cbSum += w * ks;
+    cbBits.push(label + ' keeps ' + (preserved*100).toFixed(0) + '% of the range' +
+      (coll < 0.35 ? ' <b>but collapses distant values together</b>' : ''));
+  }
+  const cbPts = MAX_CVD * cbSum;
+  cats.push({ name: 'Colorblind accessibility', pts: cbPts, max: MAX_CVD,
+    detail: cbBits.join('; ') + '. ' +
+      (cbSum > 0.85 ? 'Distinguishable for every common form of color vision deficiency.'
+       : cbSum > 0.6 ? 'Usable, but some pairs of values collapse toward each other for red&ndash;green deficient readers.'
+       : 'Values that are far apart in your data become nearly the same color for red&ndash;green deficient readers — about 1 in 12 men.') });
+
+  /* --- 5. Gamut & smoothness (10) --- */
+  let wig = 0, d1 = 0;
+  for (let i = 1; i < n - 1; i++) {
+    wig += Math.hypot(jab[i+1][0]-2*jab[i][0]+jab[i-1][0],
+                      jab[i+1][1]-2*jab[i][1]+jab[i-1][1],
+                      jab[i+1][2]-2*jab[i][2]+jab[i-1][2]);
+    d1 += d[i];
+  }
+  const wiggle = d1 < 1e-9 ? 1 : wig / d1;
+  const g1 = clamp01(1 - cm.clippedFrac / 0.25);
+  const g2 = clamp01(1 - wiggle / 0.5);
+  const gPts = 10 * (0.6 * g1 + 0.4 * g2);
+  cats.push({ name: 'Gamut &amp; smoothness', pts: gPts, max: 10,
+    detail: (cm.clippedFrac > 0.005
+      ? '<b>' + (cm.clippedFrac*100).toFixed(0) + '%</b> of your colors sit outside what a screen can show and had to be desaturated — that flattens contrast there. '
+      : 'Every color is reproducible in sRGB. ') +
+      (wiggle > 0.3 ? 'The path also kinks sharply, which shows up as banding.' : 'The path is smooth.') });
+
+  const totalPts = cats.reduce((a,c) => a + c.pts, 0);
+  const grade = totalPts >= 90 ? ['Publication-ready','excellent']
+              : totalPts >= 75 ? ['Solid','good']
+              : totalPts >= 55 ? ['Needs work','fair']
+              : ['Misleading','poor'];
+  for (const c of cats) {
+    const f = c.pts / c.max;
+    c.badge = f >= 0.85 ? 'excellent' : f >= 0.65 ? 'good' : f >= 0.4 ? 'fair' : 'poor';
+  }
+  return { total: totalPts, grade, cats, cv, d2, mean, minStep, total_arc: total, hueCov, cm };
+}
+
+/* Jet's own score under the stage-2 rubric — the number to beat. Computed once
+   from the pristine jet control points, with the app state saved and restored. */
+let JET_BASELINE = null;
+function jetBaseline() {
+  if (JET_BASELINE !== null) return JET_BASELINE;
+  const save = { pts: clonePts(App.pts), sel: App.sel, type: App.type, lmode: App.lmode,
+                 equalize: App.equalize, stage: App.stage, cache: App.cache };
+  App.stage = 2; App.type = 'sequential'; App.lmode = 'free'; App.equalize = false;
+  App.pts = jetPoints();
+  App.cache = null;
+  const s = scoreColormap();
+  JET_BASELINE = { total: s.total, hueCov: s.hueCov, cv: s.cv, d2: s.d2,
+                   cats: s.cats.map(c => ({ name: c.name, pts: c.pts, max: c.max })) };
+  Object.assign(App, save);
+  return JET_BASELINE;
+}
+function jetPoints() {
+  return PRESETS['jet (a cautionary tale)'].hex.map(h => {
+    const c = CS.hexToRgb(h), j = CS.rgb_to_Jab(c[0], c[1], c[2]);
+    return { J: j[0], a: j[1], b: j[2] };
+  });
+}
+/* Google's turbo, the modern "fixed rainbow", quoted as a benchmark. Stored at
+   16 bits per channel on purpose: the wobble metric is a second derivative, and
+   on 8-bit data it measures rounding noise instead of design. (8-bit viridis
+   reads 0.27 against 0.0002 in float -- worse than jet, which is nonsense.)
+   Student colormaps are computed in float from their spline, so the benchmark
+   has to be float too for the comparison to mean anything. */
+const TURBO_HEX16 =
+  '30a0125f3b6f31e0155942f1331618514a4d34431b45518535671e365898368121255f8637922410664e389a26f86cf2' +
+  '399929de73723a8f2cc079cc3b7c2f9f80023c5e327c86133d3935558bfe3e0a382b91c53ed23afe97673f903dce9ce4' +
+  '4046409ba23c40f24365a7704195462cac7e422f48f0b16842c04bb1b62c43474e6fbacc43c5512bbf46443a53e3c39d' +
+  '44a65697c7ce45095949cbda45625bf8cfc245b35ea4d38445f9614dd722463863f3da9a466c6695ddee46986935e11d' +
+  '46ba6bd2e42746d46e6ce70c46e37102e9cc46ea7396ec6846e87626eede46dc78b4f12f46c77b3ff35c46aa7dc7f564' +
+  '4682804bf747465282ccf9054618854bfa9e45d187c8fc0e45648a47fd4244ce8cc9fe3644138f4efeee433491d5ff6a' +
+  '4235945fffae411696e9ffbb3fdc9974ff933e889bffff383d1e9e8afead3b9ea115fdf43a0da39dfd0e386ba625fbfe' +
+  '36bda8aafac53503ab2df9663341adacf7e43179b028f63e2faeb29ff4792de2b512f2962c17b77ff0962a50b9e8ee7d' +
+  '288fbc4aec4c26d8bea5ea05252bc0f9e7ab238cc345e53f21fec58ae2c32082c7c6e03a1f1bc9f8dda51dcccc22db07' +
+  '1c96ce41d8611b7dd055d5b71a83d25fd30919abd45dd05a18f6d64ecdac1867d834cb011801da0bc85a17c6dbd6c5bb' +
+  '17b9dd93c32517dcdf42c09b1832e0e1be1e18bce270bbb0197ee3f0b9531a7ae55fb70a1bb0e6c3b4bb1d1ee81fb24e' +
+  '1ec1e973afc42099eac0ad1f22a0ec05aa6124d7ed42a78b273aee77a4a029c7efa3a1a12c7cf0c69e8f2f56f1e09b6c' +
+  '3254f2f1983b3572f3f994fd38aff4f891b33c07f5ec8e5f3f7bf6d78b034305f7b787a146a6f88d843b4a59f95980d2' +
+  '4e1dfa1a7d6851effacf79fe55cdfb7a769759b5fc1973345da5fcac6fd7619bfd346c826593fdb06936698bfe1f65f4' +
+  '6d83fe8262c07176fed95f9a7562ff225c847947ff5e59817d21ff8e569180edffb053b784aaffc450f38855ffca4e49' +
+  '8becffc24bba8f6dffac494692d5ff8746f19622ff5444bb9952ff1242a89c62fec040b79f50fe603eeca21bfdef3d47' +
+  'a4c4fd6f3bcaa768fcdc3a75aa0efc383944acb3fb823837af58faba374db1fbf9e13683b49df8f835d7b73cf7ff3549' +
+  'b9d8f6f634d6bc70f5de347dbf04f4b7343dc194f3823414c41df23e33ffc6a1f0ed33fec91eef8f340fcb94ee243430' +
+  'ce02ecac3460d068eb29349dd2c5e99b34e5d518e8003537d761e65c3592d99fe4ad35f3dbd2e2f43659ddf9e13236c3' +
+  'e013df66372ee220dd93379ae420dbb63803e610d9d2386be7f2d7e638cde9c5d5f43929eb87d3fb397ded39d1fb39c7' +
+  'eed9cff63a07f067cdec3a39f1e3cbdc3a5ef34cc9c93a72f4a1c7b13a76f5e2c5953a65f70ec3753a40f824c1533a04' +
+  'f925bf2f39b1fa0ebd083944fae0bae138bbfb9eb8ad381cfc48b666376cfce0b40b36adfd66b19d35dffddaaf1f3502' +
+  'fe3dac903417fe8fa9f23320fecea745321efefda48c3110ff1ca1c62ff8ff2a9ef52ed7ff289c192dadff1699342c7b' +
+  'fef496472b43fec293532a04fe82905928c0fe328d582778fdd48a54262bfd67874e24dcfcec8444238afc6381392238' +
+  'fbcc7e2f20e5fb277b251f92fa75781d1e40f9b675181cf1f8ea72161ba4f8126f1a1a5af72d6c231915f63c693217d5' +
+  'f53f664a169bf437636b1568f3236096143df2035dcb131af0da5b0c1200efa5585a10f0ee6555b60febed1c53210ef1' +
+  'ebc9509c0e04ea6c4e280d25e9054bc60c53e79549760b90e61c473a0adde49945120a39e30c42f3099ce17240db0903' +
+  'dfcc3ec90871de1a3cbf07e4dc5c3abd075cda9238c106dad8bb36cd065ed6d934e005e7d4eb32f90575d2f0311b0508' +
+  'd0ea2f4304a2ced82d720440ccb92ba903e4ca8f29e7038dc858282c033cc615267902f0c3c724cc02aac16c23270269' +
+  'bf042188022ebc921ff101f8ba131e6101c7b7871cd8019cb4f01b570176b24d19dc0156af9e1869013bace316fd0126' +
+  'aa1b15990116a748143b010ba46912e40107a17d119501079e85104d010d9b820f0c011898720dd2012995560ca0013f' +
+  '922e0b74015b8efb0a50017b8bbb093301a2886f081d01ce8517070e01ff81b3060702367e43050602727ac7040d02b3';
+
+/* Score an arbitrary 256-colour table through the normal scoring path by
+   temporarily standing in for the colormap cache. */
+function scoreRawColors(hexStr) {
+  const save = { pts: clonePts(App.pts), sel: App.sel, type: App.type, lmode: App.lmode,
+                 equalize: App.equalize, stage: App.stage, cache: App.cache };
+  App.stage = 2; App.type = 'sequential'; App.lmode = 'free'; App.equalize = false;
+  const rgb = [], jab = [], samp = [], flags = [];
+  for (let i = 0; i < hexStr.length; i += 12) {
+    const c = [parseInt(hexStr.substr(i, 4), 16) / 65535,
+               parseInt(hexStr.substr(i + 4, 4), 16) / 65535,
+               parseInt(hexStr.substr(i + 8, 4), 16) / 65535];
+    const j = CS.rgb_to_Jab(c[0], c[1], c[2]);
+    rgb.push(c); jab.push(j); flags.push(false);
+    samp.push({ J: j[0], a: j[1], b: j[2] });
+  }
+  App.cache = { samp, rgb, jab, clipped: flags, clippedFrac: 0 };
+  const s = scoreColormap();
+  Object.assign(App, save);
+  return s;
+}
+/* Kovesi's CET_R1, the best-behaved published rainbow, as a second benchmark.
+   From the CET perceptually uniform colormaps (Peter Kovesi, CC-BY), via colorcet.
+   Stored at 16 bits for the same reason as turbo. */
+const CET_R1_HEX16 =
+  '00002fc2f66f000033d5f2ea000037a1ef6600003b33ebe302dd3e92e863094041cae4e30e4144e0e16411c347d2dde7' +
+  '144a4aaeda6c16324d6ed6f217955019d37a188a52b1d003192c5536cc8e197d57a8c91c19925a09c5ac19725c5ac23e' +
+  '192c5e9cbed318c560cdbb6d185c62efb80a17ec6503b4ac17996706b154176d68fbae0117786adfaab517c56cb4a76f' +
+  '186c6e7aa43119617032a0fa1aab71db9dcc1c4173789aa41e10750797842013768b946a223878059156247179768e47' +
+  '26b27ade8b3e28f17c3f88392b297d9c85362d4d7ef282362f5c80467f36314e81967c36332282e6793634db84347634' +
+  '366f8581732f37e486ce70283937881b6d1a3a6b89696a093b7e8ab566f13c738c0463d43d4c8d5360b03e088ea35d84' +
+  '3eac8ff35a513f38914357143fae929453cf400f93e45081406595344d2a40ab968349cc40ec97d14667412c991c42fc' +
+  '416f9a653f8d41be9bac3c1c42209cee38aa429e9e2b353b433d9f6231d74408a0932e7b4503a1be2b344633a2e12802' +
+  '479da3fc24ea4941a50e21f54b21a6191f264d37a71a1c8c4f84a8141a2451ffa90517fa54a1a9ee16115768aad01471' +
+  '5a49abac131b5d40ac82120c6048ad531144635aae1e10ba6674aee7106b6991afab104d6cadb06d10556fc9b12d107c' +
+  '72e0b1ea10bb75f2b2a4110d7900b35e116d7c08b41711d67f0ab4ce12438207b58412b484fdb638132587eeb6ec1399' +
+  '8adab79f140e8dc0b851148690a1b9011500937fb9b215749658ba6115e5992dbb0f16609bffbbbd16d39ecdbc691749' +
+  'a198bd1517bba461bdbf1835a726be6918a5a9eabf11191faca9bfb91992af68c0611a07b224c1071a7fb4dfc1ab1af1' +
+  'b798c2501b69ba4ec2f31bddbd03c3951c54bfb7c4371ccac26ac4d71d3cc51bc5761db5c7cbc6121e29ca78c6ae1e9d' +
+  'cd24c7471f0fcfcec7dc1f83d274c86f1ff8d517c8fc2069d7b5c98420dbda4cca04214adcdcca7a21b4df61cae5221b' +
+  'e1d9cb43227fe442cb9022d9e697cbca2333e8d7cbf02381eafdcbfd23c6ed04cbf02407eeebcbc7243af0afcb7f2462' +
+  'f24ccb19247ff3c1ca932490f50fc9ef2494f634c92b248ef731c84b247df808c74f2461f8bbc63a243bf94dc510240d' +
+  'f9c2c3d223d3fa1cc2822397fa5fc1252356fa8ebfba230dfaaebe4822c0fac0bccb2276fac7bb492224fac5b9c321d2' +
+  'fabdb8382181faaeb6aa212cfa9cb51a20d8fa86b3882082fa6db1f52030fa53b0611fdafa36aecb1f85fa17ad351f32' +
+  'f9f7ab9e1ee0f9d6aa061e8ff9b4a86d1e3ff991a6d41decf96da5391d9cf947a39e1d49f921a2021cfef8f9a0641cae' +
+  'f8d19ec71c5ff8a79d271c13f87c9b871bc1f84f99e51b77f82298421b2bf7f4969e1adbf7c494f91a93f79493531a48' +
+  'f76291aa19fdf72f900119b4f6fb8e55196bf6c68ca91926f6908afb18dbf659894a1894f62187991853f5e885e5180b' +
+  'f5ae842e17c4f57282771785f53680bc1740f4f87f0016fef4bb7d4216bcf47b7b81167cf43a79bd163cf3f977f615f8' +
+  'f3b7762c15c0f3747460158cf33072911556f2ed70c0152cf2a96eee150df2666d1a14f8f2246b4614f4f1e369731505' +
+  'f1a567a1152ef16b65d5157cf135640f15eaf1056253168ff0dd60a31763f0be5f05186df0a95d7e19b0f0a25c111b36' +
+  'f0a75ac31cf8f0bd59991ef3f0e258962131f11857c123a4f160571b2654f1b756a62934f22056642c44f29856542f84' +
+  'f31d567432e8f3ae56c43673f44a573f3a1ef4ee57e13de4f59858a541c1f646598845b1f6f75a8549b4f7a95b974dc3' +
+  'f8595cba51ddf9085deb55fff9b35f275a25fa5b606e5e52fafe61b96282fb9c630866b5fc34645d6aeafcc565b36f20' +
+  'fd51670c7359fdd568667794fe5469c37bcffeca6b1e800dff396c7c844cffa26dda888cffff6f388cd0ffff70979115' +
+  'ffff71f6955cffff735699a7ffff74b79df4ffff7619a243ffff777ba696ffff78deaaebffff7a42af43ffff7ba6b39e' +
+  'ffff7d0cb7fdffff7e72bc5effff7fd8c0c2ffff8140c52affff82a8c995ffff8410ce03ffff857bd274ffff86e6d6e9' +
+  'ffff8851db60ffff89bddfdbffff8b29e459ffff8c98e8dbff9b8e06ed5fff208f75f1e7fe9990e5f672fe059256fb00';
+
+let CET_BASELINE = null;
+function cetBaseline() {
+  if (CET_BASELINE === null) {
+    const s = scoreRawColors(CET_R1_HEX16);
+    CET_BASELINE = { total: s.total, hueCov: s.hueCov };
+  }
+  return CET_BASELINE;
+}
+let TURBO_BASELINE = null;
+function turboBaseline() {
+  if (TURBO_BASELINE === null) {
+    const s = scoreRawColors(TURBO_HEX16);
+    TURBO_BASELINE = { total: s.total, hueCov: s.hueCov };
+  }
+  return TURBO_BASELINE;
+}
+
+// Has the student actually changed anything yet? Used so that evaluating jet
+// straight out of the gate reads as the baseline rather than as a loss.
+function isUnmodifiedJet() {
+  const J = jetPoints();
+  if (App.pts.length !== J.length) return false;
+  for (let i = 0; i < J.length; i++) {
+    if (Math.abs(App.pts[i].J - J[i].J) > 1e-6 ||
+        Math.abs(App.pts[i].a - J[i].a) > 1e-6 ||
+        Math.abs(App.pts[i].b - J[i].b) > 1e-6) return false;
+  }
+  return true;
+}
+
+/* =====================================================================
+   PART 4 — Drawing
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+const cv3d = $('cv3d'), cvAB = $('cvAB'), cvJ = $('cvJ');
+const g3 = cv3d.getContext('2d'), gAB = cvAB.getContext('2d'), gJ = cvJ.getContext('2d');
+const AB_RANGE = 46;   // a'/b' half-extent shown
+const COL_BORDER = '#e0e2da', COL_MUTED = '#8b8d84', COL_ACCENT = '#1b6350', COL_TEXT = '#53564f';
+
+/* ---- 3D projection ---- */
+// Sized from the canvas so the whole solid fits with a little margin.
+const V3 = {
+  get cx() { return cv3d.width / 2; },
+  get cy() { return cv3d.height * 0.53; },
+  get S()  { return Math.min(cv3d.width / 176, cv3d.height / 152); },
+  get d0() { return cv3d.width * 1.15; }
+};
+function proj(J, a, b) {
+  const ca = Math.cos(App.view.az), sa = Math.sin(App.view.az);
+  const ce = Math.cos(App.view.el), se = Math.sin(App.view.el);
+  const x1 = a * ca + b * sa;
+  const y1 = -a * sa + b * ca;
+  const z1 = J - 50;
+  const D = (y1 * ce - z1 * se) * V3.S;      // depth, larger = farther
+  const Z = (y1 * se + z1 * ce) * V3.S;      // up
+  const f = V3.d0 / (V3.d0 + D);
+  return { x: V3.cx + x1 * V3.S * f, y: V3.cy - Z * f, d: D, f };
+}
+/* Dragging happens in the plane parallel to the screen, so a point tracks the
+   cursor exactly whatever the orbit angle is. The view frame below decomposes a
+   world position into screen-x (x1), screen-up (Z) and depth (D); a drag changes
+   x1 and Z while holding D fixed, then we rotate back to (J, a', b'). */
+function viewFrame(J, a, b) {
+  const ca = Math.cos(App.view.az), sa = Math.sin(App.view.az);
+  const ce = Math.cos(App.view.el), se = Math.sin(App.view.el);
+  const x1 = a * ca + b * sa;
+  const y1 = -a * sa + b * ca;
+  const z1 = J - 50;
+  const D = (y1 * ce - z1 * se) * V3.S;
+  const Z = (y1 * se + z1 * ce) * V3.S;
+  return { ca, sa, ce, se, x1, y1, z1, D, Z, f: V3.d0 / (V3.d0 + D) };
+}
+// Recover a world position from screen-x / screen-up / depth.
+function fromFrame(fr, x1, Z, D) {
+  const S = V3.S;
+  const y1 = (fr.se * Z + fr.ce * D) / S;
+  const z1 = (fr.ce * Z - fr.se * D) / S;
+  return { J: z1 + 50, a: x1 * fr.ca - y1 * fr.sa, b: x1 * fr.sa + y1 * fr.ca };
+}
+// Move a point by a screen-space delta, staying at the same depth.
+function screenDrag(fr, dsx, dsy) {
+  return fromFrame(fr, fr.x1 + dsx / (V3.S * fr.f), fr.Z - dsy / fr.f, fr.D);
+}
+// Place a brand-new point under the cursor, at the depth of the reference point.
+function screenPlace(sx, sy, D0) {
+  const fr = viewFrame(50, 0, 0);
+  const f = V3.d0 / (V3.d0 + D0);
+  if (!isFinite(f) || f <= 0.05) return null;
+  return fromFrame(fr, (sx - V3.cx) / (V3.S * f), (V3.cy - sy) / f, D0);
+}
+
+/* ---- cached geometry ---- */
+let GAMUT_CLOUD = null, GAMUT_EDGES = null;
+function gamutCloud() {
+  if (GAMUT_CLOUD) return GAMUT_CLOUD;
+  const pts = [], G = 13;
+  for (let face = 0; face < 6; face++) {
+    const axis = face >> 1, val = face & 1;
+    for (let i = 0; i < G; i++) for (let j = 0; j < G; j++) {
+      const c = [0, 0, 0];
+      c[axis] = val; c[(axis+1) % 3] = i/(G-1); c[(axis+2) % 3] = j/(G-1);
+      const jb = CS.rgb_to_Jab(c[0], c[1], c[2]);
+      pts.push({ J: jb[0], a: jb[1], b: jb[2], col: CS.css(c) });
+    }
+  }
+  GAMUT_CLOUD = pts;
+  return pts;
+}
+function gamutEdges() {
+  if (GAMUT_EDGES) return GAMUT_EDGES;
+  const segs = [], N = 18;
+  for (let axis = 0; axis < 3; axis++) {
+    for (let s = 0; s < 4; s++) {
+      const line = [];
+      for (let i = 0; i <= N; i++) {
+        const c = [0, 0, 0];
+        c[axis] = i / N;
+        c[(axis+1) % 3] = s & 1; c[(axis+2) % 3] = (s >> 1) & 1;
+        const jb = CS.rgb_to_Jab(c[0], c[1], c[2]);
+        line.push({ J: jb[0], a: jb[1], b: jb[2] });
+      }
+      segs.push(line);
+    }
+  }
+  GAMUT_EDGES = segs;
+  return segs;
+}
+const sliceCache = new Map();
+function sliceOutline(J0) {
+  const key = Math.round(J0);
+  if (sliceCache.has(key)) return sliceCache.get(key);
+  const N = 72, out = [];
+  for (let i = 0; i < N; i++) {
+    const hr = i / N * 2 * Math.PI, m = CS.maxMp(key, hr);
+    out.push([Math.cos(hr) * m, Math.sin(hr) * m]);
+  }
+  if (sliceCache.size > 120) sliceCache.clear();
+  sliceCache.set(key, out);
+  return out;
+}
+const sliceImgCache = new Map();
+function sliceImage(J0) {
+  const key = Math.round(J0);
+  if (sliceImgCache.has(key)) return sliceImgCache.get(key);
+  const R = 190, off = document.createElement('canvas');
+  off.width = R; off.height = R;
+  const ictx = off.getContext('2d');
+  const img = ictx.createImageData(R, R);
+  const dat = img.data;
+  for (let py = 0; py < R; py++) {
+    const bb = -((py + 0.5) / R * 2 - 1) * AB_RANGE;
+    for (let px = 0; px < R; px++) {
+      const aa = ((px + 0.5) / R * 2 - 1) * AB_RANGE;
+      const o = (py * R + px) * 4;
+      const res = CS.Jab_to_rgb(key, aa, bb);
+      if (res.inGamut) {
+        dat[o] = res.rgb[0]*255; dat[o+1] = res.rgb[1]*255; dat[o+2] = res.rgb[2]*255; dat[o+3] = 255;
+      } else {
+        dat[o] = 232; dat[o+1] = 233; dat[o+2] = 228; dat[o+3] = 255;
+      }
+    }
+  }
+  ictx.putImageData(img, 0, 0);
+  if (sliceImgCache.size > 40) sliceImgCache.clear();
+  sliceImgCache.set(key, off);
+  return off;
+}
+
+function selJ() {
+  if (!App.pts.length) return 50;
+  return App.pts[Math.min(App.sel, App.pts.length - 1)].J;
+}
+
+/* ---- the 3D panel ---- */
+function draw3D() {
+  const W = cv3d.width, H = cv3d.height;
+  g3.clearRect(0, 0, W, H);
+  g3.fillStyle = '#ffffff';
+  g3.fillRect(0, 0, W, H);
+
+  // floor grid at J'=0
+  g3.strokeStyle = '#eceee7'; g3.lineWidth = 1;
+  for (const r of [15, 30, 45]) {
+    g3.beginPath();
+    for (let i = 0; i <= 60; i++) {
+      const t = i / 60 * 2 * Math.PI, p = proj(0, Math.cos(t) * r, Math.sin(t) * r);
+      i ? g3.lineTo(p.x, p.y) : g3.moveTo(p.x, p.y);
+    }
+    g3.stroke();
+  }
+  g3.beginPath();
+  let p = proj(0, -50, 0); g3.moveTo(p.x, p.y); p = proj(0, 50, 0); g3.lineTo(p.x, p.y);
+  p = proj(0, 0, -50); g3.moveTo(p.x, p.y); p = proj(0, 0, 50); g3.lineTo(p.x, p.y);
+  g3.stroke();
+  // vertical lightness axis
+  g3.strokeStyle = '#dcdfd7'; g3.lineWidth = 1.5;
+  g3.beginPath();
+  p = proj(0, 0, 0); g3.moveTo(p.x, p.y); p = proj(100, 0, 0); g3.lineTo(p.x, p.y);
+  g3.stroke();
+
+  // sRGB gamut shell
+  if (App.showGamut) {
+    const cloud = gamutCloud().map(q => ({ q, p: proj(q.J, q.a, q.b) }));
+    cloud.sort((m, n) => n.p.d - m.p.d);
+    for (const it of cloud) {
+      g3.globalAlpha = 0.5;
+      g3.fillStyle = it.q.col;
+      const r = 4.4 * it.p.f;
+      g3.fillRect(it.p.x - r, it.p.y - r, r * 2, r * 2);
+    }
+    g3.globalAlpha = 0.30; g3.strokeStyle = '#5b5f57'; g3.lineWidth = 1;
+    for (const line of gamutEdges()) {
+      g3.beginPath();
+      line.forEach((q, i) => { const pp = proj(q.J, q.a, q.b); i ? g3.lineTo(pp.x, pp.y) : g3.moveTo(pp.x, pp.y); });
+      g3.stroke();
+    }
+    g3.globalAlpha = 1;
+  }
+
+  // Constant-lightness reference slice. Only in stage 2, where it corresponds to
+  // the a'b' panel next to it — in stage 1 it would just look like a placement
+  // plane, which is not how placement works.
+  if (App.stage >= 2 && App.pts.length) {
+    const J0 = selJ(), out = sliceOutline(J0);
+    g3.beginPath();
+    out.forEach((q, i) => { const pp = proj(J0, q[0], q[1]); i ? g3.lineTo(pp.x, pp.y) : g3.moveTo(pp.x, pp.y); });
+    g3.closePath();
+    g3.fillStyle = 'rgba(255,255,255,0.42)'; g3.fill();
+    g3.strokeStyle = COL_ACCENT; g3.lineWidth = 1.6; g3.setLineDash([6, 5]); g3.stroke();
+    g3.setLineDash([]);
+  }
+
+  // the colormap path
+  if (hasMap()) {
+    const cm = buildColormap();
+    g3.lineWidth = 7; g3.lineCap = 'round';
+    for (let i = 0; i < cm.samp.length - 1; i++) {
+      const A = proj(cm.samp[i].J, cm.samp[i].a, cm.samp[i].b);
+      const B = proj(cm.samp[i+1].J, cm.samp[i+1].a, cm.samp[i+1].b);
+      g3.strokeStyle = CS.css(cm.rgb[i]);
+      g3.beginPath(); g3.moveTo(A.x, A.y); g3.lineTo(B.x, B.y); g3.stroke();
+    }
+    g3.lineWidth = 1.2; g3.strokeStyle = 'rgba(0,0,0,0.28)';
+    g3.beginPath();
+    cm.samp.forEach((s, i) => { const pp = proj(s.J, s.a, s.b); i ? g3.lineTo(pp.x, pp.y) : g3.moveTo(pp.x, pp.y); });
+    g3.stroke();
+  }
+
+  // control point handles + stems to the floor
+  App.pts.forEach((q, i) => {
+    const pp = proj(q.J, q.a, q.b), fl = proj(0, q.a, q.b);
+    g3.strokeStyle = 'rgba(120,124,114,0.35)'; g3.lineWidth = 1; g3.setLineDash([3, 4]);
+    g3.beginPath(); g3.moveTo(pp.x, pp.y); g3.lineTo(fl.x, fl.y); g3.stroke();
+    g3.setLineDash([]);
+    const c = CS.gamutClip(q.J, q.a, q.b);
+    const r = (i === App.sel ? 18 : 13) * pp.f;
+    g3.beginPath(); g3.arc(pp.x, pp.y, r, 0, 2 * Math.PI);
+    g3.fillStyle = CS.css(c.rgb); g3.fill();
+    g3.lineWidth = i === App.sel ? 4 : 2.5;
+    g3.strokeStyle = i === App.sel ? COL_ACCENT : 'rgba(255,255,255,0.95)';
+    g3.stroke();
+    if (i === App.sel) {
+      g3.lineWidth = 1.5; g3.strokeStyle = 'rgba(0,0,0,0.35)';
+      g3.beginPath(); g3.arc(pp.x, pp.y, r + 3.5, 0, 2 * Math.PI); g3.stroke();
+    }
+    g3.fillStyle = '#fff'; g3.font = '600 ' + (16 * pp.f).toFixed(0) + 'px system-ui';
+    g3.textAlign = 'center'; g3.textBaseline = 'middle';
+    g3.strokeStyle = 'rgba(0,0,0,0.5)'; g3.lineWidth = 2.5;
+    g3.strokeText(String(i + 1), pp.x, pp.y);
+    g3.fillText(String(i + 1), pp.x, pp.y);
+  });
+
+  // Axis labels go on last, haloed, so the point cloud never swallows them.
+  const halo = (txt, x, y, align, font) => {
+    g3.font = font; g3.textAlign = align; g3.textBaseline = 'middle';
+    g3.lineWidth = 5; g3.strokeStyle = 'rgba(255,255,255,0.92)';
+    g3.strokeText(txt, x, y);
+    g3.fillStyle = COL_TEXT; g3.fillText(txt, x, y);
+  };
+  const FA = '500 23px system-ui, sans-serif', FT = '19px system-ui, sans-serif';
+  p = proj(0, 62, 0);   halo("a′ →  red", p.x, p.y, 'center', FA);
+  p = proj(0, -62, 0);  halo("green", p.x, p.y, 'center', FA);
+  p = proj(0, 0, 62);   halo("b′ →  yellow", p.x, p.y, 'center', FA);
+  p = proj(0, 0, -62);  halo("blue", p.x, p.y, 'center', FA);
+  // Near top-down the J' axis projects to a point, so its ticks would pile up in
+  // the middle of the wheel. Say what the axis is doing instead.
+  if (App.view.el < 1.35) {
+    for (const j of [0, 25, 50, 75, 100]) {
+      p = proj(j, 0, 0);
+      halo(String(j), p.x - 11, p.y, 'right', FT);
+    }
+    p = proj(100, 0, 0);
+    halo("J′ lightness", p.x, p.y - 28, 'center', FA);
+  } else {
+    halo("J′ lightness points at you — drag the background to tip the solid over",
+         W / 2, H - 26, 'center', FT);
+  }
+
+  if (!App.pts.length) {
+    g3.fillStyle = COL_MUTED; g3.font = '26px system-ui, sans-serif'; g3.textAlign = 'center';
+    g3.fillText('Click anywhere in here to drop your first color', W / 2, 46);
+  }
+}
+
+/* ---- the a'b' slice panel ---- */
+function abToPx(a, b) {
+  return { x: (a / AB_RANGE / 2 + 0.5) * cvAB.width, y: (0.5 - b / AB_RANGE / 2) * cvAB.height };
+}
+function pxToAb(x, y) {
+  return { a: (x / cvAB.width - 0.5) * 2 * AB_RANGE, b: (0.5 - y / cvAB.height) * 2 * AB_RANGE };
+}
+function drawAB() {
+  const W = cvAB.width, H = cvAB.height;
+  const J0 = selJ();
+  gAB.clearRect(0, 0, W, H);
+  gAB.imageSmoothingEnabled = true;
+  gAB.drawImage(sliceImage(J0), 0, 0, W, H);
+
+  // hue spokes and chroma rings
+  gAB.strokeStyle = 'rgba(255,255,255,0.35)'; gAB.lineWidth = 1;
+  const O = abToPx(0, 0);
+  for (const r of [15, 30, 45]) {
+    const e = abToPx(r, 0);
+    gAB.beginPath(); gAB.arc(O.x, O.y, e.x - O.x, 0, 2 * Math.PI); gAB.stroke();
+  }
+  for (let k = 0; k < 12; k++) {
+    const t = k / 12 * 2 * Math.PI, e = abToPx(Math.cos(t) * AB_RANGE, Math.sin(t) * AB_RANGE);
+    gAB.beginPath(); gAB.moveTo(O.x, O.y); gAB.lineTo(e.x, e.y); gAB.stroke();
+  }
+
+  // the whole path, flattened onto this plane
+  if (hasMap()) {
+    const cm = buildColormap();
+    gAB.lineWidth = 5; gAB.lineJoin = 'round';
+    for (let i = 0; i < cm.samp.length - 1; i++) {
+      const A = abToPx(cm.samp[i].a, cm.samp[i].b), B = abToPx(cm.samp[i+1].a, cm.samp[i+1].b);
+      gAB.strokeStyle = CS.css(cm.rgb[i]);
+      gAB.beginPath(); gAB.moveTo(A.x, A.y); gAB.lineTo(B.x, B.y); gAB.stroke();
+    }
+    gAB.strokeStyle = 'rgba(0,0,0,0.35)'; gAB.lineWidth = 1;
+    gAB.beginPath();
+    cm.samp.forEach((s, i) => { const q = abToPx(s.a, s.b); i ? gAB.lineTo(q.x, q.y) : gAB.moveTo(q.x, q.y); });
+    gAB.stroke();
+  }
+
+  App.pts.forEach((q, i) => {
+    const pt = abToPx(q.a, q.b);
+    const sel = i === App.sel;
+    const near = Math.abs(q.J - J0) < 6;
+    const c = CS.gamutClip(q.J, q.a, q.b);
+    gAB.globalAlpha = sel || near ? 1 : 0.55;
+    gAB.beginPath(); gAB.arc(pt.x, pt.y, sel ? 15 : 10, 0, 2 * Math.PI);
+    gAB.fillStyle = CS.css(c.rgb); gAB.fill();
+    gAB.lineWidth = sel ? 4 : 2.5;
+    gAB.strokeStyle = sel ? COL_ACCENT : 'rgba(255,255,255,0.95)';
+    gAB.stroke();
+    gAB.globalAlpha = 1;
+    gAB.fillStyle = '#fff'; gAB.font = '600 13px system-ui'; gAB.textAlign = 'center'; gAB.textBaseline = 'middle';
+    gAB.strokeStyle = 'rgba(0,0,0,0.5)'; gAB.lineWidth = 2.5;
+    gAB.strokeText(String(i + 1), pt.x, pt.y); gAB.fillText(String(i + 1), pt.x, pt.y);
+  });
+}
+
+/* ---- the J' profile panel ---- */
+const JP = { l: 58, r: 18, t: 20, b: 42 };
+function jToPx(t, J) {
+  return { x: JP.l + t * (cvJ.width - JP.l - JP.r),
+           y: JP.t + (1 - J / 100) * (cvJ.height - JP.t - JP.b) };
+}
+function pxToJ(x, y) {
+  return { t: (x - JP.l) / (cvJ.width - JP.l - JP.r),
+           J: (1 - (y - JP.t) / (cvJ.height - JP.t - JP.b)) * 100 };
+}
+function drawJ() {
+  const W = cvJ.width, H = cvJ.height;
+  gJ.clearRect(0, 0, W, H);
+  gJ.fillStyle = '#fff'; gJ.fillRect(0, 0, W, H);
+  gJ.strokeStyle = COL_BORDER; gJ.lineWidth = 1;
+  gJ.fillStyle = COL_MUTED; gJ.font = '14px system-ui'; gJ.textAlign = 'right'; gJ.textBaseline = 'middle';
+  for (const j of [0, 25, 50, 75, 100]) {
+    const p = jToPx(0, j);
+    gJ.beginPath(); gJ.moveTo(JP.l, p.y); gJ.lineTo(W - JP.r, p.y); gJ.stroke();
+    gJ.fillText(String(j), JP.l - 7, p.y);
+  }
+  gJ.textAlign = 'center'; gJ.textBaseline = 'top';
+  gJ.fillText('start of scale', jToPx(0.09, 0).x, H - JP.b + 7);
+  gJ.fillText('end of scale', jToPx(0.91, 0).x, H - JP.b + 7);
+
+  if (hasMap()) {
+    const cm = buildColormap(), n = cm.samp.length;
+    for (let i = 0; i < n - 1; i++) {
+      const A = jToPx(i / (n - 1), cm.samp[i].J), B = jToPx((i + 1) / (n - 1), cm.samp[i+1].J);
+      const base = jToPx(0, 0).y;
+      gJ.fillStyle = CS.css(cm.rgb[i]);
+      gJ.globalAlpha = 0.5;
+      gJ.beginPath(); gJ.moveTo(A.x, base); gJ.lineTo(A.x, A.y); gJ.lineTo(B.x + 0.6, B.y);
+      gJ.lineTo(B.x + 0.6, base); gJ.closePath(); gJ.fill();
+      gJ.globalAlpha = 1;
+      gJ.strokeStyle = CS.css(cm.rgb[i]); gJ.lineWidth = 4;
+      gJ.beginPath(); gJ.moveTo(A.x, A.y); gJ.lineTo(B.x, B.y); gJ.stroke();
+    }
+    gJ.strokeStyle = 'rgba(0,0,0,0.3)'; gJ.lineWidth = 1;
+    gJ.beginPath();
+    cm.samp.forEach((s, i) => { const q = jToPx(i / (n - 1), s.J); i ? gJ.lineTo(q.x, q.y) : gJ.moveTo(q.x, q.y); });
+    gJ.stroke();
+  }
+
+  const m = App.pts.length;
+  App.pts.forEach((q, i) => {
+    const t = m === 1 ? 0.5 : i / (m - 1), p = jToPx(t, q.J);
+    const locked = App.lmode === 'ramp' && !isRampHandle(i);
+    const sel = i === App.sel;
+    const c = CS.gamutClip(q.J, q.a, q.b);
+    gJ.globalAlpha = locked ? 0.4 : 1;
+    gJ.beginPath(); gJ.arc(p.x, p.y, sel ? 13 : 9, 0, 2 * Math.PI);
+    gJ.fillStyle = CS.css(c.rgb); gJ.fill();
+    gJ.lineWidth = sel ? 4 : 2.5;
+    gJ.strokeStyle = sel ? COL_ACCENT : 'rgba(120,124,114,0.9)';
+    gJ.stroke();
+    gJ.globalAlpha = 1;
+  });
+  if (App.lmode === 'ramp') {
+    gJ.fillStyle = COL_MUTED; gJ.font = 'italic 14px system-ui'; gJ.textAlign = 'left'; gJ.textBaseline = 'top';
+    gJ.fillText('linear ramp — only the ends' + (App.type === 'diverging' ? ' and middle' : '') + ' are adjustable',
+                JP.l + 6, JP.t + 4);
+  }
+}
+function isRampHandle(i) {
+  const m = App.pts.length;
+  if (i === 0 || i === m - 1) return true;
+  return App.type === 'diverging' && i === Math.floor((m - 1) / 2);
+}
+
+/* ---- gradient strips ---- */
+function rampCSS(cols) {
+  const stops = cols.map((c, i) => CS.css(c) + ' ' + (i / (cols.length - 1) * 100).toFixed(3) + '%');
+  return 'linear-gradient(to right, ' + stops.join(', ') + ')';
+}
+function paintRamp(el, cols) { el.style.background = cols.length > 1 ? rampCSS(cols) : 'var(--surface-1)'; }
+
+function redraw() {
+  draw3D();
+  // Skip the guide panels in stage 1: they are hidden, and rendering the gamut
+  // slice on every frame of a lightness drag would cost more than it is worth.
+  if (App.stage >= 2) {
+    drawAB(); drawJ();
+    $('sliceJLabel').innerHTML = App.pts.length ? 'J′ = ' + selJ().toFixed(1) : 'J′ = —';
+  }
+  const lr = $('liveRamp');
+  if (hasMap()) {
+    const cm = buildColormap();
+    paintRamp(lr, cm.rgb);
+    const w = $('gamutWarn');
+    if (cm.clippedFrac > 0.005) {
+      w.classList.add('show');
+      w.innerHTML = Math.round(cm.clippedFrac * 100) + '% of this path is outside the sRGB gamut — ' +
+        'those colors are being desaturated to fit, so your screen is not showing what you drew. ' +
+        'Pull the path toward the center, or change its lightness.';
+    } else w.classList.remove('show');
+  } else {
+    lr.style.background = 'var(--surface-1)';
+    $('gamutWarn').classList.remove('show');
+  }
+  const ro = $('ptReadout');
+  if (App.pts.length) {
+    const q = App.pts[Math.min(App.sel, App.pts.length - 1)];
+    const c = CS.gamutClip(q.J, q.a, q.b);
+    ro.textContent = 'point ' + (App.sel + 1) + ' of ' + App.pts.length +
+      '   J′ ' + q.J.toFixed(1) + '   a′ ' + q.a.toFixed(1) + '   b′ ' + q.b.toFixed(1) +
+      '   ' + CS.hex(c.rgb) + (c.clipped ? '  (out of gamut)' : '');
+  } else ro.textContent = 'no points yet';
+  $('btnDelPt').disabled = !App.pts.length;
+  $('btnUndo').disabled = !App.history.length;
+  $('btnEval').disabled = !hasMap();
+}
+
+/* =====================================================================
+   PART 5 — Interaction
+   ===================================================================== */
+function cvPos(cv, ev) {
+  const r = cv.getBoundingClientRect();
+  return { x: (ev.clientX - r.left) * cv.width / r.width,
+           y: (ev.clientY - r.top) * cv.height / r.height };
+}
+function addPoint(J, a, b, at) {
+  pushHistory();
+  const p = { J: CS.clamp(J, 0, 100), a, b };
+  if (at === undefined || at >= App.pts.length) { App.pts.push(p); App.sel = App.pts.length - 1; }
+  else { App.pts.splice(at, 0, p); App.sel = at; }
+  invalidate(); redraw();
+}
+function deleteSel() {
+  if (!App.pts.length) return;
+  pushHistory();
+  App.pts.splice(App.sel, 1);
+  App.sel = Math.max(0, Math.min(App.sel, App.pts.length - 1));
+  invalidate(); redraw();
+}
+// If a click lands on the drawn curve, insert there instead of appending.
+function insertIndexNear(px, py, projectFn, tol) {
+  if (!hasMap()) return undefined;
+  const cm = buildColormap(), N = cm.samp.length;
+  let best = Infinity, bi = -1;
+  for (let i = 0; i < N; i++) {
+    const q = projectFn(cm.samp[i]);
+    const d = Math.hypot(q.x - px, q.y - py);
+    if (d < best) { best = d; bi = i; }
+  }
+  if (best > tol) return undefined;
+  const m = App.pts.length, segs = App.type === 'cyclic' ? m : m - 1;
+  const s = Math.floor(bi / (N - 1) * segs);
+  return Math.min(s + 1, m);
+}
+function hitPoint(px, py, projectFn, tol) {
+  let best = tol, bi = -1;
+  App.pts.forEach((q, i) => {
+    const p = projectFn(q);
+    const d = Math.hypot(p.x - px, p.y - py);
+    if (d <= best) { best = d; bi = i; }
+  });
+  return bi;
+}
+
+/* ---- 3D canvas ---- */
+const p3 = q => proj(q.J, q.a, q.b);
+let drag3 = null;
+cv3d.addEventListener('pointerdown', ev => {
+  cv3d.setPointerCapture(ev.pointerId);
+  const m = cvPos(cv3d, ev);
+  const hit = hitPoint(m.x, m.y, p3, 26);
+  if (hit >= 0) {
+    App.sel = hit;
+    pushHistory();
+    const q = App.pts[hit];
+    drag3 = { mode: ev.shiftKey ? 'J' : 'screen', i: hit, x0: m.x, y0: m.y,
+              J0: q.J, fr: viewFrame(q.J, q.a, q.b), moved: false };
+    redraw();
+  } else {
+    drag3 = { mode: 'orbit', x0: m.x, y0: m.y, az: App.view.az, el: App.view.el, moved: false };
+  }
+});
+cv3d.addEventListener('pointermove', ev => {
+  const m = cvPos(cv3d, ev);
+  if (!drag3) {
+    cv3d.classList.toggle('grab', hitPoint(m.x, m.y, p3, 26) >= 0);
+    return;
+  }
+  if (Math.hypot(m.x - drag3.x0, m.y - drag3.y0) > 5) drag3.moved = true;
+  if (drag3.mode === 'orbit') {
+    App.view.az = drag3.az + (m.x - drag3.x0) * 0.006;
+    App.view.el = CS.clamp(drag3.el + (m.y - drag3.y0) * 0.005, 0.30, Math.PI / 2);
+    redraw();
+  } else if (drag3.mode === 'screen') {
+    const q = App.pts[drag3.i];
+    const g = screenDrag(drag3.fr, m.x - drag3.x0, m.y - drag3.y0);
+    q.J = CS.clamp(g.J, 0, 100);
+    q.a = CS.clamp(g.a, -AB_RANGE, AB_RANGE);
+    q.b = CS.clamp(g.b, -AB_RANGE, AB_RANGE);
+    invalidate(); redraw();
+  } else {
+    const q = App.pts[drag3.i];
+    q.J = CS.clamp(drag3.J0 - (m.y - drag3.y0) * 0.16, 0, 100);
+    invalidate(); redraw();
+  }
+});
+cv3d.addEventListener('pointerup', ev => {
+  const m = cvPos(cv3d, ev);
+  if (drag3 && drag3.mode === 'orbit' && !drag3.moved) {
+    const at = insertIndexNear(m.x, m.y, p3, 26);
+    // New points land at the same depth as the selected one, so the whole path
+    // stays in the plane the student is currently looking at.
+    const ref = App.pts.length ? App.pts[Math.min(App.sel, App.pts.length - 1)] : null;
+    const D0 = ref ? viewFrame(ref.J, ref.a, ref.b).D : 0;
+    const g = screenPlace(m.x, m.y, D0);
+    if (g && Math.abs(g.a) < AB_RANGE * 1.5 && Math.abs(g.b) < AB_RANGE * 1.5
+        && g.J > -25 && g.J < 125) {
+      addPoint(CS.clamp(g.J, 0, 100),
+               CS.clamp(g.a, -AB_RANGE, AB_RANGE),
+               CS.clamp(g.b, -AB_RANGE, AB_RANGE), at);
+    }
+  }
+  drag3 = null;
+});
+cv3d.addEventListener('wheel', ev => {
+  const m = cvPos(cv3d, ev);
+  const hit = hitPoint(m.x, m.y, p3, 40);
+  if (hit >= 0) {
+    ev.preventDefault();
+    App.sel = hit;
+    App.pts[hit].J = CS.clamp(App.pts[hit].J - Math.sign(ev.deltaY) * 1.5, 0, 100);
+    invalidate(); redraw();
+  }
+}, { passive: false });
+
+/* ---- a'b' canvas ---- */
+const pAB = q => abToPx(q.a, q.b);
+let dragAB = null;
+cvAB.addEventListener('pointerdown', ev => {
+  cvAB.setPointerCapture(ev.pointerId);
+  const m = cvPos(cvAB, ev);
+  const hit = hitPoint(m.x, m.y, pAB, 20);
+  if (hit >= 0) { App.sel = hit; pushHistory(); dragAB = { i: hit, moved: false }; redraw(); }
+  else dragAB = { i: -1, x0: m.x, y0: m.y, moved: false };
+});
+cvAB.addEventListener('pointermove', ev => {
+  const m = cvPos(cvAB, ev);
+  if (!dragAB) { cvAB.classList.toggle('grab', hitPoint(m.x, m.y, pAB, 20) >= 0); return; }
+  if (dragAB.i < 0) return;
+  dragAB.moved = true;
+  const g = pxToAb(m.x, m.y);
+  const q = App.pts[dragAB.i];
+  q.a = CS.clamp(g.a, -AB_RANGE, AB_RANGE);
+  q.b = CS.clamp(g.b, -AB_RANGE, AB_RANGE);
+  invalidate(); redraw();
+});
+cvAB.addEventListener('pointerup', ev => {
+  const m = cvPos(cvAB, ev);
+  if (dragAB && dragAB.i < 0 && !dragAB.moved) {
+    const g = pxToAb(m.x, m.y);
+    addPoint(selJ(), g.a, g.b, insertIndexNear(m.x, m.y, pAB, 20));
+  }
+  dragAB = null;
+});
+
+/* ---- J' profile canvas ---- */
+const pJ = (q, i) => { const m = App.pts.length; return jToPx(m === 1 ? 0.5 : i / (m - 1), q.J); };
+function hitJ(px, py) {
+  let best = 22, bi = -1;
+  App.pts.forEach((q, i) => {
+    const p = pJ(q, i);
+    const d = Math.hypot(p.x - px, p.y - py);
+    if (d <= best) { best = d; bi = i; }
+  });
+  return bi;
+}
+let dragJ = null;
+cvJ.addEventListener('pointerdown', ev => {
+  cvJ.setPointerCapture(ev.pointerId);
+  const m = cvPos(cvJ, ev);
+  const hit = hitJ(m.x, m.y);
+  if (hit >= 0 && !(App.lmode === 'ramp' && !isRampHandle(hit))) {
+    App.sel = hit; pushHistory(); dragJ = { i: hit }; redraw();
+  }
+});
+cvJ.addEventListener('pointermove', ev => {
+  const m = cvPos(cvJ, ev);
+  if (!dragJ) { cvJ.classList.toggle('grab', hitJ(m.x, m.y) >= 0); return; }
+  App.pts[dragJ.i].J = CS.clamp(pxToJ(m.x, m.y).J, 0, 100);
+  invalidate(); redraw();
+});
+cvJ.addEventListener('pointerup', () => { dragJ = null; });
+
+document.addEventListener('keydown', ev => {
+  if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) return;
+  if (!App.pts.length) return;
+  const q = App.pts[App.sel];
+  const step = ev.shiftKey ? 5 : 1;
+  if (ev.key === 'Backspace' || ev.key === 'Delete') { ev.preventDefault(); deleteSel(); }
+  else if (ev.key === 'ArrowLeft')  { q.a -= step; }
+  else if (ev.key === 'ArrowRight') { q.a += step; }
+  else if (ev.key === 'ArrowUp')    { q.b += step; }
+  else if (ev.key === 'ArrowDown')  { q.b -= step; }
+  else if (ev.key === 'PageUp')     { q.J = CS.clamp(q.J + step, 0, 100); }
+  else if (ev.key === 'PageDown')   { q.J = CS.clamp(q.J - step, 0, 100); }
+  else if (ev.key === 'Tab')        { ev.preventDefault(); App.sel = (App.sel + (ev.shiftKey ? -1 : 1) + App.pts.length) % App.pts.length; }
+  else return;
+  ev.preventDefault(); invalidate(); redraw();
+});
+
+/* ---- toolbar ---- */
+$('typeSeg').addEventListener('click', ev => {
+  const b = ev.target.closest('[data-type]'); if (!b) return;
+  App.type = b.dataset.type;
+  [].forEach.call($('typeSeg').children, c => c.classList.toggle('active', c === b));
+  invalidate(); redraw();
+});
+$('lmodeSeg').addEventListener('click', ev => {
+  const b = ev.target.closest('[data-lmode]'); if (!b) return;
+  App.lmode = b.dataset.lmode;
+  [].forEach.call($('lmodeSeg').children, c => c.classList.toggle('active', c === b));
+  invalidate(); redraw();
+});
+$('chkEqualize').addEventListener('change', e => { App.equalize = e.target.checked; invalidate(); redraw(); });
+$('btnGamut').addEventListener('click', e => {
+  App.showGamut = !App.showGamut;
+  e.target.classList.toggle('active', App.showGamut);
+  redraw();
+});
+$('btnResetView').addEventListener('click', () => { App.view = { az: 0, el: Math.PI / 2 }; redraw(); });
+$('btnUndo').addEventListener('click', () => {
+  const h = App.history.pop(); if (!h) return;
+  App.pts = h.pts; App.sel = Math.min(h.sel, App.pts.length - 1);
+  invalidate(); redraw();
+});
+$('btnDelPt').addEventListener('click', deleteSel);
+$('btnReverse').addEventListener('click', () => {
+  pushHistory(); App.pts.reverse();
+  App.sel = App.pts.length - 1 - App.sel;
+  invalidate(); redraw();
+});
+$('btnClear').addEventListener('click', () => {
+  pushHistory(); App.pts = []; App.sel = 0;
+  invalidate(); $('reportCard').classList.add('hidden'); redraw();
+});
+const presetSel = $('presetSel');
+Object.keys(PRESETS).forEach(k => {
+  const o = document.createElement('option'); o.value = k; o.textContent = k; presetSel.appendChild(o);
+});
+presetSel.addEventListener('change', e => {
+  if (!e.target.value) return;
+  loadPreset(e.target.value);
+  [].forEach.call($('typeSeg').children, c => c.classList.toggle('active', c.dataset.type === App.type));
+  redraw();
+  if (!$('reportCard').classList.contains('hidden')) renderReport();
+  e.target.value = '';
+});
+$('btnEval').addEventListener('click', () => {
+  renderReport();
+  $('reportCard').classList.remove('hidden');
+  $('reportCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* =====================================================================
+   PART 6 — The report
+   ===================================================================== */
+function drawSeries(ctx, vals, cols, opts) {
+  const W = ctx.canvas.width, H = ctx.canvas.height;
+  const P = { l: 48, r: 12, t: 26, b: 34 };
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const lo = opts.lo !== undefined ? opts.lo : 0;
+  const hi = opts.hi !== undefined ? opts.hi : Math.max.apply(null, vals) * 1.15 || 1;
+  const px = i => P.l + (i / (vals.length - 1)) * (W - P.l - P.r);
+  const py = v => P.t + (1 - (v - lo) / (hi - lo)) * (H - P.t - P.b);
+  ctx.strokeStyle = COL_BORDER; ctx.lineWidth = 1;
+  ctx.fillStyle = COL_MUTED; ctx.font = '14px system-ui'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  const nTicks = 4;
+  for (let k = 0; k <= nTicks; k++) {
+    const v = lo + (hi - lo) * k / nTicks;
+    ctx.beginPath(); ctx.moveTo(P.l, py(v)); ctx.lineTo(W - P.r, py(v)); ctx.stroke();
+    ctx.fillText(v.toFixed(hi - lo > 20 ? 0 : 1), P.l - 6, py(v));
+  }
+  // Data is clipped to the plot box: a single huge spike must not be allowed to
+  // squash the reference line into unreadability, so it runs off the top instead.
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(P.l, P.t, W - P.l - P.r, H - P.t - P.b);
+  ctx.clip();
+  for (let i = 0; i < vals.length - 1; i++) {
+    ctx.fillStyle = CS.css(cols[Math.min(i, cols.length - 1)]);
+    ctx.globalAlpha = 0.55;
+    ctx.fillRect(px(i), py(vals[i]), px(i + 1) - px(i) + 0.7, py(lo) - py(vals[i]));
+    ctx.globalAlpha = 1;
+  }
+  ctx.strokeStyle = '#2c2f28'; ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  vals.forEach((v, i) => { i ? ctx.lineTo(px(i), py(v)) : ctx.moveTo(px(i), py(v)); });
+  ctx.stroke();
+  if (opts.refLine !== undefined) {
+    ctx.strokeStyle = COL_ACCENT; ctx.lineWidth = 1.8; ctx.setLineDash([7, 5]);
+    ctx.beginPath(); ctx.moveTo(P.l, py(opts.refLine)); ctx.lineTo(W - P.r, py(opts.refLine)); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  ctx.restore();
+  ctx.fillStyle = '#14161a'; ctx.font = '500 16px system-ui'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText(opts.title, P.l, 5);
+  if (opts.note) {
+    ctx.fillStyle = COL_MUTED; ctx.font = '13px system-ui'; ctx.textAlign = 'right';
+    ctx.fillText(opts.note, W - P.r, 7);
+  }
+  ctx.fillStyle = COL_MUTED; ctx.font = '13px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  ctx.fillText('position along the colormap →', (P.l + W - P.r) / 2, H - P.b + 10);
+}
+
+/* ---- synthetic test data ---- */
+function hash2(x, y) {
+  let h = x * 374761393 + y * 668265263;
+  h = (h ^ (h >> 13)) * 1274126177;
+  return ((h ^ (h >> 16)) >>> 0) / 4294967295;
+}
+function valueNoise(x, y) {
+  const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+  const sx = xf * xf * (3 - 2 * xf), sy = yf * yf * (3 - 2 * yf);
+  const a = hash2(xi, yi), b = hash2(xi + 1, yi), c = hash2(xi, yi + 1), d = hash2(xi + 1, yi + 1);
+  return (a + (b - a) * sx) + ((c + (d - c) * sx) - (a + (b - a) * sx)) * sy;
+}
+function normalize(f) {
+  let lo = Infinity, hi = -Infinity;
+  for (const v of f) { if (v < lo) lo = v; if (v > hi) hi = v; }
+  const s = hi - lo < 1e-9 ? 1 : hi - lo;
+  for (let i = 0; i < f.length; i++) f[i] = (f[i] - lo) / s;
+  return f;
+}
+function terrainField(w, h) {
+  const f = new Float32Array(w * h);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    let v = 0, amp = 1, fr = 5 / w;
+    for (let o = 0; o < 5; o++) { v += amp * valueNoise(x * fr, y * fr); amp *= 0.5; fr *= 2.07; }
+    const dx = (x - w * 0.42) / (w * 0.30), dy = (y - h * 0.46) / (h * 0.30);
+    v += 1.5 * Math.exp(-(dx * dx + dy * dy));
+    f[y * w + x] = v;
+  }
+  return normalize(f);
+}
+function blobField(w, h) {
+  const f = new Float32Array(w * h);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const u = x / w, v = y / h;
+    let s = 0;
+    for (const [cx, cy, sx, sy, rot, amp] of [[0.34, 0.34, 0.30, 0.09, -0.7, 1.0],
+                                              [0.66, 0.66, 0.26, 0.08, -0.7, 0.85]]) {
+      const dx = u - cx, dy = v - cy;
+      const rx = dx * Math.cos(rot) - dy * Math.sin(rot), ry = dx * Math.sin(rot) + dy * Math.cos(rot);
+      s += amp * Math.exp(-(rx * rx / (sx * sx) + ry * ry / (sy * sy)));
+    }
+    f[y * w + x] = s + 0.22 * hash2(x * 7 + 3, y * 13 + 5);
+  }
+  return normalize(f);
+}
+function fresnelField(w, h) {
+  const f = new Float32Array(w * h);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const u = (x / w - 0.5) * 8, v = (y / h - 0.5) * 5;
+    const r1 = Math.hypot(u + 1.6, v), r2 = Math.hypot(u - 1.6, v);
+    f[y * w + x] = Math.cos(r1 * 4.2) + Math.cos(r2 * 4.2) + 0.35 * Math.cos((u + v) * 2.2);
+  }
+  return normalize(f);
+}
+let FIELDS = null;
+function fields() {
+  if (FIELDS) return FIELDS;
+  FIELDS = [
+    // all 8:5 so every cell in the grid ends up the same height
+    { name: 'Smooth surface',    w: 240, h: 150, data: terrainField(240, 150), pixel: false },
+    { name: 'Coarse grid',       w: 24,  h: 15,  data: blobField(24, 15),      pixel: true  },
+    { name: 'Fine oscillation',  w: 240, h: 150, data: fresnelField(240, 150), pixel: false }
+  ];
+  return FIELDS;
+}
+function renderField(canvas, field, cols, cvd) {
+  canvas.width = field.w; canvas.height = field.h;
+  canvas.style.imageRendering = field.pixel ? 'pixelated' : 'auto';
+  const ctx = canvas.getContext('2d');
+  const img = ctx.createImageData(field.w, field.h);
+  const lut = cols.map(c => cvd ? CS.simulateCVD(c, cvd, 1.0) : c);
+  const n = lut.length;
+  for (let i = 0; i < field.data.length; i++) {
+    const c = lut[Math.min(n - 1, Math.max(0, Math.round(field.data[i] * (n - 1))))];
+    const o = i * 4;
+    img.data[o] = c[0] * 255; img.data[o+1] = c[1] * 255; img.data[o+2] = c[2] * 255; img.data[o+3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+let lastScore = null;
+function renderReport() {
+  const S = scoreColormap();
+  lastScore = S;
+  const cols = S.cm.rgb;
+
+  $('scoreNum').textContent = S.total.toFixed(1);
+  const gb = $('scoreGrade');
+  gb.textContent = S.grade[0];
+  gb.className = 'score-grade badge ' + S.grade[1];
+
+  $('scoreRows').innerHTML = S.cats.map(c =>
+    '<div class="score-row"><span class="sr-pts">' + c.pts.toFixed(1) + '/' + c.max + '</span>' +
+    '<span class="badge ' + c.badge + '">' + c.badge + '</span>' +
+    '<span class="sr-body"><span class="nm">' + c.name + '</span><br>' +
+    '<span class="desc">' + c.detail + '</span></span></div>').join('');
+
+  // Part 2 is a head-to-head against jet, so show the verdict explicitly.
+  // Note the tie cases: on entering Part 2 the path *is* jet, so "behind" would
+  // be wrong -- it has to read as the starting baseline, not as a failure.
+  const jt = $('jetTarget');
+  if (!SANDBOX && App.stage >= 2) {
+    const B = jetBaseline();
+    const margin = S.total - B.total;
+    const tied = Math.abs(margin) < 0.05;
+    const beat = margin >= 0.05;
+    const colorful = S.hueCov >= B.hueCov - 0.03;
+    const untouched = isUnmodifiedJet();
+    // Green only for a real win: ahead of jet, still colorful, and 70+.
+    jt.className = 'jet-target s2-only rainbow-only ' +
+      (untouched || tied ? ''
+        : beat && colorful ? (S.total >= 70 ? 'win' : 'partial')
+        : 'lose');
+    const scores = 'jet scores <b>' + B.total.toFixed(1) + '</b> with <b>' +
+      (B.hueCov*100).toFixed(0) + '%</b> hue coverage. You score <b>' + S.total.toFixed(1) +
+      '</b> with <b>' + (S.hueCov*100).toFixed(0) + '%</b>. ';
+    if (untouched) {
+      jt.innerHTML = 'This is <b>jet itself</b>, unmodified: <b>' + B.total.toFixed(1) +
+        '</b> out of 100, with <b>' + (B.hueCov*100).toFixed(0) + '%</b> hue coverage. ' +
+        'That is your baseline and your target. Read the five rows above to see exactly where it ' +
+        'loses its points, then start moving the control points.';
+    } else if (tied) {
+      jt.innerHTML = scores + 'You have <b>matched</b> jet, not beaten it — a different path, ' +
+        'the same score. Look at which rows above are still costing you the most.';
+    } else if (beat && colorful && S.total >= 80) {
+      const T = turboBaseline(), K = cetBaseline();
+      jt.innerHTML = scores + '<b>This is outstanding.</b> For scale, on this exact rubric: ' +
+        '<b>turbo</b> — Google\'s modern rainbow — scores <b>' + T.total.toFixed(1) + '</b>, and ' +
+        '<b>CET&#8209;R1</b> — Kovesi\'s, the best&#8209;behaved published rainbow there is — scores <b>' +
+        K.total.toFixed(1) + '</b>. <b>No published rainbow gets past 60.</b> ' +
+        'They all make the same trade: bright in the middle and dark at both ends, buying vividness ' +
+        'at the cost of a lightness ramp that survives grayscale. You scored <b>' +
+        S.total.toFixed(1) + '</b> by refusing that trade — your map probably looks less lurid than ' +
+        'theirs, and is a better instrument. Write down exactly what you did and why it works.';
+    } else if (beat && colorful && S.total >= 70) {
+      jt.innerHTML = scores + '<b>You beat jet by ' + margin.toFixed(1) + ' points and kept the ' +
+        'rainbow.</b> That is the exercise — write down what you changed and why it worked. ' +
+        'Push past <b>80</b> and you are into genuinely excellent territory.';
+    } else if (beat && colorful) {
+      // Ahead of jet but still weak. Point them at the criterion they have
+      // improved least on, ignoring any that are already close to full marks.
+      const jetPts = {};
+      (B.cats || []).forEach(c => { jetPts[c.name] = c.pts; });
+      // Rank by points still on the table, not by smallest gain: a criterion that
+      // is already near full marks is useless advice even if it never improved.
+      const cand = S.cats
+        .map(c => ({ name: c.name, pts: c.pts, max: c.max,
+                     jet: jetPts[c.name] === undefined ? 0 : jetPts[c.name],
+                     head: c.max - c.pts }))
+        .filter(c => c.head > 1.5)
+        .sort((a, b) => (b.head - a.head) || ((a.pts - a.jet) - (b.pts - b.jet)));
+      const w = cand[0];
+      jt.innerHTML = scores +
+        (margin < 10 ? '<b>You beat jet, but only just</b> — and jet is a low bar. '
+                     : '<b>You are well clear of jet</b>, but jet is a low bar and you are still ' +
+                       'short of 70. ') +
+        'Keep improving.' +
+        (w ? ' The most points still on the table are in <b>' + w.name + '</b>, at <b>' +
+             w.pts.toFixed(1) + '/' + w.max + '</b>' +
+             (w.pts < w.jet - 0.2
+                ? ' — actually <i>worse</i> than jet\'s ' + w.jet.toFixed(1) + ' there.'
+                : w.pts - w.jet < 2
+                  ? ' — barely better than jet\'s ' + w.jet.toFixed(1) + '.'
+                  : '.')
+           : '');
+    } else if (beat) {
+      jt.innerHTML = scores + 'You beat jet on points, but by draining the color out of it: your ' +
+        'hue coverage is below jet\'s. That is the easy way out. Get it back up to jet\'s ' +
+        (B.hueCov*100).toFixed(0) + '% or better while staying ahead on score.';
+    } else if (colorful) {
+      jt.innerHTML = scores + 'Still <b>' + (-margin).toFixed(1) + ' points behind</b> jet. You have ' +
+        'kept the colorfulness — now go after the plots below: flatten the perceptual-deltas ' +
+        'curve and stop the lightness from reversing.';
+    } else {
+      jt.innerHTML = scores + 'Behind jet on both counts. Start with lightness: make it climb ' +
+        'steadily from one end to the other, then swing the path around the hue circle at a steady rate.';
+    }
+  }
+
+  paintRamp($('rampMain'), cols);
+  paintRamp($('rampGray'), cols.map(CS.grayOf));
+  paintRamp($('rampDeutMod'), cols.map(c => CS.simulateCVD(c, 'deuter', 0.5)));
+  paintRamp($('rampProtMod'), cols.map(c => CS.simulateCVD(c, 'protan', 0.5)));
+  paintRamp($('rampDeut'), cols.map(c => CS.simulateCVD(c, 'deuter', 1.0)));
+  paintRamp($('rampProt'), cols.map(c => CS.simulateCVD(c, 'protan', 1.0)));
+  paintRamp($('rampTrit'), cols.map(c => CS.simulateCVD(c, 'tritan', 1.0)));
+
+  // viscm-style: plot the rate of change (delta x number of steps) so that a
+  // perfectly uniform colormap is a flat line sitting exactly on its own total.
+  const N = S.cm.jab.length, K = N - 1;
+  const d = [], dJp = [];
+  for (let i = 1; i < N; i++) {
+    d.push(dE(S.cm.jab[i], S.cm.jab[i-1]));
+    dJp.push(Math.abs(S.cm.jab[i][0] - S.cm.jab[i-1][0]));
+  }
+  const totE = d.reduce((a, b) => a + b, 0);
+  const totJ = dJp.reduce((a, b) => a + b, 0);
+  // Cap the axis at 2.5x the ideal so the dashed line stays readable; report any
+  // peak that runs off the top as a number instead.
+  const axis = (vals, tot) => {
+    const peak = Math.max.apply(null, vals);
+    const hi = Math.max(Math.min(peak * 1.08, tot * 2.5), tot * 1.25) || 1;
+    return { hi, note: 'total: ' + tot.toFixed(2) +
+      (peak > hi ? '   peak ' + peak.toFixed(0) + ' off scale' : '') };
+  };
+  const vE = d.map(v => v * K), vJ = dJp.map(v => v * K);
+  const aE = axis(vE, totE), aJ = axis(vJ, totJ);
+  drawSeries($('cvDeltaE').getContext('2d'), vE, cols,
+    { title: 'Perceptual deltas', lo: 0, refLine: totE, hi: aE.hi, note: aE.note });
+  drawSeries($('cvDeltaJp').getContext('2d'), vJ, cols,
+    { title: 'Perceptual lightness deltas', lo: 0, refLine: totJ, hi: aJ.hi, note: aJ.note });
+  drawSeries($('cvDeltaJ').getContext('2d'), S.cm.jab.map(p => p[0]), cols,
+    { title: 'Lightness J′', lo: 0, hi: 100 });
+
+  const grid = $('samplesGrid');
+  grid.innerHTML = '';
+  fields().forEach(f => {
+    [['normal color vision', null], ['deuteranopia', 'deuter']].forEach(([lab, kind]) => {
+      const cell = document.createElement('div');
+      cell.className = 'sample-cell';
+      const c = document.createElement('canvas');
+      cell.appendChild(c);
+      const cap = document.createElement('div');
+      cap.className = 'cap';
+      cap.innerHTML = '<b>' + f.name + '</b><br>' + lab;
+      cell.appendChild(cap);
+      grid.appendChild(cell);
+      renderField(c, f, cols, kind);
+    });
+  });
+  $('codeOut').classList.remove('show');
+}
+
+/* ---- exports ---- */
+function hexList() { return buildColormap().rgb.map(CS.hex); }
+function exportText(kind) {
+  const H = hexList();
+  if (kind === 'py') {
+    const rows = [];
+    for (let i = 0; i < H.length; i += 6) rows.push('    ' + H.slice(i, i + 6).map(h => '"' + h + '"').join(', ') + ',');
+    return '# Paste into your notebook. Works anywhere a matplotlib colormap does.\n' +
+           'from matplotlib.colors import ListedColormap\n\n' +
+           'my_colors = [\n' + rows.join('\n') + '\n]\n' +
+           'my_cmap = ListedColormap(my_colors, name="my_cmap")\n\n' +
+           '# e.g.  plt.imshow(Z, cmap=my_cmap);  plt.colorbar()\n' +
+           '#       sns.heatmap(df, cmap=my_cmap)';
+  }
+  if (kind === 'r') {
+    const rows = [];
+    for (let i = 0; i < H.length; i += 6) rows.push('  ' + H.slice(i, i + 6).map(h => '"' + h + '"').join(', ') + ',');
+    let body = rows.join('\n'); body = body.replace(/,$/, '');
+    return '# ggplot2 continuous scale\nmy_colors <- c(\n' + body + '\n)\n\n' +
+           '# ggplot(df, aes(x, y, fill = z)) + geom_raster() +\n' +
+           '#   scale_fill_gradientn(colours = my_colors)';
+  }
+  if (kind === 'hex') return H.join('\n');
+  if (kind === 'css') {
+    const step = 8, parts = [];
+    for (let i = 0; i < H.length; i += step) parts.push(H[i] + ' ' + (i / (H.length - 1) * 100).toFixed(1) + '%');
+    parts.push(H[H.length - 1] + ' 100%');
+    return 'background: linear-gradient(to right,\n  ' + parts.join(',\n  ') + ');';
+  }
+  return '';
+}
+function downloadJscm() {
+  const cm = buildColormap();
+  const Js = cm.jab.map(p => p[0]);
+  const doc = {
+    'content-type': 'application/vnd.matplotlib.colormap-v1+json',
+    name: 'my_cmap',
+    license: 'http://creativecommons.org/publicdomain/zero/1.0/',
+    'usage-hints': [App.type === 'diverging' ? 'diverging' : App.type === 'cyclic' ? 'cyclic' : 'sequential'],
+    colorspace: 'sRGB',
+    domain: 'continuous',
+    colors: cm.rgb.map(c => CS.hex(c).slice(1)).join(''),
+    extensions: {
+      'https://matplotlib.org/viscm': {
+        min_Jp: Math.min.apply(null, Js), max_Jp: Math.max.apply(null, Js),
+        xp: App.pts.map(p => +p.a.toFixed(3)), yp: App.pts.map(p => +p.b.toFixed(3)),
+        fixed: -1, filter_k: 100,
+        cmtype: App.type === 'diverging' ? 'diverging' : 'linear',
+        uniform_colorspace: 'CAM02-UCS', spline_method: 'CatmulClark'
+      }
+    }
+  };
+  const blob = new Blob([JSON.stringify(doc)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'my_cmap.jscm';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+document.querySelectorAll('[data-export]').forEach(b => {
+  b.addEventListener('click', () => {
+    const kind = b.dataset.export;
+    if (kind === 'jscm') { downloadJscm(); return; }
+    const out = $('codeOut');
+    out.textContent = exportText(kind);
+    out.classList.add('show');
+  });
+});
+$('btnCopyCode').addEventListener('click', () => {
+  const out = $('codeOut');
+  if (!out.classList.contains('show')) { out.textContent = exportText('py'); out.classList.add('show'); }
+  navigator.clipboard.writeText(out.textContent).then(
+    () => { $('btnCopyCode').textContent = 'Copied'; setTimeout(() => $('btnCopyCode').textContent = 'Copy', 1400); },
+    () => { $('btnCopyCode').textContent = 'Select and copy'; }
+  );
+});
+
+/* ---- stages ---- */
+function setStage(n) {
+  App.stage = n;
+  $('cmdApp').classList.toggle('stage-2', n >= 2);
+  $('cmdApp').classList.toggle('sandbox', SANDBOX);
+  const rainbowRubric = !SANDBOX && n >= 2;
+  $('rbCount').textContent = rainbowRubric ? 'six' : 'five';
+  $('rbLight').textContent = rainbowRubric ? '20' : '25';
+  $('rbCvd').textContent   = rainbowRubric ? '15' : '25';
+  document.querySelectorAll('.rainbow-only').forEach(e => e.classList.toggle('hidden', !rainbowRubric));
+  if (n === 1) {
+    App.type = 'sequential'; App.lmode = 'free'; App.equalize = false;
+    $('chkEqualize').checked = false;
+    [].forEach.call($('typeSeg').children,  c => c.classList.toggle('active', c.dataset.type === 'sequential'));
+    [].forEach.call($('lmodeSeg').children, c => c.classList.toggle('active', c.dataset.lmode === 'free'));
+  }
+  invalidate(); redraw();
+}
+$('btnStage2').addEventListener('click', () => {
+  setStage(2);
+  App.view = { az: 0, el: Math.PI / 2 };   // Part 2 also opens top-down
+  resetToJet();                         // part 2 starts from jet's own control points
+  $('reportCard').classList.add('hidden');
+  document.querySelector('.a-solid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+function resetToJet() {
+  pushHistory();
+  App.type = 'sequential'; App.lmode = 'free';
+  App.pts = jetPoints();
+  App.sel = 0;
+  [].forEach.call($('typeSeg').children, c => c.classList.toggle('active', c.dataset.type === 'sequential'));
+  [].forEach.call($('lmodeSeg').children, c => c.classList.toggle('active', c.dataset.lmode === 'free'));
+  invalidate(); redraw();
+}
+$('btnResetJet').addEventListener('click', resetToJet);
+
+/* ---- go ---- */
+setStage(SANDBOX ? 2 : 1);
+window.CMD = { App, CS, buildColormap, scoreColormap, loadPreset, redraw, invalidate, PRESETS,
+               reversals, renderReport, exportText, splineSample, setStage,
+               jetBaseline, turboBaseline, cetBaseline, scoreRawColors, TURBO_HEX16, hueCoverage,
+               proj, viewFrame, fromFrame, screenDrag, screenPlace };
+</script>
+</div>
+</body>
+</html>

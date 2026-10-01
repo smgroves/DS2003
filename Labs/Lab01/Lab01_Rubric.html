@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lab 1 Rubric</title>
+<style>
+  body {
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  h1 {
+    font-size: 1.4rem;
+    margin-bottom: 0.25rem;
+  }
+  p.total {
+    margin-top: 0;
+    color: #444;
+    font-size: 0.95rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  thead th {
+    background-color: #2c3e50;
+    color: #ffffff;
+    font-weight: 600;
+  }
+  tbody th {
+    background-color: #f4f6f7;
+    white-space: nowrap;
+  }
+  tbody tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+  td.pts, th.pts {
+    text-align: center;
+    white-space: nowrap;
+  }
+  tfoot td {
+    font-weight: 700;
+    background-color: #f4f6f7;
+  }
+</style>
+</head>
+<body>
+
+<h1>Lab 1: Introduction to Pandas &amp; Data Types &mdash; Rubric</h1>
+<p class="total">Total: 100 points</p>
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Component</th>
+      <th scope="col">Criteria</th>
+      <th scope="col" class="pts">Points</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Submission format</th>
+      <td>Both the completed notebook (<code>.ipynb</code>) and a PDF export of it are submitted to Canvas by the deadline.</td>
+      <td class="pts">10</td>
+    </tr>
+    <tr>
+      <th scope="row">Runs cleanly</th>
+      <td>Notebook runs top-to-bottom (Restart &amp; Run All) with no errors; every code cell's output (tables, printed values, charts) is visible in the submitted file, not just the code.</td>
+      <td class="pts">10</td>
+    </tr>
+    <tr>
+      <th scope="row">Task 1 &mdash; Load &amp; inspect</th>
+      <td>Loads <code>data_src</code> into a DataFrame named <code>df</code> and shows the first five rows.</td>
+      <td class="pts">5</td>
+    </tr>
+    <tr>
+      <th scope="row">Task 2 &mdash; Column inventory</th>
+      <td>Raw cell lists every column (except <code>GeoLocation</code>) with a correct data type (<code>str</code>/<code>int</code>/<code>float</code>/<code>bool</code>) and scale (<code>nominal</code>/<code>ordinal</code>/<code>interval</code>/<code>ratio</code>/<code>NA</code>), following the treatment rules given (booleans as nominal, dates as interval, free text/URLs as <code>NA</code>).</td>
+      <td class="pts">15</td>
+    </tr>
+    <tr>
+      <th scope="row">Task 3 &mdash; Ordinal count</th>
+      <td>Correctly reports the number of ordinal columns from Task 2's inventory.</td>
+      <td class="pts">3</td>
+    </tr>
+    <tr>
+      <th scope="row">Task 4 &mdash; Ratio count</th>
+      <td>Correctly reports the number of ratio columns from Task 2's inventory.</td>
+      <td class="pts">3</td>
+    </tr>
+    <tr>
+      <th scope="row">Task 5 &mdash; Region value_counts</th>
+      <td>Uses <code>.value_counts()</code> on <code>Region</code> and correctly identifies the count of distinct regions and the most common one.</td>
+      <td class="pts">5</td>
+    </tr>
+    <tr>
+      <th scope="row">Task 6 &mdash; Region bar chart</th>
+      <td>Builds a bar chart from the Task 5 value counts using <code>.plot.bar()</code>.</td>
+      <td class="pts">5</td>
+    </tr>
+    <tr>
+      <th scope="row">Task 7 &mdash; Ordinal ordering</th>
+      <td>Runs the provided <code>pd.Categorical()</code> cell, calls <code>.value_counts(sort=False)</code> on <code>Evidence_Ordered</code>, plots it with <code>.plot.bar()</code>, and gives a thoughtful written comparison to the unordered version.</td>
+      <td class="pts">10</td>
+    </tr>
+    <tr>
+      <th scope="row">Task 8 &mdash; Melt wide &rarr; long</th>
+      <td>Correctly reshapes <code>tb_wide</code> into <code>tb_long</code> with <code>.melt(id_vars=["country","year"], var_name="group", value_name="cases")</code>.</td>
+      <td class="pts">6</td>
+    </tr>
+    <tr>
+      <th scope="row">Task 9 &mdash; Pivot long &rarr; wide</th>
+      <td>Correctly reshapes <code>tb_long</code> back to wide with <code>.pivot()</code> and confirms it matches the original <code>tb_wide</code>.</td>
+      <td class="pts">6</td>
+    </tr>
+    <tr>
+      <th scope="row">Task 10 &mdash; Region &times; Evidence crosstab</th>
+      <td>Builds <code>evidence_wide</code> via <code>pd.crosstab()</code> and <code>evidence_long</code> via <code>.melt()</code>, correctly answers both sub-questions (top region for Eruption Observed; count of zero-value combinations), and gives a sound explanation of which format made each question easier.</td>
+      <td class="pts">10</td>
+    </tr>
+    <tr>
+      <th scope="row">Task 11 &mdash; Grouped boxplot</th>
+      <td>Uses <code>df.groupby("Region")["Elevation"]</code> to build a per-region dictionary, plots it as a boxplot with <code>.plot.box()</code>, and correctly names a region with a notably higher/lower elevation.</td>
+      <td class="pts">8</td>
+    </tr>
+    <tr>
+      <th scope="row">Wrap-up reflection</th>
+      <td>2&ndash;3 sentences giving a genuine, specific answer to the reflection prompt (not just restating the question).</td>
+      <td class="pts">4</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="2">Total</td>
+      <td class="pts">100</td>
+    </tr>
+  </tfoot>
+</table>
+
+</body>
+</html>
