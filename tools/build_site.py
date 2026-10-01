@@ -24,7 +24,7 @@ def data_links(ids):
 
 CSS = """
 :root {
-  --ink: #1c1c1c; --mute: #6f6f6f; --line: #d9d4d9; --paper: #ffffff; --bg: #f7f5f7;
+  --ink: #1c1c1c; --mute: #6f6f6f; --line: #dcdcdc; --paper: #ffffff; --bg: #f6f6f6;
   --purple: #b509ac; --purple-dark: #7d0677; --purple-tint: #fbeefa; --purple-light: #ecc2e9;
   --due: #b71c1c;
 }
@@ -36,25 +36,27 @@ h1 { font: 700 30px/1.15 "Source Serif 4", Georgia, serif; margin: 0; }
 a { color: var(--purple); text-underline-offset: 2px; }
 a:hover { color: var(--purple-dark); }
 .blurb { max-width: 720px; }
-nav.tabs { display: flex; gap: 4px; margin: 18px 0 0; border-bottom: 2px solid var(--purple); }
-nav.tabs a { padding: 7px 16px; text-decoration: none; color: var(--purple-dark); font-weight: 600;
-  border: 1px solid var(--purple-light); border-bottom: none; border-radius: 6px 6px 0 0; background: var(--paper); }
-nav.tabs a.on { background: var(--purple); color: #fff; border-color: var(--purple); }
+nav.tabs { display: flex; gap: 4px; margin: 18px 0 0; border-bottom: 2px solid var(--ink); }
+nav.tabs a { padding: 7px 16px; text-decoration: none; color: var(--ink); font-weight: 600;
+  border: 1px solid var(--line); border-bottom: none; border-radius: 6px 6px 0 0; background: var(--paper); }
+nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
 .grid { display: grid; grid-template-columns: 110px repeat(3, 1fr); border: 1px solid var(--line); border-top: none; background: var(--paper); }
 .grid > div { border-bottom: 1px solid var(--line); padding: 8px 10px; min-width: 0; }
 .grid > div + div { border-left: 1px solid var(--line); }
 .grid .wk { font-weight: 700; } .grid .wk small { display: block; font-weight: normal; color: var(--mute); }
-.grid .wk .unit { display: block; font-weight: normal; font-size: 12px; color: var(--purple-dark); margin-top: 4px; }
+.grid .wk .unit { display: block; font-weight: normal; font-size: 12px; color: var(--mute); margin-top: 4px; }
 .grid .hd { font-weight: 700; font-size: 13px; border-bottom: 2px solid var(--ink); background: var(--bg); }
 .cell .dt { font: 12px/1 ui-monospace, Menlo, monospace; color: var(--mute); margin-bottom: 4px; }
 .cell .t { font-weight: 600; }
+.cell .t a { color: var(--ink); text-decoration-color: var(--line); }
+.cell .t a:hover { color: var(--purple); text-decoration-color: currentColor; }
 .cell p { margin: 3px 0 0; font-size: 13.5px; }
 .cell p i { font-style: normal; font-size: 11px; font-weight: 700; color: var(--mute); margin-right: 4px; }
 .cell p.dl, .cell p.dl i { color: var(--due); }
 .sub { font-size: 12.5px; }
-.cell.off { color: var(--mute); font-style: italic; background: repeating-linear-gradient(135deg, #faf8fa 0 6px, #f1edf1 6px 12px); }
+.cell.off { color: var(--mute); font-style: italic; background: repeating-linear-gradient(135deg, #fafafa 0 6px, #f0f0f0 6px 12px); }
 .cell.later { color: #555; }
-.cell.next { box-shadow: inset 3px 0 0 var(--purple); background: var(--purple-tint); }
+.cell.next { box-shadow: inset 3px 0 0 var(--purple); background: #f3f3f3; }
 .ds { background: var(--paper); border: 1px solid var(--line); border-top: none; padding: 16px 18px; }
 .ds h2 { font: 700 19px/1.2 "Source Serif 4", Georgia, serif; margin: 0 0 4px; }
 .ds .size { font: 12px ui-monospace, Menlo, monospace; color: var(--mute); }
