@@ -66,6 +66,9 @@ nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
 .ds code { font-size: 13px; background: var(--bg); padding: 1px 4px; border-radius: 3px; }
 .ds h3 { font-size: 14.5px; margin: 10px 0 2px; }
 .ds:target { box-shadow: inset 4px 0 0 var(--purple); }
+.ds img { max-width: 100%; height: auto; border: 1px solid var(--line); margin: 8px 12px 4px 0; vertical-align: top; }
+.ds .imgs { display: flex; flex-wrap: wrap; align-items: flex-start; }
+.ds .imgs img { max-width: min(100%, 560px); }
 @media (max-width: 760px) {
   .grid { grid-template-columns: 1fr; } .grid .hd { display: none; }
   .grid > div + div { border-left: none; } .grid .wk { background: var(--bg); border-top: 2px solid var(--ink); }
@@ -140,7 +143,7 @@ def datasets():
     secs = []
     for d in DATASETS:
         if d.get("groups"):
-            files = "".join(f'<h3>{escape(g)}</h3><ul>{"".join(f"<li>{link(t, h)}</li>" for t, h in fs)}</ul>' for g, fs in d["groups"])
+            files = "".join(f'<h3>{escape(g)} <span class="sub">(<a href="bad-charts.html#chart-{g.split()[1][0].lower()}">see chart</a>)</span></h3><ul>{"".join(f"<li>{link(t, h)}</li>" for t, h in fs)}</ul>' for g, fs in d["groups"])
         else:
             files = "<ul>" + "".join(f"<li>{link(t, h)}</li>" for t, h in d["files"]) + "</ul>"
         load = f'<p class="used">Or: <code>{escape(d["load"])}</code></p>' if d.get("load") else ""
@@ -152,7 +155,37 @@ def datasets():
 <p class="blurb" style="margin-top:14px">Every dataset we've used so far, in one place. If a lab reads a CSV, save it in the same folder as the notebook. The penguins and volcano data load straight from the web, so you don't need to download them.</p>
 {chr(10).join(secs)}""")
 
+CH = "Class activities/data_for_bad_charts/charts/"
+BAD_CHARTS = [
+  ("A", "US household income, 1995–2016",
+   "Percentage of US households in each income range, with average annual personal income and median annual household income over time. From a research paper on the &ldquo;financialization&rdquo; of the US economy.",
+   "The paper argues the economy became more &ldquo;financialized&rdquo; from 1995 to 2016: more economic activity came from finance itself (like trading stocks) rather than from making and selling goods and services. The second figure shows how much finance grew. Your redesign must be one chart, but it should include data from this context.",
+   ["A1_household_income.png", "A2_financial_assets.png"]),
+  ("B", "Ranked rating in an online game",
+   "A player's ranked rating over time in the online game TETR.IO. Each point is one match, placed at the opponent's rating and colored by whether it was a win, loss, or (self-)disqualification.",
+   None, ["B_game_rating.png"]),
+  ("C", "Gun deaths in Florida",
+   "Firearm murders in Florida over time, with 2005 marked as the year the &ldquo;Stand Your Ground&rdquo; law was enacted (Reuters, 2014).",
+   "Pair this chart with Pew Research Center's national firearm homicide and non-fatal violent crime rates, 1993–2011 (second figure). Your redesign must be one chart, but it should use information from both. The question you ask and the redesign you make should reflect the context of the Pew charts.",
+   ["C1_florida_firearm_murders.png", "C2_pew_crime_rates.png"]),
+  ("D", "Slime mold traits across a phylogeny",
+   "From a scientific paper on slime molds (dictyostelids). Based on their DNA, the species fall into four main groups on a phylogenetic tree showing how closely related they are; the colored and gray boxes show each species' traits.",
+   None, ["D_slime_mold_traits.png"]),
+]
+
+def bad_charts():
+    secs = []
+    for k, title, desc, ctx, imgs in BAD_CHARTS:
+        ctx_html = f"<p><b>Context:</b> {ctx}</p>" if ctx else ""
+        im = "".join(f'<img src="{href(CH + f)}" alt="Chart {k}">' for f in imgs)
+        secs.append(f'<section class="ds" id="chart-{k.lower()}"><h2>Chart {k}: {title}</h2>'
+                    f'<p>{desc}</p>{ctx_html}<div class="imgs">{im}</div></section>')
+    return page(None, f"""
+<p class="blurb" style="margin-top:14px">The four charts for the <a href="{href("Class activities/data_for_bad_charts/9_31_Fixing bad charts.docx")}">Fixing bad charts</a> activity (Wed 9/30) and <a href="{href("Labs/Lab05/Lab05_blank_fixing_bad_design.ipynb")}">Lab 5</a>. Pick one to redesign. The data behind each chart is on the <a href="datasets.html#bad-charts">Datasets</a> page.</p>
+{chr(10).join(secs)}""")
+
 if __name__ == "__main__":
     open(f"{OUT}/index.html", "w").write(schedule())
     open(f"{OUT}/datasets.html", "w").write(datasets())
+    open(f"{OUT}/bad-charts.html", "w").write(bad_charts())
     print("built")

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DS 2003 &middot; Communicating with Data</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@700&display=swap">
+<style>
+:root {
+  --ink: #1c1c1c; --mute: #6f6f6f; --line: #dcdcdc; --paper: #ffffff; --bg: #f6f6f6;
+  --purple: #b509ac; --purple-dark: #7d0677; --purple-tint: #fbeefa; --purple-light: #ecc2e9;
+  --due: #b71c1c;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 "Source Sans 3", "Segoe UI", system-ui, sans-serif; }
+main { max-width: 1100px; margin: 0 auto; padding: 28px 18px 60px; }
+h1 { font: 700 30px/1.15 "Source Serif 4", Georgia, serif; margin: 0; }
+.info { margin: 6px 0 2px; } .oh { color: var(--mute); font-size: 13.5px; margin: 0 0 10px; }
+a { color: var(--purple); text-underline-offset: 2px; }
+a:hover { color: var(--purple-dark); }
+.blurb { max-width: 720px; }
+nav.tabs { display: flex; gap: 4px; margin: 18px 0 0; border-bottom: 2px solid var(--ink); }
+nav.tabs a { padding: 7px 16px; text-decoration: none; color: var(--ink); font-weight: 600;
+  border: 1px solid var(--line); border-bottom: none; border-radius: 6px 6px 0 0; background: var(--paper); }
+nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.grid { display: grid; grid-template-columns: 110px repeat(3, 1fr); border: 1px solid var(--line); border-top: none; background: var(--paper); }
+.grid > div { border-bottom: 1px solid var(--line); padding: 8px 10px; min-width: 0; }
+.grid > div + div { border-left: 1px solid var(--line); }
+.grid .wk { font-weight: 700; } .grid .wk small { display: block; font-weight: normal; color: var(--mute); }
+.grid .wk .unit { display: block; font-weight: normal; font-size: 12px; color: var(--mute); margin-top: 4px; }
+.grid .hd { font-weight: 700; font-size: 13px; border-bottom: 2px solid var(--ink); background: var(--bg); }
+.cell .dt { font: 12px/1 ui-monospace, Menlo, monospace; color: var(--mute); margin-bottom: 4px; }
+.cell .t { font-weight: 600; }
+.cell .t a { color: var(--ink); text-decoration-color: var(--line); }
+.cell .t a:hover { color: var(--purple); text-decoration-color: currentColor; }
+.cell p { margin: 3px 0 0; font-size: 13.5px; }
+.cell p i { font-style: normal; font-size: 11px; font-weight: 700; color: var(--mute); margin-right: 4px; }
+.cell p.dl, .cell p.dl i { color: var(--due); }
+.sub { font-size: 12.5px; }
+.cell.off { color: var(--mute); font-style: italic; background: repeating-linear-gradient(135deg, #fafafa 0 6px, #f0f0f0 6px 12px); }
+.cell.later { color: #555; }
+.cell.next { box-shadow: inset 3px 0 0 var(--purple); background: #f3f3f3; }
+.ds { background: var(--paper); border: 1px solid var(--line); border-top: none; padding: 16px 18px; }
+.ds h2 { font: 700 19px/1.2 "Source Serif 4", Georgia, serif; margin: 0 0 4px; }
+.ds .size { font: 12px ui-monospace, Menlo, monospace; color: var(--mute); }
+.ds p { margin: 6px 0; max-width: 760px; }
+.ds ul { margin: 6px 0; padding-left: 20px; }
+.ds .used { font-size: 13.5px; color: var(--mute); }
+.ds code { font-size: 13px; background: var(--bg); padding: 1px 4px; border-radius: 3px; }
+.ds h3 { font-size: 14.5px; margin: 10px 0 2px; }
+.ds:target { box-shadow: inset 4px 0 0 var(--purple); }
+.ds img { max-width: 100%; height: auto; border: 1px solid var(--line); margin: 8px 12px 4px 0; vertical-align: top; }
+.ds .imgs { display: flex; flex-wrap: wrap; align-items: flex-start; }
+.ds .imgs img { max-width: min(100%, 560px); }
+@media (max-width: 760px) {
+  .grid { grid-template-columns: 1fr; } .grid .hd { display: none; }
+  .grid > div + div { border-left: none; } .grid .wk { background: var(--bg); border-top: 2px solid var(--ink); }
+}
+</style>
+</head>
+<body>
+<main>
+<h1>DS 2003: Communicating with Data</h1>
+<p class="info">Fall 2026 &middot; Mon/Wed/Fri &middot; Sarah Groves &middot; <a href="DS2003_Syllabus%20Fall%202026.pdf">Syllabus</a> &middot; <a href="DS2003_Computer_Setup_Guide.pdf">Computer setup guide</a> &middot; <a href="https://canvas.instructure.com">Canvas</a></p>
+<p class="oh">Office hours: Fri 1&ndash;2 pm, Rm 437 (Sarah) &middot; Wed 1&ndash;2 pm, Capital One Hub (Isabelle Lee, TA)</p>
+<nav class="tabs"><a href="index.html">Schedule</a><a href="datasets.html">Datasets</a></nav>
+
+<p class="blurb" style="margin-top:14px">The four charts for the <a href="Class%20activities/data_for_bad_charts/9_31_Fixing%20bad%20charts.docx">Fixing bad charts</a> activity (Wed 9/30) and <a href="Labs/Lab05/Lab05_blank_fixing_bad_design.ipynb">Lab 5</a>. Pick one to redesign. The data behind each chart is on the <a href="datasets.html#bad-charts">Datasets</a> page.</p>
+<section class="ds" id="chart-a"><h2>Chart A: US household income, 1995–2016</h2><p>Percentage of US households in each income range, with average annual personal income and median annual household income over time. From a research paper on the &ldquo;financialization&rdquo; of the US economy.</p><p><b>Context:</b> The paper argues the economy became more &ldquo;financialized&rdquo; from 1995 to 2016: more economic activity came from finance itself (like trading stocks) rather than from making and selling goods and services. The second figure shows how much finance grew. Your redesign must be one chart, but it should include data from this context.</p><div class="imgs"><img src="Class%20activities/data_for_bad_charts/charts/A1_household_income.png" alt="Chart A"><img src="Class%20activities/data_for_bad_charts/charts/A2_financial_assets.png" alt="Chart A"></div></section>
+<section class="ds" id="chart-b"><h2>Chart B: Ranked rating in an online game</h2><p>A player's ranked rating over time in the online game TETR.IO. Each point is one match, placed at the opponent's rating and colored by whether it was a win, loss, or (self-)disqualification.</p><div class="imgs"><img src="Class%20activities/data_for_bad_charts/charts/B_game_rating.png" alt="Chart B"></div></section>
+<section class="ds" id="chart-c"><h2>Chart C: Gun deaths in Florida</h2><p>Firearm murders in Florida over time, with 2005 marked as the year the &ldquo;Stand Your Ground&rdquo; law was enacted (Reuters, 2014).</p><p><b>Context:</b> Pair this chart with Pew Research Center's national firearm homicide and non-fatal violent crime rates, 1993–2011 (second figure). Your redesign must be one chart, but it should use information from both. The question you ask and the redesign you make should reflect the context of the Pew charts.</p><div class="imgs"><img src="Class%20activities/data_for_bad_charts/charts/C1_florida_firearm_murders.png" alt="Chart C"><img src="Class%20activities/data_for_bad_charts/charts/C2_pew_crime_rates.png" alt="Chart C"></div></section>
+<section class="ds" id="chart-d"><h2>Chart D: Slime mold traits across a phylogeny</h2><p>From a scientific paper on slime molds (dictyostelids). Based on their DNA, the species fall into four main groups on a phylogenetic tree showing how closely related they are; the colored and gray boxes show each species' traits.</p><div class="imgs"><img src="Class%20activities/data_for_bad_charts/charts/D_slime_mold_traits.png" alt="Chart D"></div></section>
+</main>
+
+</body>
+</html>

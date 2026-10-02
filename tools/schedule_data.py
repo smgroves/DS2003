@@ -45,7 +45,8 @@ WEEKS = [
   dict(n=4, days=[
     dict(date=d(9,14), lecture=[("Expressiveness & effectiveness", S+"pdf/08-VisualDesign-Scale_Effectiveness Principles.pdf")]),
     dict(date=d(9,16), lecture=[("Color", S+"pdf/09-color.pdf")],
-         activity=[("Colormap Designer", A+"colormap designer/Colormap Designer - Guided Sandbox.html"),
+         activity=[("Colormap Designer: guided sandbox", A+"colormap designer/Colormap Designer - Guided Sandbox.html"),
+                   ("Colormap Designer: assignment", A+"colormap designer/Colormap Designer.html"),
                    ("notebook", A+"colormap designer/colormap_making.ipynb")],
          deadline=[("Bad-viz discussion post due Thu", None)]),
     dict(date=d(9,18), lecture=[("Matplotlib", S+"pdf/10_matplotlib_lab.pdf")],
@@ -68,9 +69,9 @@ WEEKS = [
     dict(date=d(9,28), lecture=[("Visual tasks: from questions to sketches", S+"pdf/13-Visual Tasks.pdf")],
          activity=[("Question storm", None)], data=["fastfood"]),
     dict(date=d(9,30), lecture=[("Applications", None)],
-         activity=[("Fixing bad charts", A+"data_for_bad_charts/9_31_Fixing bad charts.docx")], data=["bad-charts"],
+         activity=[("Fixing bad charts", A+"data_for_bad_charts/9_31_Fixing bad charts.docx"), ("charts", "bad-charts.html")], data=["bad-charts"],
          deadline=[("P1 question sketches", None)]),
-    dict(date=d(10,2), lab=[("Lab 5: bad chart redesign", L+"Lab05/Lab05_blank_fixing_bad_design.ipynb")],
+    dict(date=d(10,2), lab=[("Lab 5: bad chart redesign", L+"Lab05/Lab05_blank_fixing_bad_design.ipynb"), ("charts", "bad-charts.html")],
          data=["bad-charts"], deadline=[("Lab 5 due Sun", None)]),
   ]),
   # ---- not yet taught: carried over from the previous version of the page ----
