@@ -11,12 +11,25 @@ def href(p): return p if p.startswith("http") else quote(p, safe="/#")
 
 def link(text, h): return f'<a href="{href(h)}">{escape(text)}</a>' if h else escape(text)
 
+NBVIEWER = "https://nbviewer.org/github/smgroves/DS2003/blob/main/"
+
+def nb_links(h):
+    """Notebooks get two links: view rendered on nbviewer, or download the .ipynb."""
+    return (f'<a href="{NBVIEWER}{href(h)}">nbviewer</a> &middot; '
+            f'<a href="{href(h)}" download>download .ipynb</a>')
+
 def items(lst, sep=", "):
-    """Join items; lowercase-initial items (e.g. 'rubric') attach to the previous one in parens."""
+    """Join items; lowercase-initial items (e.g. 'rubric') attach to the previous one in parens.
+    A notebook's title is plain text with its nbviewer/download links in the parens."""
     groups = []
     for text, h in lst or []:
-        if text[:1].islower() and groups: groups[-1][1].append(link(text, h))
-        else: groups.append([link(text, h), []])
+        is_nb = bool(h) and h.endswith(".ipynb")
+        if text[:1].islower() and groups:
+            groups[-1][1].append(f"{escape(text)}: {nb_links(h)}" if is_nb else link(text, h))
+        elif is_nb:
+            groups.append([escape(text), [nb_links(h)]])
+        else:
+            groups.append([link(text, h), []])
     return sep.join(m + (f' <span class="sub">({", ".join(s)})</span>' if s else "") for m, s in groups)
 
 def data_links(ids):
@@ -181,7 +194,7 @@ def bad_charts():
         secs.append(f'<section class="ds" id="chart-{k.lower()}"><h2>Chart {k}: {title}</h2>'
                     f'<p>{desc}</p>{ctx_html}<div class="imgs">{im}</div></section>')
     return page(None, f"""
-<p class="blurb" style="margin-top:14px">The four charts for the <a href="{href("Class activities/data_for_bad_charts/9_31_Fixing bad charts.docx")}">Fixing bad charts</a> activity (Wed 9/30) and <a href="{href("Labs/Lab05/Lab05_blank_fixing_bad_design.ipynb")}">Lab 5</a>. Pick one to redesign. The data behind each chart is on the <a href="datasets.html#bad-charts">Datasets</a> page.</p>
+<p class="blurb" style="margin-top:14px">The four charts for the <a href="{href("Class activities/data_for_bad_charts/9_31_Fixing bad charts.docx")}">Fixing bad charts</a> activity (Wed 9/30) and Lab 5 <span class="sub">({nb_links("Labs/Lab05/Lab05_blank_fixing_bad_design.ipynb")})</span>. Pick one to redesign. The data behind each chart is on the <a href="datasets.html#bad-charts">Datasets</a> page.</p>
 {chr(10).join(secs)}""")
 
 if __name__ == "__main__":
