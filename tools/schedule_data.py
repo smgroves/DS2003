@@ -77,7 +77,7 @@ WEEKS = [
   # ---- not yet taught: carried over from the previous version of the page ----
   dict(n=7, days=[
     dict(date=d(10,5), noclass="No class (Fall break)"),
-    dict(date=d(10,7), lecture=[("Uncertainty & statistics", None)]),
+    dict(date=d(10,7), lecture=[("Statistical plots & uncertainty", S+"pdf/14-Statistical Plots and Uncertainty.pdf")]),
     dict(date=d(10,9), lab=[("Lab 6: statistical plots", None)]),
   ]),
   dict(n=8, unit="Unit 2: Explanatory visualization: storytelling", days=[
