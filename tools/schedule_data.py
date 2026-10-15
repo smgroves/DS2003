@@ -4,6 +4,7 @@ from datetime import date, timedelta
 S = "Lectures/"
 L = "Labs/"
 A = "Class activities/"
+P2 = "Project 2/"
 
 def d(m, day): return date(2026, m, day)
 
@@ -86,43 +87,52 @@ WEEKS = [
     dict(date=d(10,16), activity=[("Project 1 presentations, day 3", None)], deadline=[("Project 1 due", None)]),
   ]),
   dict(n=9, days=[
-    dict(date=d(10,19), lecture=[("Storytelling", None)]),
-    dict(date=d(10,21), lecture=[("Data journalism & deceptive plots", None)], deadline=[("Project 2 assigned", None)]),
-    dict(date=d(10,23), lab=[("Lab 7 (async, family weekend)", None)]),
+    dict(date=d(10,19), lecture=[("Storytelling & narrative structures", None)],
+         deadline=[("Project 2 assigned", P2+"Project2_Interactive_Notebook.md"),
+                   ("rubric", P2+"Project2_Rubric.html"), ("P2 groups due Wed", None)]),
+    dict(date=d(10,21), lecture=[("Interaction: why & when (taxonomies)", None)]),
+    dict(date=d(10,23), lab=[("Lab 7 (async, family weekend): interactive EDA with Plotly", L+"Lab07/Lab07_blank.ipynb")],
+         data=["penguins", "flights"],
+         deadline=[("P2 proposal due Sun", None), ("Lab 7 due Sun", None)]),
   ]),
   dict(n=10, days=[
-    dict(date=d(10,26), lecture=[("Infographics", None)]),
-    dict(date=d(10,28), lecture=[("Infographics II", None)]),
-    dict(date=d(10,30), activity=[("Final project introduced", None)], lab=[("Lab 8: decompose an infographic", None)],
-         deadline=[("Project 2 proposals due", None)]),
+    dict(date=d(10,26), lecture=[("Interactive notebooks with ipywidgets", None)]),
+    dict(date=d(10,28), lecture=[("Graphs, networks & trees", None)]),
+    dict(date=d(10,30), lab=[("Lab 8: ipywidgets: controls & linked views", None)],
+         deadline=[("Lab 8 due Sun", None)]),
   ]),
   dict(n=11, days=[
-    dict(date=d(11,2), lecture=[("Data quality", None)]),
-    dict(date=d(11,4), lecture=[("Ethics & rhetoric", None)]),
-    dict(date=d(11,6), activity=[("Infographic challenge + critique", None)], lab=[("Lab 9", None)]),
+    dict(date=d(11,2), lecture=[("Infographics", None)]),
+    dict(date=d(11,4), lecture=[("Infographics II: principles of design", None)]),
+    dict(date=d(11,6), lab=[("Lab 9: hierarchical data: interactive treemaps & sunbursts", L+"Lab09/Lab09_blank_trees.ipynb")],
+         data=["superstore"], deadline=[("Lab 9 due Sun", None)]),
   ]),
   dict(n=12, days=[
     dict(date=d(11,9), lecture=[("Science visualizations", None)]),
     dict(date=d(11,11), lecture=[("Data journalism", None)]),
-    dict(date=d(11,13), lab=[("Lab 10: Plotly infographics", None)]),
+    dict(date=d(11,13), lab=[("Lab 10: sketching & annotation", None)],
+         deadline=[("Lab 10 due Sun", None)]),
   ]),
   dict(n=13, days=[
-    dict(date=d(11,16), lecture=[("Interaction taxonomies", None)]),
-    dict(date=d(11,18), lecture=[("Plotly", None)]),
-    dict(date=d(11,20), activity=[("Plotly widget challenge", None)], lab=[("Lab 11", None)]),
+    dict(date=d(11,16), activity=[("Project 2 work session", None)]),
+    dict(date=d(11,18), lecture=[("Data quality & deceptive plots", None)]),
+    dict(date=d(11,20), activity=[("Project 2 design critique", None)],
+         deadline=[("P2 final-piece sketches due in class", None)]),
   ]),
   dict(n=14, days=[
-    dict(date=d(11,23), lecture=[("Graphs, networks & trees", None)]),
+    dict(date=d(11,23), lecture=[("Ethics & rhetoric", None)]),
     dict(date=d(11,25), noclass="No class (Thanksgiving)"),
     dict(date=d(11,27), noclass="No class (Thanksgiving)"),
   ]),
   dict(n=15, days=[
-    dict(date=d(11,30), activity=[("Final presentations", None)]),
-    dict(date=d(12,2), activity=[("Final presentations", None)]),
-    dict(date=d(12,4), activity=[("Final presentations", None)], deadline=[("Project 2 due", None)]),
+    dict(date=d(11,30), activity=[("Project 2 presentations, day 1", None)],
+         deadline=[("P2 notebook + slides due Sun 11/29", None)]),
+    dict(date=d(12,2), activity=[("Project 2 presentations, day 2", None)]),
+    dict(date=d(12,4), activity=[("Project 2 presentations, day 3", None)]),
   ]),
   dict(n=16, unit="Final week", days=[
-    dict(date=d(12,7), activity=[("Last class: Worst Chart Contest 🍕", None)]),
+    dict(date=d(12,7), activity=[("Last class: Worst Chart Contest 🍕", None)],
+         deadline=[("P2 final infographic / science vis due 11:59pm", None)]),
   ]),
 ]
 
@@ -161,6 +171,10 @@ DATASETS = [
        size="336,776 rows × 19 columns · 33 MB",
        files=[("flights.csv", "Data/flights.csv")],
        load="pip install nycflights13, then import nycflights13 as nf; nf.flights"),
+  dict(id="superstore", name="Superstore sales", label="superstore",
+       desc="Orders from a fictional US office-supply retailer (Tableau's classic sample data): region, segment, category and sub-category, sales, profit, quantity, order date. Its nested categories make it a good fit for tree charts.",
+       size="8,399 rows × 8 columns · 640 KB",
+       files=[("superstore.csv", "Labs/Lab09/superstore.csv")]),
   dict(id="bad-charts", name="Bad chart redesign", label="bad-chart data",
        desc="Data behind the four charts from the Fixing bad charts activity (Wed 9/30) and Lab 5. Some are collected from the original source; where the raw data wasn't available, it's a synthetic best guess.",
        groups=[
