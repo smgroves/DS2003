@@ -126,13 +126,13 @@ WEEKS = [
   ]),
   dict(n=15, days=[
     dict(date=d(11,30), activity=[("Project 2 presentations, day 1", None)],
-         deadline=[("P2 notebook + slides due Sun 11/29", None)]),
+         deadline=[("P2 slides due Sun 11/29", None)]),
     dict(date=d(12,2), activity=[("Project 2 presentations, day 2", None)]),
     dict(date=d(12,4), activity=[("Project 2 presentations, day 3", None)]),
   ]),
   dict(n=16, unit="Final week", days=[
     dict(date=d(12,7), activity=[("Last class: Worst Chart Contest 🍕", None)],
-         deadline=[("P2 final infographic / science vis due 11:59pm", None)]),
+         deadline=[("P2 final notebook + infographic / science vis due 11:59pm", None)]),
   ]),
 ]
 

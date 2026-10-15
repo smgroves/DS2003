@@ -18,9 +18,9 @@ The notebook is where the reader explores. The final piece is for a reader who w
 | Groups formed | Wed, Oct. 21 |
 | 1. Project proposal | Sun, Oct. 25, 11:59pm |
 | 2. Final-piece sketches + in-class design critique | Fri, Nov. 20 (in class) |
-| 3. Interactive notebook + presentation slides | Sun, Nov. 29, 11:59pm |
-| 4. Final presentations | Nov. 30 – Dec. 4 (in class) |
-| 5. Final infographic / science visualization | Mon, Dec. 7, 11:59pm |
+| Presentation slides | Sun, Nov. 29, 11:59pm |
+| 3. Final presentations | Nov. 30 – Dec. 4 (in class) |
+| 4. Final submission: interactive notebook + infographic / science visualization | Mon, Dec. 7, 11:59pm |
 
 ## Step 1: Data Selection and Proposal
 
@@ -88,9 +88,11 @@ Each group has a **10-minute slot**. Present two things together:
 1. **Your interactive notebook, live.** Don't scroll through every cell. Pick the interactions that show your most important insights and *use* them in front of the audience.
 2. **A near-final draft of your final piece.** Feedback from this presentation should shape your revisions.
 
-Every group member should speak. Submit your slides (if you use any) with your notebook on Nov. 29.
+Every group member should speak. Submit your slides by Sun, Nov. 29 so all groups' slides are ready before presentations start. Feedback from the presentation can shape both your final notebook and your final piece.
 
-## Step 5: Final Piece (Mon, Dec. 7)
+## Step 5: Final Submission (Mon, Dec. 7)
+
+Your final submission is your revised **interactive notebook** (see Step 3) together with your **final piece**, described below.
 
 Design a standalone visual that communicates your single main takeaway, combining text and chart(s). Use one chart or several, whatever best supports the point. Choose a track:
 
@@ -112,15 +114,14 @@ Design a standalone visual that communicates your single main takeaway, combinin
 
 ## Grading
 
-Project 2 is worth **20%** of your final grade. The project score is out of **100 points**, split across deliverables. See the full rubric: [Project2_Rubric.html](Project2_Rubric.html).
+Project 2 is worth **20%** of your final grade. The project score is out of **200 points**, split across deliverables. See the full rubric: [Project2_Rubric.html](Project2_Rubric.html).
 
 | Deliverable | Points |
 |---|---|
-| Proposal | 10 |
-| Final-piece sketches + critique | 10 |
-| Interactive notebook | 35 |
-| Final presentation | 15 |
-| Final infographic / science visualization (incl. design rationale) | 30 |
+| Proposal | 25 |
+| Final-piece sketches + critique | 25 |
+| Final presentation | 50 |
+| Final submission: interactive notebook (50) + infographic / science visualization incl. design rationale (50) | 100 |
 
 Group members normally receive the same grade. If the contribution statement or instructor observation shows that work was very uneven, individual grades may be adjusted.
 
@@ -156,8 +157,10 @@ Submit everything on Canvas; each deliverable has its own submission page. One s
 
 - **Proposal** (PDF): Sun, Oct. 25, 11:59pm
 - **Sketches + feedback notes** (PDF/photos): Fri, Nov. 20, end of day
-- **Notebook** (`.ipynb` + data or download script + `requirements.txt` + HTML export) and **slides**: Sun, Nov. 29, 11:59pm
-- **Final piece** (PNG/PDF) + **design rationale** + **contribution statement**: Mon, Dec. 7, 11:59pm
+- **Presentation slides**: Sun, Nov. 29, 11:59pm
+- **Final submission**: Mon, Dec. 7, 11:59pm
+  - **Notebook**: `.ipynb` + data or download script + `requirements.txt` + HTML export
+  - **Final piece** (PNG/PDF) + **design rationale** + **contribution statement**
 
 Generative AI use follows the course policy in the syllabus. Cite any AI help in your notebook and design rationale.
 
