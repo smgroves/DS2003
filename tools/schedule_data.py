@@ -114,13 +114,13 @@ WEEKS = [
          deadline=[("Lab 10 due Sun", None)]),
   ]),
   dict(n=13, days=[
-    dict(date=d(11,16), activity=[("Project 2 work session", None)]),
-    dict(date=d(11,18), lecture=[("Data quality & deceptive plots", None)]),
+    dict(date=d(11,16), lecture=[("Data quality & deceptive plots", None)]),
+    dict(date=d(11,18), lecture=[("Ethics & rhetoric", None)]),
     dict(date=d(11,20), activity=[("Project 2 design critique", None)],
          deadline=[("P2 final-piece sketches due in class", None)]),
   ]),
   dict(n=14, days=[
-    dict(date=d(11,23), lecture=[("Ethics & rhetoric", None)]),
+    dict(date=d(11,23), activity=[("Project 2 work session", None)]),
     dict(date=d(11,25), noclass="No class (Thanksgiving)"),
     dict(date=d(11,27), noclass="No class (Thanksgiving)"),
   ]),
