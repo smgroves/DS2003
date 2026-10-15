@@ -9,7 +9,7 @@ This is a **group project** with several deliverables spread across the second h
 
 The notebook is where the reader explores. The final piece is for a reader who will never open your data; it has to make the point on its own.
 
-**Groups:** 3–4 students. Send your group members (or a request to be placed in a group) to the instructor by **Wednesday, Oct. 21**.
+**Groups:** 2–3 students. Send your group members (or a request to be placed in a group) to the instructor by **Wednesday, Oct. 21**.
 
 ## Timeline
 
@@ -17,10 +17,12 @@ The notebook is where the reader explores. The final piece is for a reader who w
 |---|---|
 | Groups formed | Wed, Oct. 21 |
 | 1. Project proposal | Sun, Oct. 25, 11:59pm |
-| 2. Final-piece sketches + in-class design critique | Fri, Nov. 20 (in class) |
+| 2. Narrative structure check-in | Sun, Nov. 15, 11:59pm |
+| 3. Final-piece sketches, in-class design critique | Fri, Nov. 20 (in class) |
+| Critique reflection | Sun, Nov. 22, 11:59pm |
 | Presentation slides | Sun, Nov. 29, 11:59pm |
-| 3. Final presentations | Nov. 30 – Dec. 4 (in class) |
-| 4. Final submission: interactive notebook + infographic / science visualization | Mon, Dec. 7, 11:59pm |
+| 4. Final presentations | Nov. 30 – Dec. 4 (in class) |
+| 5. Final submission: interactive notebook + infographic / science visualization | Mon, Dec. 7, 11:59pm |
 
 ## Step 1: Data Selection and Proposal
 
@@ -34,19 +36,9 @@ Your **proposal** (1–2 pages, one per group) should include:
 - **Planned interactions:** one or two ideas for what a reader might *do* in your notebook (filter by region, pick a year, compare two groups, ...) and why a static chart wouldn't be enough.
 - **Team plan:** who is taking the lead on which part (data cleaning, notebook, final piece, slides). Everyone should contribute code and design work.
 
-## Step 2: Design Sketches and Critique (Fri, Nov. 20)
+## Step 2: Interactive Notebook (work on it throughout; final version due Mon, Dec. 7)
 
-The critique is on your **final piece** (infographic or science visualization), not your notebook. Bring:
-
-- **At least two different thumbnail layouts** for your final piece, with your one-sentence main takeaway written at the top. Lab 10 (Nov. 13) is a sketching session for this.
-- **A rough draft of your strongest layout.** Paper, whiteboard photos, or quick slides are all fine. Charts can be placeholders or early versions from your notebook.
-- **One sentence naming your audience**, so critics can judge whether the piece works for them.
-
-Groups will rotate through critique stations giving and receiving feedback. Come with questions you want answered. You'll submit a photo or PDF of your sketches and a short list of the feedback you got and what you plan to change.
-
-## Step 3: Interactive Notebook
-
-Start your notebook as soon as your proposal is in. Labs 7–9 (Plotly, ipywidgets, interactive trees) each give you a technique to try on your own data the same week. The notebook is where your group explores and **finds the main takeaway for your final piece**, so aim to have a candidate takeaway by Lab 10 (Nov. 13), when you start sketching.
+Start your notebook as soon as your proposal is in. Labs 7–9 (Plotly, ipywidgets, interactive trees) each give you a technique to try on your own data the same week. The notebook is where your group explores and **finds the main takeaway for your final piece**, and your results are what you'll use at the Nov. 15 check-in to decide what your final piece will be.
 
 Your notebook should read like a short interactive article, not like a lab. Someone who hasn't taken this class should be able to follow it. It must contain at least two sections.
 
@@ -81,7 +73,29 @@ End with a short summary of what you learned, and state the **single main takeaw
 - If your data is large (more than ~50 MB, e.g. Chicago Crimes, Yelp, Citi Bike), do your filtering and aggregation in a separate preparation notebook and load the smaller result in your main notebook. Submit both.
 - Also submit an **HTML export** as a backup record. Plotly charts survive the export; widgets won't. If your Plotly charts come out blank in the HTML, add `import plotly.io as pio; pio.renderers.default = "notebook"` at the top and re-export.
 
-## Step 4: Final Presentation (Nov. 30 – Dec. 4)
+## Step 3: Narrative Structure Check-in (Sun, Nov. 15)
+
+By mid-November your notebook should have real results. Use them to decide what your final piece will be, and plan how it will tell its story before you start sketching. Submit a 1–2 page plan (one per group):
+
+- **What your notebook found:** two or three candidate findings from your notebook, each with the chart (screenshot or export) that supports it.
+- **Your decision:** the **one main takeaway** you'll communicate (one sentence), your **track** (infographic or science visualization), and your **audience**. Briefly explain why you chose this finding over the others.
+- **Your narrative structure:** which structure from class you'll use (for example, one of Segel & Heer's genres such as an annotated chart, partitioned poster, or magazine style; or a multi-panel A → B → C figure for a science visualization), and why it fits your takeaway and audience.
+- **A beat-by-beat outline:** what the reader sees first, second, and third. Cover the hook or context, the evidence (which charts, in what order), and the takeaway.
+- **Chart plan:** which notebook charts you'll reuse, which you'll redesign for a static, explanatory version, and any new ones you need.
+
+This plan is what you'll sketch from for the Nov. 20 critique.
+
+## Step 4: Design Sketches and Critique (Fri, Nov. 20; reflection due Sun, Nov. 22)
+
+The critique is on your **final piece** (infographic or science visualization), not your notebook. Bring:
+
+- **At least two different thumbnail layouts** for your final piece, with your one-sentence main takeaway written at the top. Build them from your narrative structure plan.
+- **A rough draft of your strongest layout.** Paper, whiteboard photos, or quick slides are all fine. Charts can be placeholders or early versions from your notebook.
+- **One sentence naming your audience**, so critics can judge whether the piece works for them.
+
+Groups will rotate through critique stations giving and receiving feedback. Come with questions you want answered. By **Sun, Nov. 22**, submit a **critique reflection**: a photo or PDF of your sketches, the feedback you got, and what you plan to change in response.
+
+## Step 5: Final Presentation (Nov. 30 – Dec. 4)
 
 Each group has a **10-minute slot**. Present two things together:
 
@@ -90,9 +104,9 @@ Each group has a **10-minute slot**. Present two things together:
 
 Every group member should speak. Submit your slides by Sun, Nov. 29 so all groups' slides are ready before presentations start. Feedback from the presentation can shape both your final notebook and your final piece.
 
-## Step 5: Final Submission (Mon, Dec. 7)
+## Step 6: Final Submission (Mon, Dec. 7)
 
-Your final submission is your revised **interactive notebook** (see Step 3) together with your **final piece**, described below.
+Your final submission is your revised **interactive notebook** (see Step 2) together with your **final piece**, described below.
 
 Design a standalone visual that communicates your single main takeaway, combining text and chart(s). Use one chart or several, whatever best supports the point. Choose a track:
 
@@ -114,12 +128,13 @@ Design a standalone visual that communicates your single main takeaway, combinin
 
 ## Grading
 
-Project 2 is worth **20%** of your final grade. The project score is out of **200 points**, split across deliverables. See the full rubric: [Project2_Rubric.html](Project2_Rubric.html).
+Project 2 is worth **20%** of your final grade. The project score is out of **225 points**, split across deliverables. See the full rubric: [Project2_Rubric.html](Project2_Rubric.html).
 
 | Deliverable | Points |
 |---|---|
 | Proposal | 25 |
-| Final-piece sketches + critique | 25 |
+| Narrative structure check-in | 25 |
+| Final-piece sketches + critique reflection | 25 |
 | Final presentation | 50 |
 | Final submission: interactive notebook (50) + infographic / science visualization incl. design rationale (50) | 100 |
 
@@ -156,7 +171,8 @@ Science-visualization groups may want data from their own field, a lab they work
 Submit everything on Canvas; each deliverable has its own submission page. One submission per group.
 
 - **Proposal** (PDF): Sun, Oct. 25, 11:59pm
-- **Sketches + feedback notes** (PDF/photos): Fri, Nov. 20, end of day
+- **Narrative structure check-in** (PDF): Sun, Nov. 15, 11:59pm
+- **Sketches** in class Fri, Nov. 20; **critique reflection** (PDF/photos): Sun, Nov. 22, 11:59pm
 - **Presentation slides**: Sun, Nov. 29, 11:59pm
 - **Final submission**: Mon, Dec. 7, 11:59pm
   - **Notebook**: `.ipynb` + data or download script + `requirements.txt` + HTML export

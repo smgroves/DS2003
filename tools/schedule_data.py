@@ -88,9 +88,10 @@ WEEKS = [
   ]),
   dict(n=9, days=[
     dict(date=d(10,19), lecture=[("Storytelling & narrative structures", None)],
-         deadline=[("Project 2 assigned", P2+"Project2_Interactive_Notebook.md"),
-                   ("rubric", P2+"Project2_Rubric.html"), ("P2 groups due Wed", None)]),
-    dict(date=d(10,21), lecture=[("Interaction: why & when (taxonomies)", None)]),
+         deadline=[("P2 introduced", P2+"Project2_Interactive_Notebook.md"),
+                   ("rubric", P2+"Project2_Rubric.html")]),
+    dict(date=d(10,21), lecture=[("Interaction: why & when (taxonomies)", None)],
+         deadline=[("P2 groups picked", None)]),
     dict(date=d(10,23), lab=[("Lab 7 (async, family weekend): interactive EDA with Plotly", L+"Lab07/Lab07_blank.ipynb")],
          data=["penguins", "flights"],
          deadline=[("P2 proposal due Sun", None), ("Lab 7 due Sun", None)]),
@@ -110,14 +111,14 @@ WEEKS = [
   dict(n=12, days=[
     dict(date=d(11,9), lecture=[("Science visualizations", None)]),
     dict(date=d(11,11), lecture=[("Data journalism", None)]),
-    dict(date=d(11,13), lab=[("Lab 10: sketching & annotation", None)],
-         deadline=[("Lab 10 due Sun", None)]),
+    dict(date=d(11,13), lab=[("Lab 10 (light): planning your final piece", None)],
+         deadline=[("P2 narrative structure due Sun", None), ("Lab 10 due Sun", None)]),
   ]),
   dict(n=13, days=[
     dict(date=d(11,16), lecture=[("Data quality & deceptive plots", None)]),
     dict(date=d(11,18), lecture=[("Ethics & rhetoric", None)]),
     dict(date=d(11,20), activity=[("Project 2 design critique", None)],
-         deadline=[("P2 final-piece sketches due in class", None)]),
+         deadline=[("P2 sketches in class", None), ("P2 critique reflection due Sun", None)]),
   ]),
   dict(n=14, days=[
     dict(date=d(11,23), activity=[("Project 2 work session", None)]),
