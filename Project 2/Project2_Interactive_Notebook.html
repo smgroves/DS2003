@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project 2: Interactive Notebook + Infographic or Science Visualization</title>
+<style>
+:root { color-scheme: light; }
+body { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color:#1a1a1a; background:#ffffff;
+  font-size:16px; line-height:1.55; max-width:860px; margin:2rem auto; padding:0 16px; }
+h1 { font-size:1.7rem; line-height:1.25; color:#2c3e50; margin:0 0 1rem; }
+h2 { font-size:1.3rem; color:#2c3e50; margin:2.2rem 0 .6rem; border-bottom:1px solid #ccc; padding-bottom:.25rem; }
+h2#rubric { margin-top:3rem; font-size:1.5rem; }
+h3 { font-size:1.1rem; margin:1.6rem 0 .5rem; }
+h4 { font-size:1rem; margin:1.2rem 0 .5rem; }
+.tbl { overflow-x:auto; margin:.5rem 0 1rem; }
+table { border-collapse:collapse; width:100%; font-size:.93rem; }
+th, td { border:1px solid #ccc; padding:8px 10px; text-align:left; vertical-align:top; }
+thead th { background:#2c3e50; color:#fff; }
+tbody th { background:#f4f6f7; }
+tbody tr:nth-child(even) td { background:#fafafa; }
+.pts { display:block; font-weight:normal; color:#555; font-size:.85rem; }
+p.note { color:#555; }
+code { font-family: Menlo, Consolas, monospace; font-size:.88em; background:#f4f6f7; padding:1px 4px; border-radius:3px; }
+a { color:#1f5fa8; }
+.back { font-size:.9rem; margin-bottom:1.5rem; }
+@media (max-width:640px) { table { font-size:.85rem; } th, td { padding:6px 7px; } }
+</style>
+</head>
+<body>
+<p class="back"><a href="../index.html">← DS 2003 schedule</a> · <a href="Project2_Overview.pdf">PDF version</a></p>
+<h1>Project 2: Interactive Notebook + Infographic or Science Visualization</h1>
+<p>This is a <strong>group project</strong> with several deliverables spread across the second half of the semester. In Project 1 you explored a dataset for yourself. In Project 2 you explain a dataset to someone else, in two forms:</p>
+<ol>
+<li>An <strong>interactive notebook</strong> that guides a reader through your dataset and lets them explore your research questions, built with <code>ipywidgets</code> and <code>plotly</code>.</li>
+<li>A <strong>final piece</strong> that distills your single most important finding into a standalone visual. Your group picks one track:<ul>
+<li>an <strong>infographic</strong> for a general audience, or</li>
+<li>a <strong>science visualization</strong>: a publication-style figure for a specialist audience.</li>
+</ul>
+</li>
+</ol>
+<p>The notebook is where the reader explores. The final piece is for a reader who will never open your data; it has to make the point on its own.</p>
+<p><strong>Groups:</strong> 2–3 students. Send your group members (or a request to be placed in a group) to the instructor by <strong>Wednesday, Oct. 21</strong>.</p>
+<h2>Timeline</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Deliverable</th>
+<th>Due</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Groups formed</td>
+<td>Wed, Oct. 21</td>
+</tr>
+<tr>
+<td>1. Project proposal</td>
+<td>Sun, Oct. 25, 11:59pm</td>
+</tr>
+<tr>
+<td>2. Narrative structure check-in</td>
+<td>Sun, Nov. 15, 11:59pm</td>
+</tr>
+<tr>
+<td>3. Final-piece sketches, in-class design critique</td>
+<td>Fri, Nov. 20 (in class)</td>
+</tr>
+<tr>
+<td>Critique reflection</td>
+<td>Sun, Nov. 22, 11:59pm</td>
+</tr>
+<tr>
+<td>Presentation slides</td>
+<td>Sun, Nov. 29, 11:59pm</td>
+</tr>
+<tr>
+<td>4. Final presentations</td>
+<td>Nov. 30 – Dec. 4 (in class)</td>
+</tr>
+<tr>
+<td>5. Final submission: interactive notebook + infographic / science visualization</td>
+<td>Mon, Dec. 7, 11:59pm</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Step 1: Data Selection and Proposal</h2>
+<p>Pick a topic and a dataset. You can use any data, as long as it isn't a trivial or toy dataset that has already been explored extensively (no built-in datasets like <code>penguins</code>, <code>mpg</code>, or <code>nycflights13</code>). If you aren't sure whether your dataset is appropriate, ask the instructor early.</p>
+<p>Your <strong>proposal</strong> (no more than 1 page, one per group) should include:</p>
+<ul>
+<li><strong>Dataset:</strong> where it comes from, who collected it and how, its size (rows × columns), and the key variables.</li>
+<li><strong>At least three research questions</strong> you want to investigate.</li>
+<li><strong>Audience and track:</strong> who you imagine reading your final piece, and whether you are leaning toward an infographic or a science visualization. You can switch tracks later, but tell the instructor if you do.</li>
+<li><strong>Planned interactions:</strong> one or two ideas for what a reader might <em>do</em> in your notebook (filter by region, pick a year, compare two groups, ...) and why a static chart wouldn't be enough.</li>
+<li><strong>Team plan:</strong> who is taking the lead on which part (data cleaning, notebook, final piece, slides). Everyone should contribute code and design work.</li>
+</ul>
+<h2>Step 2: Interactive Notebook (work on it throughout; final version due Mon, Dec. 7)</h2>
+<p>Start your notebook as soon as your proposal is in. Labs 7–9 (Plotly, ipywidgets, interactive trees) each give you a technique to try on your own data the same week. The notebook is where your group explores and <strong>finds the main takeaway for your final piece</strong>, and your results are what you'll use at the Nov. 15 check-in to decide what your final piece will be.</p>
+<p>Your notebook should read like a short interactive article, not like a lab. Someone who hasn't taken this class should be able to follow it. It must contain at least two sections.</p>
+<h3>About section</h3>
+<p>An introduction that catches the reader's attention and tells them what the project is about:</p>
+<ul>
+<li>What the dataset is, where it comes from, and any important limitations (missing values, sampling, what the data <em>can't</em> tell you).</li>
+<li>Your research questions and why a reader should care.</li>
+<li>A few key insights shown with <strong>static visualizations</strong> (matplotlib/seaborn is fine). Use the explanatory techniques from class: active titles, annotations, highlighting what matters, and direct labels.</li>
+</ul>
+<h3>Interactive section</h3>
+<p><strong>At least three charts</strong> that meaningfully answer your research questions. Requirements across the section:</p>
+<ul>
+<li><strong>At least one <code>ipywidgets</code> control</strong> (dropdown, slider, checkbox, toggle, ...) that changes what a chart shows.</li>
+<li><strong>At least one Plotly chart</strong> with useful micro-interactions: custom hover text (formatted values and units, not raw column names), and zooming or legend toggling where it helps.</li>
+<li><strong>Every chart is interactive in some way</strong>, and each one gets a 1–2 sentence note saying <strong>what the interaction lets the reader do that a static chart wouldn't.</strong> Interactivity that adds nothing (a dropdown with one sensible option, hover text that repeats the axis) will cost you points. Think carefully about which charts actually benefit.</li>
+<li>Charts can stand alone, or widgets can control several charts at once (linked views). Linked views are not required but count toward creativity.</li>
+<li>Each chart is followed by <strong>2–4 sentences of interpretation</strong>: what pattern should the reader look for, and what does it mean?</li>
+</ul>
+<h3>Takeaway section</h3>
+<p>End with a short summary of what you learned, and state the <strong>single main takeaway</strong> you've chosen for your final piece.</p>
+<h3>Technical requirements</h3>
+<p><code>ipywidgets</code> need a running Python kernel, so <strong>they will not work in an exported HTML file.</strong> Because of that:</p>
+<ul>
+<li>Submit the <strong><code>.ipynb</code></strong>, your <strong>data</strong> (or a script that downloads it), and a <code>requirements.txt</code> (or a list of packages at the top of the notebook).</li>
+<li>Your notebook must run from top to bottom in a fresh kernel (<strong>Kernel → Restart Kernel and Run All Cells</strong>) with no errors and no manual steps.</li>
+<li>If your data is large (more than ~50 MB, e.g. Chicago Crimes, Yelp, Citi Bike), do your filtering and aggregation in a separate preparation notebook and load the smaller result in your main notebook. Submit both.</li>
+<li>Also submit an <strong>HTML export</strong> as a backup record. Plotly charts survive the export; widgets won't. If your Plotly charts come out blank in the HTML, add <code>import plotly.io as pio; pio.renderers.default = "notebook"</code> at the top and re-export.</li>
+</ul>
+<h2>Step 3: Narrative Structure Check-in (Sun, Nov. 15)</h2>
+<p>By mid-November your notebook should have real results. Use them to decide what your final piece will be, and plan how it will tell its story before you start sketching. Submit a 1–2 page plan (one per group):</p>
+<ul>
+<li><strong>What your notebook found:</strong> two or three candidate findings from your notebook, each with the chart (screenshot or export) that supports it.</li>
+<li><strong>Your decision:</strong> the <strong>one main takeaway</strong> you'll communicate (one sentence), your <strong>track</strong> (infographic or science visualization), and your <strong>audience</strong>. Briefly explain why you chose this finding over the others.</li>
+<li><strong>Your narrative structure:</strong> which structure from class you'll use (for example, one of Segel &amp; Heer's genres such as an annotated chart, partitioned poster, or magazine style; or a multi-panel A → B → C figure for a science visualization), and why it fits your takeaway and audience.</li>
+<li><strong>A beat-by-beat outline:</strong> what the reader sees first, second, and third. Cover the hook or context, the evidence (which charts, in what order), and the takeaway.</li>
+<li><strong>Chart plan:</strong> which notebook charts you'll reuse, which you'll redesign for a static, explanatory version, and any new ones you need.</li>
+</ul>
+<p>This plan is what you'll sketch from for the Nov. 20 critique.</p>
+<h2>Step 4: Design Sketches and Critique (Fri, Nov. 20; reflection due Sun, Nov. 22)</h2>
+<p>The critique is on your <strong>final piece</strong> (infographic or science visualization), not your notebook. Bring:</p>
+<ul>
+<li><strong>At least two different thumbnail layouts</strong> for your final piece, with your one-sentence main takeaway written at the top. Build them from your narrative structure plan.</li>
+<li><strong>A rough draft of your strongest layout.</strong> Paper, whiteboard photos, or quick slides are all fine. Charts can be placeholders or early versions from your notebook.</li>
+<li><strong>One sentence naming your audience</strong>, so critics can judge whether the piece works for them.</li>
+</ul>
+<p>Groups will rotate through critique stations giving and receiving feedback. Come with questions you want answered. By <strong>Sun, Nov. 22</strong>, submit a <strong>critique reflection</strong>: a photo or PDF of your sketches, the feedback you got, and what you plan to change in response.</p>
+<h2>Step 5: Final Presentation (Nov. 30 – Dec. 4)</h2>
+<p>Each group has a <strong>10-minute slot</strong>. Present two things together:</p>
+<ol>
+<li><strong>Your interactive notebook, live.</strong> Don't scroll through every cell. Pick the interactions that show your most important insights and <em>use</em> them in front of the audience.</li>
+<li><strong>A near-final draft of your final piece.</strong> Feedback from this presentation should shape your revisions.</li>
+</ol>
+<p>Every group member should speak. Submit your slides by Sun, Nov. 29 so all groups' slides are ready before presentations start. Feedback from the presentation can shape both your final notebook and your final piece.</p>
+<h2>Step 6: Final Submission (Mon, Dec. 7)</h2>
+<p>Your final submission is your revised <strong>interactive notebook</strong> (see Step 2) together with your <strong>final piece</strong>, described below.</p>
+<p>Design a standalone visual that communicates your single main takeaway, combining text and chart(s). Use one chart or several, whatever best supports the point. Choose a track:</p>
+<p><strong>Infographic</strong> (general audience)
+- Built for a reader who has a minute or two and no background: a poster, a web graphic, or a social-media graphic.
+- A clear headline that states the takeaway, a visual hierarchy that tells the reader where to look first, and plain-language text.</p>
+<p><strong>Science visualization</strong> (specialist audience)
+- A publication-style figure like you'd see in a journal: typically several panels labeled <strong>A, B, C...</strong>, with a <strong>figure legend</strong> (a title sentence followed by a description of each panel, sample sizes, and what any error bars mean).
+- Follow the science-figure conventions from class: show the data rather than only summaries, use color carefully and accessibly, and keep fonts and alignment consistent across panels.</p>
+<p><strong>Requirements for both tracks</strong>
+- <strong>Final assembly can happen outside of code</strong> (Figma, Canva, Illustrator, Inkscape, PowerPoint, ...). However, <strong>every data-driven element must be generated from code</strong> in your notebook: no hand-drawn, traced, or manually adjusted data marks. Text, layout, icons, and annotations can be added by hand.
+- Cite your data source on the graphic itself.
+- No deceptive encodings: check your piece against the ethics and deceptive-plots material from class.
+- Submit as a <strong>PNG or PDF</strong> (vector PDF preferred for science figures).
+- Include a <strong>design rationale</strong> (about 1 page): your audience, your takeaway, three key design decisions and why you made them, and <strong>what you changed after the presentation feedback.</strong>
+- Include a short <strong>contribution statement</strong> listing what each group member did.</p>
+<h2>Grading</h2>
+<p>Project 2 is worth <strong>20%</strong> of your final grade. The project score is out of <strong>225 points</strong>, split across deliverables. The full rubric is <a href="#rubric">at the end of this page</a>.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Deliverable</th>
+<th>Points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Proposal</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Narrative structure check-in</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Final-piece sketches + critique reflection</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Final presentation</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Final submission: interactive notebook (50) + infographic / science visualization incl. design rationale (50)</td>
+<td>100</td>
+</tr>
+</tbody>
+</table></div>
+<p>Group members normally receive the same grade. If the contribution statement or instructor observation shows that work was very uneven, individual grades may be adjusted.</p>
+<h2>Recommended Data Sources</h2>
+<p>To get up and running quickly, consider one of these:</p>
+<ul>
+<li><a href="https://www.kaggle.com/datasets/lin0li/covid19testing">COVID-19 Worldwide Testing Data</a></li>
+<li><a href="https://citibikenyc.com/system-data">Citi Bike NYC trip data</a>: large; pick a few months</li>
+<li><a href="https://insideairbnb.com/get-the-data/">Inside Airbnb</a>: pick one or two cities</li>
+<li><a href="https://www.kaggle.com/datasets/leonardopena/top-spotify-songs-from-20102019-by-year">Top Spotify songs 2010–2019</a>: ~600 Billboard top songs</li>
+<li><a href="https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-Present/ijzp-q8t2/about_data">Chicago Crimes, 2001–present</a>: millions of rows; filter by year or type before loading</li>
+<li><a href="https://github.com/light-and-salt/World-Bank-Data-by-Indicators">World Bank Indicators, 1960–2017</a>: or browse the original data by indicator or country</li>
+<li><a href="https://vis.csail.mit.edu/classes/6.894/data/">Daily U.S. weather, 2017 (NOAA GHCN)</a>: see the accompanying <code>weather.txt</code> for column descriptions</li>
+<li><a href="https://opportunityinsights.org/data/">Opportunity Insights: social mobility in the U.S.</a>: Raj Chetty's group; consider joining multiple files from the same paper</li>
+<li><a href="https://business.yelp.com/data/resources/open-dataset/">Yelp Open Dataset</a>: large JSON; you don't need all of it (requires agreeing to Yelp's license)</li>
+<li><a href="https://www.ookla.com/articles/announcing-ookla-open-datasets">Ookla Speedtest open data</a>: mobile and fixed internet speeds</li>
+</ul>
+<p>Science-visualization groups may want data from their own field, a lab they work in, or a public repository (e.g., NASA, NOAA, NCBI/GEO, the Allen Institute). Check with the instructor first.</p>
+<h3>Additional data sources</h3>
+<ul>
+<li><a href="https://datasetsearch.research.google.com/">Google Dataset Search</a></li>
+<li><a href="https://www.kaggle.com/datasets">Kaggle Datasets</a></li>
+<li><a href="https://vincentarelbundock.github.io/Rdatasets/datasets.html">Rdatasets</a></li>
+<li><a href="https://archive.ics.uci.edu/datasets">UC Irvine ML Repository</a></li>
+<li><a href="https://github.com/fivethirtyeight/data/tree/master">FiveThirtyEight datasets</a></li>
+<li><a href="https://github.com/awesomedata/awesome-public-datasets">Awesome Public Datasets</a></li>
+</ul>
+<h2>Submission Details</h2>
+<p>Submit everything on Canvas; each deliverable has its own submission page. One submission per group.</p>
+<ul>
+<li><strong>Proposal</strong> (PDF): Sun, Oct. 25, 11:59pm</li>
+<li><strong>Narrative structure check-in</strong> (PDF): Sun, Nov. 15, 11:59pm</li>
+<li><strong>Sketches</strong> in class Fri, Nov. 20; <strong>critique reflection</strong> (PDF/photos): Sun, Nov. 22, 11:59pm</li>
+<li><strong>Presentation slides</strong>: Sun, Nov. 29, 11:59pm</li>
+<li><strong>Final submission</strong>: Mon, Dec. 7, 11:59pm<ul>
+<li><strong>Notebook</strong>: <code>.ipynb</code> + data or download script + <code>requirements.txt</code> + HTML export</li>
+<li><strong>Final piece</strong> (PNG/PDF) + <strong>design rationale</strong> + <strong>contribution statement</strong></li>
+</ul>
+</li>
+</ul>
+<p>Generative AI use follows the course policy in the syllabus. Cite any AI help in your notebook and design rationale.</p>
+<h2>Acknowledgments</h2>
+<p>Components of this assignment were inspired by Adam Perer and Dominik Moritz's <em>Interactive Data Science</em> course at CMU.</p>
+<h2 id="rubric">Rubric</h2>
+<p class="note">Interactive notebook + infographic or science visualization. 225 points total (20% of the course grade). Rubric cells may not map exactly to specific point scores.</p>
+
+<div class="tbl"><table>
+  <thead>
+    <tr><th scope="col">Deliverable</th><th scope="col">Points</th></tr>
+  </thead>
+  <tbody>
+    <tr><th scope="row">1. Proposal</th><td>25</td></tr>
+    <tr><th scope="row">2. Narrative structure check-in</th><td>25</td></tr>
+    <tr><th scope="row">3. Final-piece sketches + critique reflection</th><td>25</td></tr>
+    <tr><th scope="row">4. Final presentation</th><td>50</td></tr>
+    <tr><th scope="row">5. Final submission: interactive notebook (50) + infographic / science visualization (50)</th><td>100</td></tr>
+  </tbody>
+</table></div>
+
+<h3>1. Proposal (25 pts)</h3>
+<div class="tbl"><table>
+  <thead>
+    <tr><th scope="col">Component</th><th scope="col">Excellent</th><th scope="col">Satisfactory</th><th scope="col">Poor</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Dataset<span class="pts">7 pts</span></th>
+      <td>Source, collection method, size, and key variables are described; the dataset is substantial and not a toy dataset.</td>
+      <td>Dataset is appropriate, but the description is missing its source, size, or variables.</td>
+      <td>Dataset is trivial or built-in, or not described.</td>
+    </tr>
+    <tr>
+      <th scope="row">Research questions<span class="pts">8 pts</span></th>
+      <td>Three or more specific, answerable questions that go beyond single summary statistics.</td>
+      <td>Questions are reasonable but vague or shallow.</td>
+      <td>Fewer than three questions, or questions the data can't answer.</td>
+    </tr>
+    <tr>
+      <th scope="row">Audience, track &amp; interactions<span class="pts">7 pts</span></th>
+      <td>Names a specific audience and track, and proposes interactions with a clear reason a static chart wouldn't be enough.</td>
+      <td>Audience or interactions named, but generic ("the public," "add a dropdown").</td>
+      <td>Missing audience, track, or interaction ideas.</td>
+    </tr>
+    <tr>
+      <th scope="row">Team plan<span class="pts">3 pts</span></th>
+      <td>Every member has a clear lead role.</td>
+      <td colspan="2">Roles missing or unbalanced.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h3>2. Narrative structure check-in (25 pts)</h3>
+<div class="tbl"><table>
+  <thead>
+    <tr><th scope="col">Component</th><th scope="col">Excellent</th><th scope="col">Satisfactory</th><th scope="col">Poor</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Evidence from the notebook<span class="pts">6 pts</span></th>
+      <td>Two or three candidate findings, each backed by a chart from the notebook.</td>
+      <td>Findings listed, but with weak or missing chart support.</td>
+      <td>No notebook results shown.</td>
+    </tr>
+    <tr>
+      <th scope="row">Takeaway, track &amp; audience<span class="pts">6 pts</span></th>
+      <td>A specific one-sentence takeaway, a chosen track, a named audience, and a clear reason this finding beat the others.</td>
+      <td>Decision made, but the takeaway is vague or the reasoning is missing.</td>
+      <td>No clear decision.</td>
+    </tr>
+    <tr>
+      <th scope="row">Narrative structure<span class="pts">6 pts</span></th>
+      <td>Names a structure from class and explains why it fits the takeaway and audience.</td>
+      <td>Structure named, but the fit isn't explained.</td>
+      <td>No structure identified.</td>
+    </tr>
+    <tr>
+      <th scope="row">Outline &amp; chart plan<span class="pts">7 pts</span></th>
+      <td>Beat-by-beat outline (hook, evidence in order, takeaway) and a plan for which charts to reuse, redesign, or add.</td>
+      <td>Outline or chart plan present, but incomplete.</td>
+      <td>Missing.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h3>3. Final-piece sketches + critique reflection (25 pts)</h3>
+<div class="tbl"><table>
+  <thead>
+    <tr><th scope="col">Component</th><th scope="col">Excellent</th><th scope="col">Satisfactory</th><th scope="col">Poor</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Thumbnails &amp; rough draft<span class="pts">10 pts</span></th>
+      <td>Two or more genuinely different layouts plus a rough draft of the strongest one, developed enough to critique.</td>
+      <td>Only one layout, layouts that differ only slightly, or no rough draft.</td>
+      <td>Missing or too rough to critique.</td>
+    </tr>
+    <tr>
+      <th scope="row">Takeaway &amp; audience<span class="pts">7 pts</span></th>
+      <td>A specific one-sentence takeaway and a named audience, both reflected in the layouts.</td>
+      <td>Takeaway or audience stated, but vague or disconnected from the sketches.</td>
+      <td>Missing.</td>
+    </tr>
+    <tr>
+      <th scope="row">Critique participation &amp; follow-up<span class="pts">8 pts</span></th>
+      <td>Gave specific, constructive feedback to other groups; submitted a critique reflection with a concrete plan for each piece of feedback.</td>
+      <td>Participated, but the feedback given or the follow-up plan was thin.</td>
+      <td>Absent, or no reflection submitted.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h3>4. Final presentation (50 pts)</h3>
+<div class="tbl"><table>
+  <thead>
+    <tr><th scope="col">Component</th><th scope="col">Excellent</th><th scope="col">Satisfactory</th><th scope="col">Poor</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Live demo<span class="pts">15 pts</span></th>
+      <td>Uses the interactions live to reveal the key insights; the audience sees why interactivity matters.</td>
+      <td>Shows the notebook, but scrolls through cells rather than using the interactions purposefully.</td>
+      <td>No demo, or the notebook breaks during the presentation.</td>
+    </tr>
+    <tr>
+      <th scope="row">Final piece draft<span class="pts">13 pts</span></th>
+      <td>A near-final draft whose takeaway and design choices are explained.</td>
+      <td>An early draft, or shown without explanation.</td>
+      <td>Missing.</td>
+    </tr>
+    <tr>
+      <th scope="row">Structure &amp; time<span class="pts">11 pts</span></th>
+      <td>Clear context → evidence → takeaway; finishes within 10 minutes.</td>
+      <td>Generally organized, but ran over or rushed.</td>
+      <td>Disorganized, or significantly over time.</td>
+    </tr>
+    <tr>
+      <th scope="row">Delivery &amp; team<span class="pts">11 pts</span></th>
+      <td>Every member speaks; confident and audience-facing.</td>
+      <td>Uneven speaking roles, or delivery read from the screen.</td>
+      <td>One person presents everything, or hard to follow.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h3>5. Final submission (100 pts)</h3>
+<h4>5a. Interactive notebook (50 pts)</h4>
+<div class="tbl"><table>
+  <thead>
+    <tr><th scope="col">Component</th><th scope="col">Excellent</th><th scope="col">Satisfactory</th><th scope="col">Poor</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">About section<span class="pts">8 pts</span></th>
+      <td>Engaging introduction to the data, its source and limitations, and the research questions; static charts use explanatory techniques (active titles, annotation, highlighting).</td>
+      <td>Data and questions introduced, but limitations are missing or the static charts are exploratory-style with no emphasis.</td>
+      <td>Missing or reads like lab notes.</td>
+    </tr>
+    <tr>
+      <th scope="row">Answers to research questions<span class="pts">10 pts</span></th>
+      <td>At least three charts meaningfully answer the research questions, and each is followed by an interpretation of what to notice and what it means.</td>
+      <td>Charts address the questions, but interpretations just describe the chart rather than explain it.</td>
+      <td>Fewer than three charts, or charts unrelated to the questions.</td>
+    </tr>
+    <tr>
+      <th scope="row">Interaction design<span class="pts">12 pts</span></th>
+      <td>Uses ipywidgets controls and Plotly micro-interactions, each with a clear purpose, stated in a note on what it lets the reader do that a static chart couldn't. Linked views or other thoughtful touches earn full marks.</td>
+      <td>Requirements met, but some interactions add little (redundant hover text, a dropdown with no meaningful choices).</td>
+      <td>Missing ipywidgets or Plotly, or interactions that get in the way of reading the chart.</td>
+    </tr>
+    <tr>
+      <th scope="row">Visual design<span class="pts">8 pts</span></th>
+      <td>Effective chart types and encodings; clear titles, labels, and units; formatted hover text; accessible color.</td>
+      <td>Mostly effective, with a few encoding or labeling errors.</td>
+      <td>Poorly chosen chart types or encodings; unlabeled axes; raw column names.</td>
+    </tr>
+    <tr>
+      <th scope="row">Narrative &amp; takeaway<span class="pts">6 pts</span></th>
+      <td>Reads like a short article a newcomer could follow; ends with a clear main takeaway.</td>
+      <td>Mostly followable, but the transitions or the takeaway are weak.</td>
+      <td>No narrative thread; no takeaway.</td>
+    </tr>
+    <tr>
+      <th scope="row">Reproducibility<span class="pts">6 pts</span></th>
+      <td>Runs top-to-bottom in a fresh kernel with no errors; data (or a download script), requirements, and HTML backup included.</td>
+      <td>Runs after minor fixes (a path, a missing package).</td>
+      <td>Does not run, or data is missing.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h4>5b. Infographic / science visualization (50 pts)</h4>
+<div class="tbl"><table>
+  <thead>
+    <tr><th scope="col">Component</th><th scope="col">Excellent</th><th scope="col">Satisfactory</th><th scope="col">Poor</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Main takeaway<span class="pts">12 pts</span></th>
+      <td>A single, clear takeaway a reader gets within seconds; stands on its own without the notebook.</td>
+      <td>Takeaway present, but competing with secondary points or requiring effort to find.</td>
+      <td>No clear takeaway; reads like a collage of charts.</td>
+    </tr>
+    <tr>
+      <th scope="row">Audience fit &amp; genre<span class="pts">10 pts</span></th>
+      <td><b>Infographic:</b> plain language and a headline a general reader understands. <b>Science vis:</b> labeled panels and a complete figure legend (sample sizes, error bars defined) at journal standard.</td>
+      <td>Mostly fits the audience, but uses jargon (infographic) or has an incomplete legend (science vis).</td>
+      <td>Wrong level for the audience, or ignores the conventions of the genre.</td>
+    </tr>
+    <tr>
+      <th scope="row">Composition &amp; visual design<span class="pts">12 pts</span></th>
+      <td>Clear visual hierarchy and reading order; consistent alignment, type, and color; effective encodings; accessible color.</td>
+      <td>Generally well designed, with some clutter, misalignment, or competing emphasis.</td>
+      <td>Cluttered or confusing layout; ineffective encodings.</td>
+    </tr>
+    <tr>
+      <th scope="row">Data integrity<span class="pts">7 pts</span></th>
+      <td>Data marks generated from code; source cited on the graphic; no deceptive encodings; uncertainty shown where relevant.</td>
+      <td>Minor issues (source hard to find, a questionable axis choice).</td>
+      <td>Misleading encodings, hand-drawn data marks, or no source.</td>
+    </tr>
+    <tr>
+      <th scope="row">Design rationale &amp; revision<span class="pts">9 pts</span></th>
+      <td>Rationale explains audience, takeaway, and three design decisions; the revision clearly responds to presentation feedback; contribution statement included.</td>
+      <td>Rationale present but thin, or the revisions are minor.</td>
+      <td>No rationale, or no evidence of revision.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+
+</body>
+</html>

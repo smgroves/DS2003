@@ -28,7 +28,7 @@ The notebook is where the reader explores. The final piece is for a reader who w
 
 Pick a topic and a dataset. You can use any data, as long as it isn't a trivial or toy dataset that has already been explored extensively (no built-in datasets like `penguins`, `mpg`, or `nycflights13`). If you aren't sure whether your dataset is appropriate, ask the instructor early.
 
-Your **proposal** (1–2 pages, one per group) should include:
+Your **proposal** (no more than 1 page, one per group) should include:
 
 - **Dataset:** where it comes from, who collected it and how, its size (rows × columns), and the key variables.
 - **At least three research questions** you want to investigate.
