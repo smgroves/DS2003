@@ -87,7 +87,7 @@ WEEKS = [
     dict(date=d(10,16), activity=[("Project 1 presentations, day 3", None)], deadline=[("Project 1 due", None)]),
   ]),
   dict(n=9, days=[
-    dict(date=d(10,19), lecture=[("Storytelling & narrative structures", None)],
+    dict(date=d(10,19), lecture=[("Storytelling & narrative structures", S+"pdf/15-Storytelling.pdf")],
          deadline=[("P2 introduced", P2+"Project2_Interactive_Notebook.html"),
                    ("rubric", P2+"Project2_Rubric.html")]),
     dict(date=d(10,21), lecture=[("Interaction: why & when (taxonomies)", None)],
