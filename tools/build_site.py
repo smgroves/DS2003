@@ -158,8 +158,9 @@ def datasets():
         if d.get("groups"):
             files = "".join(f'<h3>{escape(g)} <span class="sub">(<a href="bad-charts.html#chart-{g.split()[1][0].lower()}">see chart</a>)</span></h3><ul>{"".join(f"<li>{link(t, h)}</li>" for t, h in fs)}</ul>' for g, fs in d["groups"])
         else:
-            files = "<ul>" + "".join(f"<li>{link(t, h)}</li>" for t, h in d["files"]) + "</ul>"
-        load = f'<p class="used">Or: <code>{escape(d["load"])}</code></p>' if d.get("load") else ""
+            files = ("<ul>" + "".join(f"<li>{link(t, h)}</li>" for t, h in d["files"]) + "</ul>") if d["files"] else ""
+        load = (f'<p class="used">{"Or: " if files else "Load it with: "}<code>{escape(d["load"])}</code></p>'
+                if d.get("load") else "")
         uses = "; ".join(f'{dt.strftime("%a %-m/%-d")} {escape(w)}' for dt, w in used_in(d["id"]))
         size = f'<div class="size">{d["size"]}</div>' if d.get("size") else ""
         secs.append(f'<section class="ds" id="{d["id"]}"><h2>{escape(d["name"])}</h2>{size}'
