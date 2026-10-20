@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Screenshot Hunt</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@700&display=swap">
+<link rel="stylesheet" href="hunt.css">
+<style>
+main { max-width: 520px; margin: 0 auto; padding: 20px 16px 40px; display: grid; gap: 14px; }
+.top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.top h1 { font-size: 22px; }
+.who { font-size: 14px; color: var(--mute); }
+.who button { background: none; color: var(--purple); padding: 0; font-weight: 600; text-decoration: underline; }
+.prompt { font: 700 22px/1.3 "Source Serif 4", Georgia, serif; margin: 6px 0 0; }
+.timer { font: 700 15px ui-monospace, Menlo, monospace; color: var(--purple); margin-top: 8px; }
+.send { width: 100%; font-size: 20px; padding: 22px; background: var(--purple); border-radius: 14px; }
+.send.disabled { background: var(--line); color: var(--mute); pointer-events: none; }
+.status { text-align: center; min-height: 1.5em; }
+.status.ok b { color: var(--good); } .status.err { color: var(--bad); }
+.sent { display: flex; gap: 12px; align-items: center; }
+.sent img { width: 64px; height: 96px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); }
+.place { font: 700 34px/1 "Source Serif 4", Georgia, serif; color: var(--purple); }
+.how { font-size: 14px; color: var(--mute); }
+.how ol { margin: 4px 0 0; padding-left: 20px; }
+form.join { display: grid; gap: 10px; }
+</style>
+</head>
+<body>
+<main id="app"></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="hunt.js"></script>
+<script>
+const app = document.getElementById("app");
+let round = null, lastSent = null;   // lastSent = { roundId, place, thumb }
+
+function render() {
+  shownKey = JSON.stringify([round, Hunt.isOpen(round)]);
+  const name = Hunt.local.get("hunt-name");
+  if (!name) return renderJoin();
+  const open = Hunt.isOpen(round);
+  const left = Hunt.secondsLeft(round);
+  const sentThis = lastSent && round && lastSent.roundId === round.id;
+
+  app.innerHTML = `
+    <div class="top"><h1>Screenshot Hunt</h1>
+      <span class="who">${Hunt.esc(name)} · <button id="rename">change</button></span></div>
+    <div class="card">
+      ${round ? `<div class="eyebrow">${open ? "Round " + round.id : "Round closed"}</div>
+        <p class="prompt">${Hunt.esc(round.prompt)}</p>
+        ${open && left != null ? `<div class="timer" id="timer">${Hunt.fmtClock(left)} left</div>` : ""}`
+      : `<p class="prompt muted">Waiting for the first round…</p>`}
+    </div>
+    <label class="btn send ${open ? "" : "disabled"}" for="pick">📸 ${sentThis ? "Send another" : "Send screenshot"}</label>
+    <input id="pick" type="file" accept="image/*" hidden ${open ? "" : "disabled"}>
+    <div class="status" id="status"></div>
+    ${sentThis ? `<div class="card sent"><img src="${lastSent.thumb}" alt="">
+      <div><div class="place">#${lastSent.place}</div><div class="muted">You were #${lastSent.place} to send one in.</div></div></div>` : ""}
+    <div class="how"><b>Keep this tab open.</b> Each round:
+      <ol><li>Take a screenshot</li><li>Come back to this tab</li><li>Tap the button and pick it</li></ol></div>`;
+
+  document.getElementById("rename").onclick = () => { Hunt.local.del("hunt-name"); render(); };
+  document.getElementById("pick").onchange = (e) => e.target.files[0] && send(e.target.files[0]);
+}
+
+function renderJoin() {
+  app.innerHTML = `
+    <h1>Screenshot Hunt</h1>
+    <form class="card join" id="join">
+      <label for="nm"><b>Your name</b> <span class="muted">(shows on the screen if you're picked)</span></label>
+      <input id="nm" type="text" maxlength="40" autocomplete="name" required>
+      <button type="submit">Join</button>
+    </form>`;
+  document.getElementById("join").onsubmit = (e) => {
+    e.preventDefault();
+    const v = document.getElementById("nm").value.trim();
+    if (v) { Hunt.local.set("hunt-name", v); render(); }
+  };
+  document.getElementById("nm").focus();
+}
+
+// Phone screenshots are big; shrink to ≤1600px JPEG so uploads are quick.
+async function shrink(file) {
+  let img;
+  try { img = await createImageBitmap(file); }
+  catch (e) {
+    img = await new Promise((res, rej) => {
+      const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = URL.createObjectURL(file);
+    });
+  }
+  const scale = Math.min(1, 1600 / Math.max(img.width, img.height));
+  const c = document.createElement("canvas");
+  c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+  c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+  return new Promise((res) => c.toBlob(res, "image/jpeg", 0.82));
+}
+
+async function send(file) {
+  const status = document.getElementById("status");
+  const r = round;
+  status.className = "status"; status.textContent = "Sending…";
+  try {
+    const blob = await shrink(file);
+    const path = `${r.id}/${crypto.randomUUID()}.jpg`;
+    const up = await Hunt.db.storage.from("hunt").upload(path, blob, { contentType: "image/jpeg" });
+    if (up.error) throw up.error;
+    const { data: place, error } = await Hunt.db.rpc("hunt_submit",
+      { p_round: r.id, p_name: Hunt.local.get("hunt-name"), p_path: path });
+    if (error) throw error;
+    lastSent = { roundId: r.id, place, thumb: URL.createObjectURL(blob) };
+    render();
+    const s = document.getElementById("status");
+    s.className = "status ok"; s.innerHTML = "<b>Sent!</b>";
+  } catch (e) {
+    status.className = "status err";
+    status.textContent = "Didn't send: " + (e.message || e) + ". Try again.";
+  }
+}
+
+// Only redraw when something actually changes, so a photo picker that's open
+// isn't wiped out from under the student.
+let shownKey = "";
+function maybeRender() {
+  const key = JSON.stringify([round, Hunt.isOpen(round)]);
+  const sending = document.getElementById("status")?.textContent === "Sending…";
+  if (key !== shownKey && !sending && Hunt.local.get("hunt-name")) { shownKey = key; render(); }
+}
+
+async function refresh() {
+  try { round = await Hunt.currentRound(); maybeRender(); }
+  catch (e) { /* keep last state; next poll will retry */ }
+}
+
+function tick() {
+  const t = document.getElementById("timer"), left = Hunt.secondsLeft(round);
+  if (t && left != null) t.textContent = Hunt.fmtClock(left) + " left";
+  maybeRender();   // flips the button off when time runs out
+}
+
+if (!Hunt.configured) Hunt.notConfigured(app);
+else {
+  render();
+  refresh();
+  setInterval(refresh, 3000);
+  setInterval(tick, 1000);
+  // Refresh the moment they switch back from taking the screenshot.
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
+}
+</script>
+</body>
+</html>

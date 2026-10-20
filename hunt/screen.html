@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hunt Screen</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@700&display=swap">
+<link rel="stylesheet" href="hunt.css">
+<style>
+body { min-height: 100vh; }
+main { padding: 24px 32px; display: grid; gap: 20px; }
+.bar { display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center; }
+.prompt { font: 700 clamp(26px, 3.4vw, 50px)/1.18 "Source Serif 4", Georgia, serif; margin: 6px 0 0; }
+.meta { display: flex; gap: 28px; margin-top: 12px; align-items: baseline; }
+.clock { font: 700 clamp(28px, 3vw, 46px)/1 ui-monospace, Menlo, monospace; color: var(--purple); }
+.clock.done { color: var(--bad); }
+.count { font-size: 20px; color: var(--mute); }
+.qr { text-align: center; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px 8px; }
+.qr svg { display: block; width: 150px; height: 150px; }
+.qr .url { font: 600 13px ui-monospace, Menlo, monospace; color: var(--mute); margin-top: 4px; }
+.wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+.shot { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 8px; position: relative; }
+.shot.new { animation: pop .35s ease-out; }
+.shot img { width: 100%; height: 46vh; object-fit: contain; background: var(--bg); border-radius: 8px; display: block; }
+.shot .nm { font-weight: 700; font-size: 18px; margin: 6px 4px 0; }
+.shot .rank { position: absolute; top: -10px; left: -10px; width: 40px; height: 40px; border-radius: 50%;
+  background: var(--ink); color: #fff; font: 700 18px/40px "Source Sans 3", sans-serif; text-align: center; }
+.shot.first { border: 3px solid var(--gold); }
+.shot.first .rank { background: var(--gold); }
+@keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
+.lobby { display: grid; place-items: center; text-align: center; gap: 16px; min-height: 80vh; }
+.lobby .qr svg { width: min(46vh, 420px); height: min(46vh, 420px); }
+.lobby .qr .url { font-size: 22px; }
+.lobby h1 { font-size: clamp(32px, 4vw, 60px); }
+.empty { color: var(--mute); font-size: 20px; }
+</style>
+</head>
+<body>
+<main id="app"></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script src="config.js"></script>
+<script src="hunt.js"></script>
+<script>
+const app = document.getElementById("app");
+const joinUrl = new URL("./", location.href).href;
+const shortUrl = joinUrl.replace(/^https?:\/\//, "");
+const qr = qrcode(0, "M"); qr.addData(joinUrl); qr.make();
+const qrSvg = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+
+let round = null, shots = [], count = 0, shownKey = "";
+const seen = new Set();   // ids already on screen, so only new arrivals animate
+
+function render() {
+  if (!round) {
+    app.innerHTML = `<div class="lobby"><h1>Screenshot Hunt</h1>
+      <div class="qr">${qrSvg}<div class="url">${Hunt.esc(shortUrl)}</div></div>
+      <div class="empty">Scan to join, and keep that tab open.</div></div>`;
+    return;
+  }
+  app.innerHTML = `
+    <div class="bar">
+      <div>
+        <div class="eyebrow">Round ${round.id}</div>
+        <p class="prompt">${Hunt.esc(round.prompt)}</p>
+        <div class="meta"><span class="clock" id="clock"></span>
+          <span class="count" id="count"></span></div>
+      </div>
+      <div class="qr">${qrSvg}<div class="url">${Hunt.esc(shortUrl)}</div></div>
+    </div>
+    <div class="wall">${shots.length ? shots.map((s, i) => `
+      <figure class="shot ${i === 0 ? "first" : ""} ${seen.has(s.id) ? "" : "new"}" style="margin:0">
+        <span class="rank">${i + 1}</span>
+        <img src="${Hunt.imageUrl(s.path)}" alt="Screenshot from ${Hunt.esc(s.name)}">
+        <figcaption class="nm">${Hunt.esc(s.name)}</figcaption></figure>`).join("")
+      : `<div class="empty">Approved screenshots will show up here.</div>`}</div>`;
+  shots.forEach((s) => seen.add(s.id));
+  tick();
+}
+
+function tick() {
+  const c = document.getElementById("clock"), n = document.getElementById("count");
+  if (n) n.textContent = `${count} sent in`;
+  if (!c) return;
+  const left = Hunt.secondsLeft(round);
+  if (!Hunt.isOpen(round)) { c.textContent = "Time!"; c.className = "clock done"; }
+  else if (left != null) { c.textContent = Hunt.fmtClock(left); c.className = "clock"; }
+  else {
+    const up = Math.floor((Date.now() - new Date(round.started_at)) / 1000);
+    c.textContent = Hunt.fmtClock(Math.max(0, up)); c.className = "clock";
+  }
+}
+
+async function refresh() {
+  try {
+    round = await Hunt.currentRound();
+    if (round) {
+      const [{ data, error }, cnt] = await Promise.all([
+        Hunt.db.from("hunt_submissions").select("id,name,path,created_at")
+          .eq("round_id", round.id).order("created_at"),
+        Hunt.db.rpc("hunt_count", { p_round: round.id }),
+      ]);
+      if (error) throw error;
+      shots = data; count = cnt.data ?? count;
+    }
+    const key = JSON.stringify([round, shots.map((s) => s.id)]);
+    if (key !== shownKey) { shownKey = key; render(); } else tick();
+  } catch (e) { /* next poll retries */ }
+}
+
+if (!Hunt.configured) Hunt.notConfigured(app);
+else { render(); refresh(); setInterval(refresh, 2000); setInterval(tick, 1000); }
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+:root {
+  --ink: #1c1c1c; --mute: #6f6f6f; --line: #dcdcdc; --paper: #ffffff; --bg: #f6f6f6;
+  --purple: #b509ac; --purple-dark: #7d0677; --purple-tint: #fbeefa; --purple-light: #ecc2e9;
+  --good: #1b7a3a; --good-tint: #e6f4ea; --bad: #b71c1c; --bad-tint: #fdecec; --gold: #c99a06;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.45 "Source Sans 3", "Segoe UI", system-ui, sans-serif; }
+h1, h2 { font-family: "Source Serif 4", Georgia, serif; font-weight: 700; margin: 0; }
+a { color: var(--purple); }
+code { font-size: 0.9em; background: var(--bg); padding: 1px 4px; border-radius: 3px; }
+.card { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+.card.warn { border-color: var(--bad); background: var(--bad-tint); }
+.muted { color: var(--mute); }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--purple); }
+button, .btn { font: inherit; font-weight: 700; border: 0; border-radius: 10px; cursor: pointer;
+  padding: 12px 18px; background: var(--ink); color: #fff; display: inline-flex; align-items: center;
+  justify-content: center; gap: 8px; text-decoration: none; }
+button.ghost { background: var(--paper); color: var(--ink); border: 1px solid var(--line); }
+button.ok { background: var(--good); } button.no { background: var(--paper); color: var(--bad); border: 1px solid var(--bad); }
+button:disabled { opacity: 0.4; cursor: default; }
+input[type=text], input[type=password], textarea, select { font: inherit; width: 100%; padding: 11px 12px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); }
+textarea { resize: vertical; min-height: 70px; }
+.pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+.pill.pending { background: var(--bg); color: var(--mute); }
+.pill.approved { background: var(--good-tint); color: var(--good); }
+.pill.rejected { background: var(--bad-tint); color: var(--bad); }

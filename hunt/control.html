@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Hunt Control</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@700&display=swap">
+<link rel="stylesheet" href="hunt.css">
+<style>
+main { max-width: 1000px; margin: 0 auto; padding: 20px 16px 40px; display: grid; gap: 16px; }
+.top { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+.top h1 { font-size: 24px; }
+.links { font-size: 14px; display: flex; gap: 14px; }
+.links button { background: none; color: var(--purple); padding: 0; font-weight: 600; text-decoration: underline; }
+form.new { display: grid; gap: 10px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.row select { width: auto; }
+.now { display: flex; justify-content: space-between; gap: 12px; align-items: center; flex-wrap: wrap; }
+.now .p { font: 700 18px/1.3 "Source Serif 4", Georgia, serif; }
+.queue { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.item { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 8px; display: grid; gap: 6px; }
+.item.approved { border: 2px solid var(--good); }
+.item.rejected { opacity: 0.45; }
+.item img { width: 100%; height: 220px; object-fit: contain; background: var(--bg); border-radius: 6px; cursor: zoom-in; }
+.item .nm { font-weight: 700; overflow-wrap: anywhere; }
+.item .t { font: 12px ui-monospace, Menlo, monospace; color: var(--mute); }
+.item .acts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.item .acts button { padding: 8px; font-size: 14px; }
+.big { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: grid; place-items: center; z-index: 9; cursor: zoom-out; }
+.big img { max-width: 96vw; max-height: 94vh; }
+.err { color: var(--bad); }
+</style>
+</head>
+<body>
+<main id="app"></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="prompts.js"></script>
+<script src="hunt.js"></script>
+<script>
+const app = document.getElementById("app");
+let pin = Hunt.session.get("hunt-pin");
+let round = null, subs = [], roundKey = "", queueKey = "";
+
+function login(msg) {
+  app.innerHTML = `<h1>Hunt Control</h1>
+    <form class="card new" id="login"><label for="pin"><b>Host PIN</b></label>
+      <input id="pin" type="password" autocomplete="current-password" required>
+      <button type="submit">Unlock</button>${msg ? `<div class="err">${Hunt.esc(msg)}</div>` : ""}</form>`;
+  document.getElementById("login").onsubmit = async (e) => {
+    e.preventDefault();
+    const p = document.getElementById("pin").value;
+    const { error } = await Hunt.db.rpc("hunt_login", { p_pin: p });
+    if (error) return login(error.message);
+    pin = p; Hunt.session.set("hunt-pin", p); shell();
+  };
+}
+
+function shell() {
+  const opts = (window.HUNT_PROMPTS || []).map((p, i) => `<option value="${i}">${Hunt.esc(p)}</option>`).join("");
+  app.innerHTML = `
+    <div class="top"><h1>Hunt Control</h1>
+      <div class="links"><a href="screen.html" target="_blank">Open projector screen ↗</a>
+        <a href="./" target="_blank">Student page ↗</a><button id="lock">Lock</button></div></div>
+    <div class="card" id="now"></div>
+    <form class="card new" id="new">
+      <div class="eyebrow">Start a new round</div>
+      <select id="preset"><option value="">Pick a prompt…</option>${opts}</select>
+      <textarea id="prompt" placeholder="…or type your own prompt" required></textarea>
+      <div class="row"><label for="secs">Time limit</label>
+        <select id="secs"><option value="">None</option><option value="60">1:00</option>
+          <option value="90" selected>1:30</option><option value="120">2:00</option><option value="180">3:00</option></select>
+        <button type="submit">Start round</button><span id="newmsg" class="err"></span></div>
+    </form>
+    <div><div class="eyebrow" style="margin-bottom:8px">Submissions this round, in the order they came in.
+      Tap <b>Show</b> to put one on the projector.</div><div class="queue" id="queue"></div></div>`;
+
+  document.getElementById("lock").onclick = () => { Hunt.session.del("hunt-pin"); pin = null; login(); };
+  document.getElementById("preset").onchange = (e) => {
+    if (e.target.value !== "") document.getElementById("prompt").value = HUNT_PROMPTS[e.target.value];
+  };
+  document.getElementById("new").onsubmit = async (e) => {
+    e.preventDefault();
+    const secs = document.getElementById("secs").value;
+    const { error } = await Hunt.db.rpc("hunt_new_round", {
+      p_pin: pin, p_prompt: document.getElementById("prompt").value.trim(),
+      p_seconds: secs ? Number(secs) : null });
+    document.getElementById("newmsg").textContent = error ? error.message : "";
+    if (!error) { document.getElementById("prompt").value = ""; document.getElementById("preset").value = ""; refresh(); }
+  };
+  document.getElementById("queue").onclick = onQueueClick;
+  roundKey = queueKey = "";
+  refresh();
+}
+
+function drawNow() {
+  const el = document.getElementById("now");
+  if (!round) { el.innerHTML = `<span class="muted">No rounds yet. Start one below.</span>`; return; }
+  const open = Hunt.isOpen(round), left = Hunt.secondsLeft(round);
+  el.innerHTML = `<div class="now"><div>
+      <div class="eyebrow">Round ${round.id} · ${open ? (left != null ? Hunt.fmtClock(left) + " left" : "open") : "closed"}</div>
+      <div class="p">${Hunt.esc(round.prompt)}</div></div>
+    ${open ? `<button class="ghost" id="close">Close round</button>` : ""}</div>`;
+  const b = document.getElementById("close");
+  if (b) b.onclick = async () => { await Hunt.db.rpc("hunt_close_round", { p_pin: pin, p_round: round.id }); refresh(); };
+}
+
+function drawQueue() {
+  const el = document.getElementById("queue");
+  if (!subs.length) { el.innerHTML = `<span class="muted">Nothing yet.</span>`; return; }
+  const t0 = new Date(round.started_at);
+  el.innerHTML = subs.map((s) => `
+    <div class="item ${s.status}">
+      <img src="${Hunt.imageUrl(s.path)}" alt="" data-big="${Hunt.esc(s.path)}" loading="lazy">
+      <div class="nm">${Hunt.esc(s.name)}</div>
+      <div class="t">+${((new Date(s.created_at) - t0) / 1000).toFixed(1)}s · <span class="pill ${s.status}">${s.status}</span></div>
+      <div class="acts">
+        <button class="ok" data-id="${s.id}" data-st="${s.status === "approved" ? "pending" : "approved"}">${s.status === "approved" ? "Unshow" : "Show"}</button>
+        <button class="no" data-id="${s.id}" data-st="${s.status === "rejected" ? "pending" : "rejected"}">${s.status === "rejected" ? "Undo" : "Hide"}</button>
+      </div></div>`).join("");
+}
+
+async function onQueueClick(e) {
+  const img = e.target.closest("[data-big]");
+  if (img) {
+    const ov = document.createElement("div"); ov.className = "big";
+    ov.innerHTML = `<img src="${Hunt.imageUrl(img.dataset.big)}" alt="">`;
+    ov.onclick = () => ov.remove(); document.body.appendChild(ov); return;
+  }
+  const b = e.target.closest("button[data-id]");
+  if (!b) return;
+  b.disabled = true;
+  const id = Number(b.dataset.id), st = b.dataset.st;
+  const { error } = await Hunt.db.rpc("hunt_set_status", { p_pin: pin, p_id: id, p_status: st });
+  if (error) { b.disabled = false; alert(error.message); return; }
+  const s = subs.find((x) => x.id === id); if (s) s.status = st;
+  queueKey = JSON.stringify(subs); drawQueue();
+}
+
+async function refresh() {
+  if (!pin) return;
+  try {
+    round = await Hunt.currentRound();
+    const rk = JSON.stringify([round, Hunt.isOpen(round), Hunt.secondsLeft(round)]);
+    if (rk !== roundKey) { roundKey = rk; drawNow(); }
+    if (!round) return;
+    const { data, error } = await Hunt.db.rpc("hunt_list", { p_pin: pin, p_round: round.id });
+    if (error) { if (/PIN/.test(error.message)) { Hunt.session.del("hunt-pin"); pin = null; login(error.message); } return; }
+    subs = data;
+    const qk = JSON.stringify(subs);
+    if (qk !== queueKey) { queueKey = qk; drawQueue(); }
+  } catch (e) { /* next poll retries */ }
+}
+
+if (!Hunt.configured) Hunt.notConfigured(app);
+else { pin ? shell() : login(); setInterval(refresh, 2000); }
+</script>
+</body>
+</html>
