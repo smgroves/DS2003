@@ -59,7 +59,8 @@ function render() {
     ${sentThis ? `<div class="card sent"><img src="${lastSent.thumb}" alt="">
       <div><div class="place">#${lastSent.place}</div><div class="muted">You were #${lastSent.place} to send one in.</div></div></div>` : ""}
     <div class="how"><b>Keep this tab open.</b> Each round:
-      <ol><li>Take a screenshot</li><li>Come back to this tab</li><li>Tap the button and pick it</li></ol></div>`;
+      <ol><li>Take a screenshot</li><li>Come back to this tab</li><li>Tap the button and pick it</li></ol>
+      <a href="record.html">See past rounds →</a></div>`;
 
   document.getElementById("rename").onclick = () => { Hunt.local.del("hunt-name"); render(); };
   document.getElementById("pick").onchange = (e) => e.target.files[0] && send(e.target.files[0]);

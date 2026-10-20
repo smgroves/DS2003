@@ -25,8 +25,10 @@ main { padding: 24px 32px; display: grid; gap: 20px; }
 .shot .nm { font-weight: 700; font-size: 18px; margin: 6px 4px 0; }
 .shot .rank { position: absolute; top: -10px; left: -10px; width: 40px; height: 40px; border-radius: 50%;
   background: var(--ink); color: #fff; font: 700 18px/40px "Source Sans 3", sans-serif; text-align: center; }
-.shot.first { border: 3px solid var(--gold); }
-.shot.first .rank { background: var(--gold); }
+.shot.first .rank { background: var(--purple); }
+.shot.starred { border: 3px solid var(--gold); }
+.shot .best { position: absolute; top: -12px; right: -8px; background: var(--gold); color: #fff;
+  font-weight: 700; font-size: 15px; padding: 3px 10px; border-radius: 99px; }
 @keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
 .lobby { display: grid; place-items: center; text-align: center; gap: 16px; min-height: 80vh; }
 .lobby .qr svg { width: min(46vh, 420px); height: min(46vh, 420px); }
@@ -69,14 +71,21 @@ function render() {
       </div>
       <div class="qr">${qrSvg}<div class="url">${Hunt.esc(shortUrl)}</div></div>
     </div>
-    <div class="wall">${shots.length ? shots.map((s, i) => `
-      <figure class="shot ${i === 0 ? "first" : ""} ${seen.has(s.id) ? "" : "new"}" style="margin:0">
-        <span class="rank">${i + 1}</span>
+    <div class="wall">${shots.length ? ordered().map(({ s, i }) => `
+      <figure class="shot ${i === 0 ? "first" : ""} ${s.starred ? "starred" : ""} ${seen.has(s.id) ? "" : "new"}" style="margin:0">
+        <span class="rank">${i + 1}</span>${s.starred ? `<span class="best">★ Best</span>` : ""}
         <img src="${Hunt.imageUrl(s.path)}" alt="Screenshot from ${Hunt.esc(s.name)}">
         <figcaption class="nm">${Hunt.esc(s.name)}</figcaption></figure>`).join("")
       : `<div class="empty">Approved screenshots will show up here.</div>`}</div>`;
   shots.forEach((s) => seen.add(s.id));
   tick();
+}
+
+// Arrival order while the round runs; once time's up, the starred ones move to the front.
+function ordered() {
+  const list = shots.map((s, i) => ({ s, i }));
+  if (!Hunt.isOpen(round)) list.sort((a, b) => (b.s.starred - a.s.starred) || (a.i - b.i));
+  return list;
 }
 
 function tick() {
@@ -97,14 +106,14 @@ async function refresh() {
     round = await Hunt.currentRound();
     if (round) {
       const [{ data, error }, cnt] = await Promise.all([
-        Hunt.db.from("hunt_submissions").select("id,name,path,created_at")
+        Hunt.db.from("hunt_submissions").select("id,name,path,created_at,starred")
           .eq("round_id", round.id).order("created_at"),
         Hunt.db.rpc("hunt_count", { p_round: round.id }),
       ]);
       if (error) throw error;
       shots = data; count = cnt.data ?? count;
     }
-    const key = JSON.stringify([round, shots.map((s) => s.id)]);
+    const key = JSON.stringify([round, Hunt.isOpen(round), shots.map((s) => [s.id, s.starred])]);
     if (key !== shownKey) { shownKey = key; render(); } else tick();
   } catch (e) { /* next poll retries */ }
 }
