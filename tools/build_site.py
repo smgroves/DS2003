@@ -101,7 +101,7 @@ UPCOMING_JS = """<script>
 
 def page(active, content):
     tabs = "".join(f'<a href="{h}"{" class=on" if k == active else ""}>{n}</a>'
-                   for k, n, h in [("schedule", "Schedule", "index.html"), ("data", "Datasets", "datasets.html")])
+                   for k, n, h in [("schedule", "Schedule", "index.html"), ("data", "Datasets", "datasets.html"), ("hunt", "Screenshot Hunt", "hunt/")])
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
