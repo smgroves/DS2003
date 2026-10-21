@@ -29,7 +29,7 @@ form.new { display: grid; gap: 10px; }
 .item .acts .star { grid-column: 1 / -1; background: var(--paper); color: var(--gold); border: 1px solid var(--gold); }
 .item.starred { border: 3px solid var(--gold); }
 .item.starred .acts .star { background: var(--gold); color: #fff; }
-.save { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); display: flex; gap: 12px;
+.save { margin-top: 8px; display: flex; gap: 12px;
   align-items: center; flex-wrap: wrap; font-size: 14px; }
 .save .done { color: var(--good); font-weight: 700; }
 .now select { width: auto; font-size: 14px; padding: 6px 8px; }
@@ -85,6 +85,7 @@ function shell() {
           <option value="90" selected>1:30</option><option value="120">2:00</option><option value="180">3:00</option></select>
         <button type="submit">Start round</button><span id="newmsg" class="err"></span></div>
     </form>
+    <div class="card" id="savebox" hidden></div>
     <div><div class="eyebrow" style="margin-bottom:8px">Submissions this round, in the order they came in.
       Tap <b>Show</b> to put one on the projector, <b>★ Best</b> to highlight it.</div><div class="queue" id="queue"></div></div>`;
 
@@ -135,7 +136,8 @@ function label(r) {
 }
 
 function drawNow() {
-  const el = document.getElementById("now");
+  const el = document.getElementById("now"), box = document.getElementById("savebox");
+  box.hidden = !round;
   if (!round) { el.innerHTML = `<span class="muted">No rounds yet. Start one below.</span>`; return; }
   const latest = round.id === rounds[0].id && !lobbyShowing;
   const open = latest && Hunt.isOpen(round), left = Hunt.secondsLeft(round);
@@ -145,7 +147,8 @@ function drawNow() {
   el.innerHTML = `<div class="now"><div>
       <div class="eyebrow">${label(round)} · ${open ? (left != null ? Hunt.fmtClock(left) + " left" : "open") : "closed"}</div>
       <div class="p">${Hunt.esc(round.prompt)}</div></div>
-    <div class="row">${picker}${open ? `<button class="ghost" id="close">Close round</button>` : ""}</div></div>
+    <div class="row">${picker}${open ? `<button class="ghost" id="close">Close round</button>` : ""}</div></div>`;
+  box.innerHTML = `<div class="eyebrow">Save to record · ${label(round)}</div>
     <div class="save">${round.saved
       ? `<span class="done">✓ In the record</span><span class="muted">(names ${round.show_names ? "shown" : "hidden"})</span>
          <a href="record.html#round-${round.id}" target="_blank">View ↗</a><button class="ghost" id="unsave">Remove from record</button>`
