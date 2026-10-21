@@ -49,7 +49,7 @@ form.new { display: grid; gap: 10px; }
 <script>
 const app = document.getElementById("app");
 let pin = Hunt.session.get("hunt-pin");
-let rounds = [], round = null, subs = [], roundKey = "", queueKey = "";
+let allRounds = [], rounds = [], round = null, subs = [], roundKey = "", queueKey = "";
 let lobbyShowing = false; // projector is on the QR screen
 let viewId = null;        // which round the page is showing; null = the latest
 let showNames = false;    // "show names in the record" checkbox
@@ -110,15 +110,28 @@ function drawLobby() {
   const el = document.getElementById("lobby");
   el.innerHTML = `<div><div class="eyebrow">Projector</div>
       <div>${lobbyShowing ? "Showing the QR code and definitions." : "Showing the current round."}</div></div>
-    <button class="ghost" id="showqr" ${lobbyShowing ? "disabled" : ""}>Show QR screen</button>`;
-  document.getElementById("showqr").onclick = async (e) => {
-    e.target.disabled = true;
-    // Stored as a blank round, closed straight away so nobody can submit to it.
-    const { data: id, error } = await Hunt.db.rpc("hunt_new_round", { p_pin: pin, p_prompt: "", p_seconds: null });
-    if (!error) await Hunt.db.rpc("hunt_close_round", { p_pin: pin, p_round: id });
-    else { e.target.disabled = false; alert(error.message); }
-    refresh();
+    <div class="row"><button class="ghost" id="showqr" ${lobbyShowing ? "disabled" : ""}>Show QR screen</button>
+      <button class="ghost" id="reset">Reset round numbers</button></div>`;
+  document.getElementById("reset").onclick = (e) => {
+    if (confirm("Start numbering from Round 1 again? Earlier rounds and the record are kept, and the projector switches to the QR screen."))
+      showLobby(e.target, 0);
   };
+  document.getElementById("showqr").onclick = (e) => showLobby(e.target, null);
+}
+
+// The QR screen is stored as a blank round, closed straight away so nobody can submit to it.
+// seconds = 0 also marks a round-number reset.
+async function showLobby(btn, seconds) {
+  btn.disabled = true;
+  const { data: id, error } = await Hunt.db.rpc("hunt_new_round", { p_pin: pin, p_prompt: "", p_seconds: seconds });
+  if (!error) await Hunt.db.rpc("hunt_close_round", { p_pin: pin, p_round: id });
+  else { btn.disabled = false; alert(error.message); }
+  refresh();
+}
+
+function label(r) {
+  const day = new Date(r.started_at).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return `${day} · Round ${Hunt.roundNumber(allRounds, r)}`;
 }
 
 function drawNow() {
@@ -128,9 +141,9 @@ function drawNow() {
   const open = latest && Hunt.isOpen(round), left = Hunt.secondsLeft(round);
   const pending = subs.filter((x) => x.status === "pending").length;
   const picker = rounds.length > 1 ? `<select id="pickround">${rounds.map((r) =>
-    `<option value="${r.id}" ${r.id === round.id ? "selected" : ""}>Round ${r.id}${r.saved ? " ✓" : ""}: ${Hunt.esc(r.prompt.slice(0, 50))}</option>`).join("")}</select>` : "";
+    `<option value="${r.id}" ${r.id === round.id ? "selected" : ""}>${label(r)}${r.saved ? " ✓" : ""}: ${Hunt.esc(r.prompt.slice(0, 50))}</option>`).join("")}</select>` : "";
   el.innerHTML = `<div class="now"><div>
-      <div class="eyebrow">Round ${round.id} · ${open ? (left != null ? Hunt.fmtClock(left) + " left" : "open") : "closed"}</div>
+      <div class="eyebrow">${label(round)} · ${open ? (left != null ? Hunt.fmtClock(left) + " left" : "open") : "closed"}</div>
       <div class="p">${Hunt.esc(round.prompt)}</div></div>
     <div class="row">${picker}${open ? `<button class="ghost" id="close">Close round</button>` : ""}</div></div>
     <div class="save">${round.saved
@@ -197,6 +210,7 @@ async function refresh() {
   try {
     const { data: rs, error: rerr } = await Hunt.db.from("hunt_rounds").select("*").order("id", { ascending: false });
     if (rerr) throw rerr;
+    allRounds = rs;
     lobbyShowing = Hunt.isLobby(rs[0]);
     rounds = rs.filter((r) => !Hunt.isLobby(r));
     round = rounds.find((r) => r.id === viewId) || rounds[0] || null;

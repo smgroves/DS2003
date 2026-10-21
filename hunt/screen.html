@@ -68,7 +68,7 @@ const shortUrl = joinUrl.replace(/^https?:\/\//, "");
 const qr = qrcode(0, "M"); qr.addData(joinUrl); qr.make();
 const qrSvg = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
 
-let round = null, shots = [], count = 0, shownKey = "";
+let rounds = [], round = null, shots = [], count = 0, shownKey = "";
 const terms = window.HUNT_TERMS || [];
 const termsHtml = terms.length ? `<div class="terms"><h2>${Hunt.esc(window.HUNT_TERMS_TITLE || "")}</h2><dl>${
   terms.map(([t, d]) => `<div><dt>${Hunt.esc(t)}</dt><dd>${Hunt.esc(d)}</dd></div>`).join("")}</dl></div>` : "";
@@ -86,7 +86,7 @@ function render() {
   app.innerHTML = `<div class="play">
     <div class="left">
       <div>
-        <div class="eyebrow">Round ${round.id}</div>
+        <div class="eyebrow">Round ${Hunt.roundNumber(rounds, round)}</div>
         <p class="prompt">${Hunt.esc(round.prompt)}</p>
         <div class="meta"><span class="clock" id="clock"></span>
           <span class="count" id="count"></span></div>
@@ -127,7 +127,8 @@ function tick() {
 
 async function refresh() {
   try {
-    round = await Hunt.currentRound();
+    rounds = await Hunt.recentRounds();
+    round = rounds[0] || null;
     if (round && !Hunt.isLobby(round)) {
       const [{ data, error }, cnt] = await Promise.all([
         Hunt.db.from("hunt_submissions").select("id,name,path,created_at,starred")

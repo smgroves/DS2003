@@ -49,6 +49,9 @@ Nothing goes on the projector until you tap **Show** (or **★ Mark best**).
   definitions back on the projector (start of class, or between rounds). It doesn't delete
   anything; earlier rounds are still in the round menu for starring and saving. Edit the
   definitions in `prompts.js`.
+- **Reset round numbers** starts counting from Round 1 again (say, at the start of each
+  class). It also switches the projector to the QR screen. Earlier rounds and the record are
+  kept; the round menu labels them by date.
 
 - Edit `prompts.js` to change the ready-made prompts.
 - Images are shrunk on the phone (≤1600px JPEG) before upload, so sends are quick.

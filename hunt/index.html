@@ -34,7 +34,7 @@ form.join { display: grid; gap: 10px; }
 <script src="hunt.js"></script>
 <script>
 const app = document.getElementById("app");
-let round = null, lastSent = null;   // lastSent = { roundId, place, thumb }
+let rounds = [], round = null, lastSent = null;   // lastSent = { roundId, place, thumb }
 
 function render() {
   shownKey = JSON.stringify([round, Hunt.isOpen(round)]);
@@ -49,7 +49,7 @@ function render() {
     <div class="top"><h1>Screenshot Hunt</h1>
       <span class="who">${Hunt.esc(name)} · <button id="rename">change</button></span></div>
     <div class="card">
-      ${live ? `<div class="eyebrow">${open ? "Round " + round.id : "Round closed"}</div>
+      ${live ? `<div class="eyebrow">${open ? "Round " + Hunt.roundNumber(rounds, round) : "Round closed"}</div>
         <p class="prompt">${Hunt.esc(round.prompt)}</p>
         ${open && left != null ? `<div class="timer" id="timer">${Hunt.fmtClock(left)} left</div>` : ""}`
       : `<p class="prompt muted">Waiting for the next round…</p>`}
@@ -131,7 +131,7 @@ function maybeRender() {
 }
 
 async function refresh() {
-  try { round = await Hunt.currentRound(); maybeRender(); }
+  try { rounds = await Hunt.recentRounds(); round = rounds[0] || null; maybeRender(); }
   catch (e) { /* keep last state; next poll will retry */ }
 }
 

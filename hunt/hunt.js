@@ -12,11 +12,12 @@
     };
   }
 
-  async function currentRound() {
+  // Newest first. Enough history to number rounds since the last reset.
+  async function recentRounds() {
     const { data, error } = await db.from("hunt_rounds").select("*")
-      .order("id", { ascending: false }).limit(1);
+      .order("id", { ascending: false }).limit(200);
     if (error) throw error;
-    return data[0] || null;
+    return data;
   }
 
   // Seconds left in a timed round, or null for untimed rounds.
@@ -34,6 +35,18 @@
 
   // "Show QR screen" is stored as a closed round with an empty prompt.
   function isLobby(round) { return !!round && !round.prompt; }
+  // "Reset round numbers" is a QR-screen round with seconds = 0.
+  function isReset(round) { return isLobby(round) && round.seconds === 0; }
+
+  // The number shown in class: real rounds since the most recent reset. `rounds` is newest first.
+  function roundNumber(rounds, round) {
+    let n = 0;
+    for (const r of rounds.slice(rounds.findIndex((x) => x.id === round.id))) {
+      if (isReset(r)) break;
+      if (!isLobby(r)) n++;
+    }
+    return n;
+  }
 
   function imageUrl(path) {
     return db.storage.from("hunt").getPublicUrl(path).data.publicUrl;
@@ -54,5 +67,5 @@
   }
 
   window.Hunt = { db, configured, local: store("localStorage"), session: store("sessionStorage"),
-    currentRound, secondsLeft, isOpen, isLobby, imageUrl, fmtClock, esc, notConfigured };
+    recentRounds, secondsLeft, isOpen, isLobby, isReset, roundNumber, imageUrl, fmtClock, esc, notConfigured };
 })();
