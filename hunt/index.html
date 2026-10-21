@@ -40,7 +40,8 @@ function render() {
   shownKey = JSON.stringify([round, Hunt.isOpen(round)]);
   const name = Hunt.local.get("hunt-name");
   if (!name) return renderJoin();
-  const open = Hunt.isOpen(round);
+  const live = round && !Hunt.isLobby(round) ? round : null;
+  const open = Hunt.isOpen(live);
   const left = Hunt.secondsLeft(round);
   const sentThis = lastSent && round && lastSent.roundId === round.id;
 
@@ -48,10 +49,10 @@ function render() {
     <div class="top"><h1>Screenshot Hunt</h1>
       <span class="who">${Hunt.esc(name)} · <button id="rename">change</button></span></div>
     <div class="card">
-      ${round ? `<div class="eyebrow">${open ? "Round " + round.id : "Round closed"}</div>
+      ${live ? `<div class="eyebrow">${open ? "Round " + round.id : "Round closed"}</div>
         <p class="prompt">${Hunt.esc(round.prompt)}</p>
         ${open && left != null ? `<div class="timer" id="timer">${Hunt.fmtClock(left)} left</div>` : ""}`
-      : `<p class="prompt muted">Waiting for the first round…</p>`}
+      : `<p class="prompt muted">Waiting for the next round…</p>`}
     </div>
     <label class="btn send ${open ? "" : "disabled"}" for="pick">📸 ${sentThis ? "Send another" : "Send screenshot"}</label>
     <input id="pick" type="file" accept="image/*" hidden ${open ? "" : "disabled"}>

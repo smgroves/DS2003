@@ -32,6 +32,9 @@
     return left == null || left > 0;
   }
 
+  // "Show QR screen" is stored as a closed round with an empty prompt.
+  function isLobby(round) { return !!round && !round.prompt; }
+
   function imageUrl(path) {
     return db.storage.from("hunt").getPublicUrl(path).data.publicUrl;
   }
@@ -51,5 +54,5 @@
   }
 
   window.Hunt = { db, configured, local: store("localStorage"), session: store("sessionStorage"),
-    currentRound, secondsLeft, isOpen, imageUrl, fmtClock, esc, notConfigured };
+    currentRound, secondsLeft, isOpen, isLobby, imageUrl, fmtClock, esc, notConfigured };
 })();

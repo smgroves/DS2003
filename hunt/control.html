@@ -50,6 +50,7 @@ form.new { display: grid; gap: 10px; }
 const app = document.getElementById("app");
 let pin = Hunt.session.get("hunt-pin");
 let rounds = [], round = null, subs = [], roundKey = "", queueKey = "";
+let lobbyShowing = false; // projector is on the QR screen
 let viewId = null;        // which round the page is showing; null = the latest
 let showNames = false;    // "show names in the record" checkbox
 
@@ -73,6 +74,7 @@ function shell() {
     <div class="top"><h1>Hunt Control</h1>
       <div class="links"><a href="screen.html" target="_blank">Open projector screen ↗</a>
         <a href="./" target="_blank">Student page ↗</a><button id="lock">Lock</button></div></div>
+    <div class="card now" id="lobby"></div>
     <div class="card" id="now"></div>
     <form class="card new" id="new">
       <div class="eyebrow">Start a new round</div>
@@ -104,10 +106,25 @@ function shell() {
   refresh();
 }
 
+function drawLobby() {
+  const el = document.getElementById("lobby");
+  el.innerHTML = `<div><div class="eyebrow">Projector</div>
+      <div>${lobbyShowing ? "Showing the QR code and definitions." : "Showing the current round."}</div></div>
+    <button class="ghost" id="showqr" ${lobbyShowing ? "disabled" : ""}>Show QR screen</button>`;
+  document.getElementById("showqr").onclick = async (e) => {
+    e.target.disabled = true;
+    // Stored as a blank round, closed straight away so nobody can submit to it.
+    const { data: id, error } = await Hunt.db.rpc("hunt_new_round", { p_pin: pin, p_prompt: "", p_seconds: null });
+    if (!error) await Hunt.db.rpc("hunt_close_round", { p_pin: pin, p_round: id });
+    else { e.target.disabled = false; alert(error.message); }
+    refresh();
+  };
+}
+
 function drawNow() {
   const el = document.getElementById("now");
   if (!round) { el.innerHTML = `<span class="muted">No rounds yet. Start one below.</span>`; return; }
-  const latest = round.id === rounds[0].id;
+  const latest = round.id === rounds[0].id && !lobbyShowing;
   const open = latest && Hunt.isOpen(round), left = Hunt.secondsLeft(round);
   const pending = subs.filter((x) => x.status === "pending").length;
   const picker = rounds.length > 1 ? `<select id="pickround">${rounds.map((r) =>
@@ -180,7 +197,8 @@ async function refresh() {
   try {
     const { data: rs, error: rerr } = await Hunt.db.from("hunt_rounds").select("*").order("id", { ascending: false });
     if (rerr) throw rerr;
-    rounds = rs;
+    lobbyShowing = Hunt.isLobby(rs[0]);
+    rounds = rs.filter((r) => !Hunt.isLobby(r));
     round = rounds.find((r) => r.id === viewId) || rounds[0] || null;
     if (round) {
       const { data, error } = await Hunt.db.rpc("hunt_list", { p_pin: pin, p_round: round.id });
@@ -188,8 +206,8 @@ async function refresh() {
       subs = data;
     } else subs = [];
     const pending = subs.filter((x) => x.status === "pending").length;
-    const rk = JSON.stringify([rounds, round && round.id, Hunt.isOpen(round), Hunt.secondsLeft(round), pending]);
-    if (rk !== roundKey) { roundKey = rk; drawNow(); }
+    const rk = JSON.stringify([lobbyShowing, rounds, round && round.id, Hunt.isOpen(round), Hunt.secondsLeft(round), pending]);
+    if (rk !== roundKey) { roundKey = rk; drawNow(); drawLobby(); }
     const qk = JSON.stringify([round && round.id, subs]);
     if (qk !== queueKey) { queueKey = qk; drawQueue(); }
   } catch (e) { /* next poll retries */ }

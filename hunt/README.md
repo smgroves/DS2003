@@ -1,7 +1,8 @@
 # Screenshot Hunt
 
 A live in-class game: you put up a prompt ("Find an example of *selection* interactivity in
-an app on your phone"), students race to screenshot one and send it from their phone, and
+an app or website on your phone or computer"), students race to screenshot one and send it
+from their phone or laptop, and
 you put the best ones on the projector.
 
 | Page | Who | URL |
@@ -43,6 +44,11 @@ you put the best ones on the projector.
 Nothing goes on the projector until you tap **Show** (or **★ Mark best**).
 
 ## Notes
+
+- **Show QR screen** on `control.html` puts the big QR code and the seven interaction
+  definitions back on the projector (start of class, or between rounds). It doesn't delete
+  anything; earlier rounds are still in the round menu for starring and saving. Edit the
+  definitions in `prompts.js`.
 
 - Edit `prompts.js` to change the ready-made prompts.
 - Images are shrunk on the phone (≤1600px JPEG) before upload, so sends are quick.
