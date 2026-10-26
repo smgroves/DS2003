@@ -99,7 +99,7 @@ WEEKS = [
          deadline=[("P2 proposal due Sun", None), ("Lab 7 due Sun", None)]),
   ]),
   dict(n=10, days=[
-    dict(date=d(10,26), lecture=[("Interactive notebooks with ipywidgets", None)]),
+    dict(date=d(10,26), lecture=[("Interactions & interactive storytelling", S+"pdf/17-Interactions & Interactive Storytelling.pdf")]),
     dict(date=d(10,28), lecture=[("Graphs, networks & trees", None)]),
     dict(date=d(10,30), lab=[("Lab 8: ipywidgets: controls & linked views", L+"Lab08/Lab08_blank_ipywidgets.ipynb")],
          data=["gapminder"],
