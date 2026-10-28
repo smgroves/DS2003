@@ -101,15 +101,15 @@ WEEKS = [
   dict(n=10, days=[
     dict(date=d(10,26), lecture=[("Interactions & interactive storytelling", S+"pdf/17-Interactions & Interactive Storytelling.pdf")]),
     dict(date=d(10,28), lecture=[("Graphs, networks & trees", None)]),
-    dict(date=d(10,30), lab=[("Lab 8: ipywidgets: controls & linked views", L+"Lab08/Lab08_blank_ipywidgets.ipynb")],
-         data=["gapminder"],
-         deadline=[("Lab 8 due Sun", None)]),
+    dict(date=d(10,30), lab=[("Lab 8: hierarchical data: interactive treemaps & sunbursts", L+"Lab08/Lab08_blank_trees.ipynb")],
+         data=["superstore"], deadline=[("Lab 8 due Sun", None)]),
   ]),
   dict(n=11, days=[
     dict(date=d(11,2), lecture=[("Infographics", None)]),
     dict(date=d(11,4), lecture=[("Infographics II: principles of design", None)]),
-    dict(date=d(11,6), lab=[("Lab 9: hierarchical data: interactive treemaps & sunbursts", L+"Lab09/Lab09_blank_trees.ipynb")],
-         data=["superstore"], deadline=[("Lab 9 due Sun", None)]),
+    dict(date=d(11,6), lab=[("Lab 9: ipywidgets: controls & linked views", L+"Lab09_widgets/Lab09_blank_ipywidgets.ipynb")],
+         data=["gapminder"],
+         deadline=[("Lab 9 due Sun", None)]),
   ]),
   dict(n=12, days=[
     dict(date=d(11,9), lecture=[("Science visualizations", None)]),
@@ -190,7 +190,7 @@ DATASETS = [
   dict(id="superstore", name="Superstore sales", label="superstore",
        desc="Orders from a fictional US office-supply retailer (Tableau's classic sample data): region, segment, category and sub-category, sales, profit, quantity, order date. Its nested categories make it a good fit for tree charts.",
        size="8,399 rows × 8 columns · 640 KB",
-       files=[("superstore.csv", "Labs/Lab09/superstore.csv")]),
+       files=[("superstore.csv", "Labs/Lab08/superstore.csv")]),
   dict(id="bad-charts", name="Bad chart redesign", label="bad-chart data",
        desc="Data behind the four charts from the Fixing bad charts activity (Wed 9/30) and Lab 5. Some are collected from the original source; where the raw data wasn't available, it's a synthetic best guess.",
        groups=[
