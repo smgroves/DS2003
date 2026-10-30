@@ -100,9 +100,9 @@ WEEKS = [
   ]),
   dict(n=10, days=[
     dict(date=d(10,26), lecture=[("Interactions & interactive storytelling", S+"pdf/17-Interactions & Interactive Storytelling.pdf")]),
-    dict(date=d(10,28), lecture=[("Graphs, networks & trees", None)]),
-    dict(date=d(10,30), lab=[("Lab 8: hierarchical data: interactive treemaps & sunbursts", L+"Lab08/Lab08_blank_trees.ipynb")],
-         data=["superstore"], deadline=[("Lab 8 due Sun", None)]),
+    dict(date=d(10,28), lecture=[("Graphs, networks & trees", S+"pdf/18-Networks&Trees.pdf")]),
+    dict(date=d(10,30), lab=[("Lab 8: network visualization: has the Senate become more polarized? (notebook + data, .zip)", L+"Lab08/Lab08.zip")],
+         data=["senate"], deadline=[("Lab 8 due Sun", None)]),
   ]),
   dict(n=11, days=[
     dict(date=d(11,2), lecture=[("Infographics", None)]),
@@ -190,7 +190,13 @@ DATASETS = [
   dict(id="superstore", name="Superstore sales", label="superstore",
        desc="Orders from a fictional US office-supply retailer (Tableau's classic sample data): region, segment, category and sub-category, sales, profit, quantity, order date. Its nested categories make it a good fit for tree charts.",
        size="8,399 rows × 8 columns · 640 KB",
-       files=[("superstore.csv", "Labs/Lab08/superstore.csv")]),
+       files=[("superstore.csv", "Data/superstore.csv")]),
+  dict(id="senate", name="US Senate voting agreement, 1973-2024", label="senate",
+       desc="Seven Senates, about every eight years from 1973-74 to 2023-24: a table of senators (name, party, state) and a table of every pair of senators in the same Senate with how often they voted the same way on roll-call votes. Built from Voteview's congressional roll-call records (voteview.com). Its pairs make it a natural fit for network charts.",
+       size="693 senator rows · 34,254 pairs · 900 KB",
+       files=[("senators.csv", "Labs/Lab08/senators.csv"),
+              ("senate_agreement.csv", "Labs/Lab08/senate_agreement.csv"),
+              ("prep_senate.py (how the pairs were computed)", "Labs/Lab08/src/prep_senate.py")]),
   dict(id="bad-charts", name="Bad chart redesign", label="bad-chart data",
        desc="Data behind the four charts from the Fixing bad charts activity (Wed 9/30) and Lab 5. Some are collected from the original source; where the raw data wasn't available, it's a synthetic best guess.",
        groups=[

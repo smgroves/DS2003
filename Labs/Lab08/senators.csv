@@ -1,0 +1,697 @@
+congress,years,senator_id,name,party,state,votes_cast
+93,1973-74,52,George Aiken,Republican,VT,1046
+93,1973-74,645,Wallace Bennett,Republican,UT,843
+93,1973-74,660,Lloyd Bentsen Jr.,Democrat,TX,937
+93,1973-74,688,Alan Bible,Democrat,NV,1032
+93,1973-74,1252,Quentin Burdick,Democrat,ND,1121
+93,1973-74,1366,Robert Byrd,Democrat,WV,1137
+93,1973-74,1482,Howard Cannon,Democrat,NV,1048
+93,1973-74,1569,Clifford Case,Republican,NJ,1107
+93,1973-74,1721,Frank Church,Democrat,ID,925
+93,1973-74,2087,Norris Cotton,Republican,NH,833
+93,1973-74,2267,Carl Curtis,Republican,NE,1076
+93,1973-74,2822,James Eastland,Democrat,MS,927
+93,1973-74,2987,Samuel Ervin Jr.,Democrat,NC,1003
+93,1973-74,3255,Hiram Fong,Republican,HI,957
+93,1973-74,3388,James Fulbright,Democrat,AR,672
+93,1973-74,3658,Barry Goldwater,Republican,AZ,788
+93,1973-74,3824,Robert Griffin,Republican,MI,1017
+93,1973-74,4148,Philip Hart,Democrat,MI,1039
+93,1973-74,4154,Rupert Hartke,Democrat,IN,943
+93,1973-74,4660,Roman Hruska,Republican,NE,1089
+93,1973-74,4728,Hubert Humphrey Jr.,Democrat,MN,1120
+93,1973-74,4812,Daniel Inouye,Democrat,HI,895
+93,1973-74,4851,Scoop Jackson,Democrat,WA,1138
+93,1973-74,4898,Jacob Javits,Republican,NY,1032
+93,1973-74,5767,Russell Long,Democrat,LA,959
+93,1973-74,5913,Warren Magnuson,Democrat,WA,1127
+93,1973-74,5967,Mike Mansfield,Democrat,MT,1042
+93,1973-74,6151,John McClellan,Democrat,AR,1090
+93,1973-74,6249,Gale McGee,Democrat,WY,921
+93,1973-74,6256,George McGovern,Democrat,SD,1026
+93,1973-74,6442,Lee Metcalf,Democrat,MT,1048
+93,1973-74,6611,Joseph Montoya,Democrat,NM,1035
+93,1973-74,6754,Ted Moss,Democrat,UT,984
+93,1973-74,6831,Edmund Muskie,Democrat,ME,1011
+93,1973-74,7229,John Pastore,Democrat,RI,1118
+93,1973-74,7638,William Proxmire,Democrat,WI,1138
+93,1973-74,7722,Jennings Randolph,Democrat,WV,1134
+93,1973-74,7847,Abraham Ribicoff,Democrat,CT,1091
+93,1973-74,8301,Hugh Scott Jr.,Republican,PA,1105
+93,1973-74,8764,John Sparkman,Democrat,AL,921
+93,1973-74,8883,John Stennis,Democrat,MS,679
+93,1973-74,9141,Stuart Symington,Democrat,MO,985
+93,1973-74,9174,Herman Talmadge,Democrat,GA,1019
+93,1973-74,9369,James Thurmond,Republican,SC,1132
+93,1973-74,10147,Harrison Williams Jr.,Democrat,NJ,1056
+93,1973-74,10450,Milton Young,Republican,ND,1025
+93,1973-74,10513,Bob Dole,Republican,KS,1087
+93,1973-74,10514,Peter Dominick,Republican,CO,909
+93,1973-74,10535,Charles Mathias Jr.,Republican,MD,931
+93,1973-74,10557,Richard Schweiker,Republican,PA,1105
+93,1973-74,10562,Robert Stafford,Republican,VT,1042
+93,1973-74,10571,William Brock III,Republican,TN,982
+93,1973-74,10593,Edward Gurney,Republican,FL,997
+93,1973-74,10630,Robert Taft Jr.,Republican,OH,1019
+93,1973-74,10736,William Hathaway,Democrat,ME,1084
+93,1973-74,10777,John Tunney,Democrat,CA,1024
+93,1973-74,10800,Birch Bayh,Democrat,IN,940
+93,1973-74,10802,Harry Byrd Jr.,Independent,VA,1099
+93,1973-74,10804,Paul Fannin,Republican,AZ,1042
+93,1973-74,10808,Ted Kennedy,Democrat,MA,1003
+93,1973-74,10810,Thomas McIntyre,Democrat,NH,1066
+93,1973-74,10813,Walter Mondale,Democrat,MN,994
+93,1973-74,10816,Gaylord Nelson,Democrat,WI,1057
+93,1973-74,10817,James Pearson,Republican,KS,985
+93,1973-74,10818,Claiborne Pell,Democrat,RI,1106
+93,1973-74,10823,John Tower,Republican,TX,1068
+93,1973-74,11029,James McClure,Republican,ID,967
+93,1973-74,11044,William Roth Jr.,Republican,DE,1099
+93,1973-74,11048,William Scott,Republican,VA,1000
+93,1973-74,11200,Howard Baker Jr.,Republican,TN,910
+93,1973-74,11201,Edward Brooke III,Republican,MA,1018
+93,1973-74,11202,Clifford Hansen,Republican,WY,1051
+93,1973-74,11203,Mark Hatfield,Republican,OR,1098
+93,1973-74,11204,Fritz Hollings,Democrat,SC,1013
+93,1973-74,11205,Charles Percy,Republican,IL,1018
+93,1973-74,12002,John Beall Jr.,Republican,MD,1090
+93,1973-74,12032,Lowell Weicker Jr.,Republican,CT,1050
+93,1973-74,12100,James Allen,Democrat,AL,1077
+93,1973-74,12101,Henry Bellmon,Republican,OK,782
+93,1973-74,12102,Marlow Cook,Republican,KY,949
+93,1973-74,12103,Alan Cranston,Democrat,CA,1032
+93,1973-74,12104,Thomas Eagleton,Democrat,MO,1011
+93,1973-74,12105,Mike Gravel,Democrat,AK,809
+93,1973-74,12106,Harold Hughes,Democrat,IA,964
+93,1973-74,12107,Robert Packwood,Republican,OR,930
+93,1973-74,12109,Ted Stevens,Republican,AK,1062
+93,1973-74,13000,James Abourezk,Democrat,SD,1036
+93,1973-74,13100,James Buckley,Independent,NY,927
+93,1973-74,13101,Lawton Chiles Jr.,Democrat,FL,1042
+93,1973-74,13102,Adlai Stevenson,Democrat,IL,1118
+93,1973-74,14100,Dewey Bartlett,Republican,OK,1098
+93,1973-74,14101,Joe Biden Jr.,Democrat,DE,1019
+93,1973-74,14102,Dick Clark,Democrat,IA,1134
+93,1973-74,14103,Pete Domenici,Republican,NM,1079
+93,1973-74,14104,Floyd Haskell,Democrat,CO,1047
+93,1973-74,14105,Jesse Helms,Republican,NC,1083
+93,1973-74,14106,Walter Huddleston,Democrat,KY,973
+93,1973-74,14107,John Johnston Jr.,Democrat,LA,992
+93,1973-74,14108,Samuel Nunn,Democrat,GA,1132
+97,1981-82,660,Lloyd Bentsen Jr.,Democrat,TX,919
+97,1981-82,1252,Quentin Burdick,Democrat,ND,953
+97,1981-82,1366,Robert Byrd,Democrat,WV,955
+97,1981-82,1482,Howard Cannon,Democrat,NV,818
+97,1981-82,3658,Barry Goldwater,Republican,AZ,653
+97,1981-82,4812,Daniel Inouye,Democrat,HI,845
+97,1981-82,4851,Scoop Jackson,Democrat,WA,966
+97,1981-82,5767,Russell Long,Democrat,LA,881
+97,1981-82,7638,William Proxmire,Democrat,WI,966
+97,1981-82,7722,Jennings Randolph,Democrat,WV,964
+97,1981-82,8883,John Stennis,Democrat,MS,896
+97,1981-82,9369,James Thurmond,Republican,SC,939
+97,1981-82,10513,Bob Dole,Republican,KS,952
+97,1981-82,10535,Charles Mathias Jr.,Republican,MD,809
+97,1981-82,10562,Robert Stafford,Republican,VT,895
+97,1981-82,10569,Mark Andrews,Republican,ND,944
+97,1981-82,10605,Spark Matsunaga,Democrat,HI,888
+97,1981-82,10791,David Pryor,Democrat,AR,923
+97,1981-82,10802,Harry Byrd Jr.,Independent,VA,938
+97,1981-82,10808,Ted Kennedy,Democrat,MA,880
+97,1981-82,10818,Claiborne Pell,Democrat,RI,951
+97,1981-82,10823,John Tower,Republican,TX,878
+97,1981-82,11029,James McClure,Republican,ID,902
+97,1981-82,11043,Donald Riegle Jr.,Democrat,MI,933
+97,1981-82,11044,William Roth Jr.,Republican,DE,945
+97,1981-82,11200,Howard Baker Jr.,Republican,TN,936
+97,1981-82,11203,Mark Hatfield,Republican,OR,925
+97,1981-82,11204,Fritz Hollings,Democrat,SC,904
+97,1981-82,11205,Charles Percy,Republican,IL,924
+97,1981-82,12032,Lowell Weicker Jr.,Republican,CT,851
+97,1981-82,12039,John Melcher,Democrat,MT,903
+97,1981-82,12103,Alan Cranston,Democrat,CA,873
+97,1981-82,12104,Thomas Eagleton,Democrat,MO,927
+97,1981-82,12107,Robert Packwood,Republican,OR,938
+97,1981-82,12109,Ted Stevens,Republican,AK,902
+97,1981-82,13039,Paul Sarbanes,Democrat,MD,910
+97,1981-82,13050,Henry Heinz III,Republican,PA,874
+97,1981-82,13101,Lawton Chiles Jr.,Democrat,FL,924
+97,1981-82,14000,James Abdnor,Republican,SD,948
+97,1981-82,14002,William Armstrong,Republican,CO,932
+97,1981-82,14009,William Cochran,Republican,MS,916
+97,1981-82,14010,William Cohen,Republican,ME,932
+97,1981-82,14056,Steven Symms,Republican,ID,947
+97,1981-82,14073,Howard Metzenbaum,Democrat,OH,883
+97,1981-82,14077,Paul Laxalt,Republican,NV,915
+97,1981-82,14101,Joe Biden Jr.,Democrat,DE,911
+97,1981-82,14103,Pete Domenici,Republican,NM,933
+97,1981-82,14105,Jesse Helms,Republican,NC,964
+97,1981-82,14106,Walter Huddleston,Democrat,KY,915
+97,1981-82,14107,John Johnston Jr.,Democrat,LA,926
+97,1981-82,14108,Samuel Nunn,Democrat,GA,939
+97,1981-82,14203,Max Baucus,Democrat,MT,956
+97,1981-82,14213,Christopher Dodd,Democrat,CT,871
+97,1981-82,14226,Charles Grassley,Republican,IA,958
+97,1981-82,14242,Robert Kasten Jr.,Republican,WI,956
+97,1981-82,14268,Larry Pressler,Republican,SD,886
+97,1981-82,14279,Paul Tsongas,Democrat,MA,865
+97,1981-82,14300,Dale Bumpers,Democrat,AR,899
+97,1981-82,14302,Wendell Ford,Democrat,KY,946
+97,1981-82,14303,Jake Garn,Republican,UT,945
+97,1981-82,14304,John Glenn Jr.,Democrat,OH,860
+97,1981-82,14305,Gary Hart,Democrat,CO,905
+97,1981-82,14307,Patrick Leahy,Democrat,VT,900
+97,1981-82,14447,Dan Quayle,Republican,IN,958
+97,1981-82,14500,John Chafee,Republican,RI,943
+97,1981-82,14501,John Danforth,Republican,MO,923
+97,1981-82,14502,Dennis Deconcini,Democrat,AZ,892
+97,1981-82,14503,Orrin Hatch,Republican,UT,938
+97,1981-82,14504,Samuel Hayakawa,Republican,CA,875
+97,1981-82,14506,Richard Lugar,Republican,IN,951
+97,1981-82,14508,Daniel Moynihan,Democrat,NY,900
+97,1981-82,14509,James Sasser,Democrat,TN,930
+97,1981-82,14510,Harrison Schmitt,Republican,NM,881
+97,1981-82,14511,Malcolm Wallop,Republican,WY,898
+97,1981-82,14512,Edward Zorinsky,Democrat,NE,928
+97,1981-82,14700,David Boren,Democrat,OK,927
+97,1981-82,14701,Rudy Boschwitz,Republican,MN,949
+97,1981-82,14702,Bill Bradley,Democrat,NJ,917
+97,1981-82,14703,David Durenberger,Republican,MN,892
+97,1981-82,14704,J. Exon,Democrat,NE,930
+97,1981-82,14705,Howell Heflin,Democrat,AL,925
+97,1981-82,14706,Gordon Humphrey,Republican,NH,954
+97,1981-82,14707,Roger Jepsen,Republican,IA,940
+97,1981-82,14708,Nancy Kassebaum,Republican,KS,935
+97,1981-82,14709,Carl Levin,Democrat,MI,948
+97,1981-82,14710,Alan Simpson,Republican,WY,935
+97,1981-82,14712,John Warner,Republican,VA,943
+97,1981-82,14713,George Mitchell,Democrat,ME,946
+97,1981-82,14900,Alfonse D'Amato,Republican,NY,944
+97,1981-82,14901,Jeremiah Denton Jr.,Republican,AL,902
+97,1981-82,14902,Alan Dixon,Democrat,IL,955
+97,1981-82,14903,John East,Republican,NC,951
+97,1981-82,14904,Thomas Gorton,Republican,WA,964
+97,1981-82,14905,Paula Hawkins,Republican,FL,937
+97,1981-82,14906,Mack Mattingly,Republican,GA,951
+97,1981-82,14907,Frank Murkowski,Republican,AK,907
+97,1981-82,14908,Donald Nickles,Republican,OK,961
+97,1981-82,14909,Warren Rudman,Republican,NH,948
+97,1981-82,14910,Arlen Specter,Republican,PA,956
+101,1989-90,660,Lloyd Bentsen Jr.,Democrat,TX,624
+101,1989-90,1252,Quentin Burdick,Democrat,ND,635
+101,1989-90,1366,Robert Byrd,Democrat,WV,638
+101,1989-90,4812,Daniel Inouye,Democrat,HI,621
+101,1989-90,9369,James Thurmond,Republican,SC,638
+101,1989-90,10513,Bob Dole,Republican,KS,636
+101,1989-90,10700,Brock Adams,Democrat,WA,631
+101,1989-90,10791,David Pryor,Democrat,AR,621
+101,1989-90,10808,Ted Kennedy,Democrat,MA,621
+101,1989-90,10818,Claiborne Pell,Democrat,RI,633
+101,1989-90,11029,James McClure,Republican,ID,624
+101,1989-90,11043,Donald Riegle Jr.,Democrat,MI,613
+101,1989-90,11044,William Roth Jr.,Republican,DE,628
+101,1989-90,11203,Mark Hatfield,Republican,OR,622
+101,1989-90,11204,Fritz Hollings,Democrat,SC,638
+101,1989-90,12103,Alan Cranston,Democrat,CA,630
+101,1989-90,12107,Robert Packwood,Republican,OR,618
+101,1989-90,12109,Ted Stevens,Republican,AK,625
+101,1989-90,13039,Paul Sarbanes,Democrat,MD,634
+101,1989-90,13050,Henry Heinz III,Republican,PA,632
+101,1989-90,13056,John Breaux,Democrat,LA,632
+101,1989-90,14002,William Armstrong,Republican,CO,554
+101,1989-90,14009,William Cochran,Republican,MS,632
+101,1989-90,14010,William Cohen,Republican,ME,638
+101,1989-90,14031,Chester Lott,Republican,MS,610
+101,1989-90,14056,Steven Symms,Republican,ID,621
+101,1989-90,14073,Howard Metzenbaum,Democrat,OH,625
+101,1989-90,14101,Joe Biden Jr.,Democrat,DE,626
+101,1989-90,14103,Pete Domenici,Republican,NM,612
+101,1989-90,14105,Jesse Helms,Republican,NC,633
+101,1989-90,14107,John Johnston Jr.,Democrat,LA,619
+101,1989-90,14108,Samuel Nunn,Democrat,GA,627
+101,1989-90,14203,Max Baucus,Democrat,MT,624
+101,1989-90,14213,Christopher Dodd,Democrat,CT,625
+101,1989-90,14226,Charles Grassley,Republican,IA,638
+101,1989-90,14230,Tom Harkin,Democrat,IA,631
+101,1989-90,14240,James Jeffords,Republican,VT,593
+101,1989-90,14242,Robert Kasten Jr.,Republican,WI,638
+101,1989-90,14268,Larry Pressler,Republican,SD,627
+101,1989-90,14275,Paul Simon,Democrat,IL,631
+101,1989-90,14282,Timothy Wirth,Democrat,CO,628
+101,1989-90,14300,Dale Bumpers,Democrat,AR,628
+101,1989-90,14302,Wendell Ford,Democrat,KY,633
+101,1989-90,14303,Jake Garn,Republican,UT,609
+101,1989-90,14304,John Glenn Jr.,Democrat,OH,632
+101,1989-90,14307,Patrick Leahy,Democrat,VT,637
+101,1989-90,14423,Albert Gore Jr.,Democrat,TN,609
+101,1989-90,14440,Barbara Mikulski,Democrat,MD,625
+101,1989-90,14467,Wyche Fowler Jr.,Democrat,GA,628
+101,1989-90,14500,John Chafee,Republican,RI,628
+101,1989-90,14501,John Danforth,Republican,MO,631
+101,1989-90,14502,Dennis Deconcini,Democrat,AZ,631
+101,1989-90,14503,Orrin Hatch,Republican,UT,632
+101,1989-90,14506,Richard Lugar,Republican,IN,624
+101,1989-90,14508,Daniel Moynihan,Democrat,NY,628
+101,1989-90,14509,James Sasser,Democrat,TN,626
+101,1989-90,14511,Malcolm Wallop,Republican,WY,628
+101,1989-90,14617,Thomas Daschle,Democrat,SD,635
+101,1989-90,14628,Phil Gramm,Republican,TX,616
+101,1989-90,14659,Richard Shelby,Democrat,AL,638
+101,1989-90,14700,David Boren,Democrat,OK,607
+101,1989-90,14701,Rudy Boschwitz,Republican,MN,607
+101,1989-90,14702,Bill Bradley,Democrat,NJ,625
+101,1989-90,14703,David Durenberger,Republican,MN,618
+101,1989-90,14704,J. Exon,Democrat,NE,625
+101,1989-90,14705,Howell Heflin,Democrat,AL,636
+101,1989-90,14706,Gordon Humphrey,Republican,NH,615
+101,1989-90,14708,Nancy Kassebaum,Republican,KS,629
+101,1989-90,14709,Carl Levin,Democrat,MI,636
+101,1989-90,14710,Alan Simpson,Republican,WY,615
+101,1989-90,14712,John Warner,Republican,VA,633
+101,1989-90,14713,George Mitchell,Democrat,ME,638
+101,1989-90,14806,Daniel Coats,Republican,IN,618
+101,1989-90,14900,Alfonse D'Amato,Republican,NY,634
+101,1989-90,14902,Alan Dixon,Democrat,IL,638
+101,1989-90,14904,Thomas Gorton,Republican,WA,638
+101,1989-90,14907,Frank Murkowski,Republican,AK,618
+101,1989-90,14908,Donald Nickles,Republican,OK,629
+101,1989-90,14909,Warren Rudman,Republican,NH,619
+101,1989-90,14910,Arlen Specter,Republican,PA,637
+101,1989-90,14912,Jeff Bingaman Jr.,Democrat,NM,618
+101,1989-90,14914,Frank Lautenberg,Democrat,NJ,633
+101,1989-90,14915,Pete Wilson,Republican,CA,553
+101,1989-90,14920,John Kerry,Democrat,MA,638
+101,1989-90,14921,Mitch McConnell,Republican,KY,634
+101,1989-90,14922,Jay Rockefeller IV,Democrat,WV,632
+101,1989-90,15037,Connie Mack III,Republican,FL,624
+101,1989-90,15039,John McCain III,Republican,AZ,621
+101,1989-90,15054,Harry Reid,Democrat,NV,635
+101,1989-90,15501,Kit Bond,Republican,MO,627
+101,1989-90,15502,Kent Conrad,Democrat,ND,637
+101,1989-90,15503,Bob Graham,Democrat,FL,636
+101,1989-90,15504,James Sanford,Democrat,NC,616
+101,1989-90,15700,Richard Bryan,Democrat,NV,636
+101,1989-90,15701,Conrad Burns,Republican,MT,630
+101,1989-90,15702,J. Kerrey,Democrat,NE,636
+101,1989-90,15703,Herbert Kohl,Democrat,WI,634
+101,1989-90,15704,Joseph Lieberman,Democrat,CT,638
+101,1989-90,15705,Charles Robb,Democrat,VA,638
+105,1997-98,1366,Robert Byrd,Democrat,WV,611
+105,1997-98,4812,Daniel Inouye,Democrat,HI,548
+105,1997-98,9369,James Thurmond,Republican,SC,608
+105,1997-98,10808,Ted Kennedy,Democrat,MA,592
+105,1997-98,11044,William Roth Jr.,Republican,DE,594
+105,1997-98,11204,Fritz Hollings,Democrat,SC,569
+105,1997-98,12109,Ted Stevens,Republican,AK,607
+105,1997-98,13039,Paul Sarbanes,Democrat,MD,609
+105,1997-98,13056,John Breaux,Democrat,LA,609
+105,1997-98,14009,William Cochran,Republican,MS,610
+105,1997-98,14031,Chester Lott,Republican,MS,605
+105,1997-98,14101,Joe Biden Jr.,Democrat,DE,587
+105,1997-98,14103,Pete Domenici,Republican,NM,595
+105,1997-98,14105,Jesse Helms,Republican,NC,536
+105,1997-98,14203,Max Baucus,Democrat,MT,593
+105,1997-98,14213,Christopher Dodd,Democrat,CT,605
+105,1997-98,14226,Charles Grassley,Republican,IA,612
+105,1997-98,14230,Tom Harkin,Democrat,IA,584
+105,1997-98,14240,James Jeffords,Republican,VT,600
+105,1997-98,14300,Dale Bumpers,Democrat,AR,606
+105,1997-98,14302,Wendell Ford,Democrat,KY,607
+105,1997-98,14304,John Glenn Jr.,Democrat,OH,530
+105,1997-98,14307,Patrick Leahy,Democrat,VT,602
+105,1997-98,14400,Daniel Akaka,Democrat,HI,585
+105,1997-98,14440,Barbara Mikulski,Democrat,MD,576
+105,1997-98,14500,John Chafee,Republican,RI,603
+105,1997-98,14503,Orrin Hatch,Republican,UT,606
+105,1997-98,14506,Richard Lugar,Republican,IN,612
+105,1997-98,14508,Daniel Moynihan,Democrat,NY,587
+105,1997-98,14617,Thomas Daschle,Democrat,SD,602
+105,1997-98,14628,Phil Gramm,Republican,TX,608
+105,1997-98,14661,Olympia Snowe,Republican,ME,610
+105,1997-98,14709,Carl Levin,Democrat,MI,604
+105,1997-98,14712,John Warner,Republican,VA,599
+105,1997-98,14806,Daniel Coats,Republican,IN,590
+105,1997-98,14809,Larry Craig,Republican,ID,612
+105,1997-98,14812,Byron Dorgan,Democrat,ND,605
+105,1997-98,14826,Judd Gregg,Republican,NH,606
+105,1997-98,14852,Pat Roberts,Republican,KS,598
+105,1997-98,14871,Ronald Wyden,Democrat,OR,595
+105,1997-98,14900,Alfonse D'Amato,Republican,NY,596
+105,1997-98,14904,Thomas Gorton,Republican,WA,611
+105,1997-98,14907,Frank Murkowski,Republican,AK,589
+105,1997-98,14908,Donald Nickles,Republican,OK,610
+105,1997-98,14910,Arlen Specter,Republican,PA,566
+105,1997-98,14912,Jeff Bingaman Jr.,Democrat,NM,584
+105,1997-98,14914,Frank Lautenberg,Democrat,NJ,608
+105,1997-98,14920,John Kerry,Democrat,MA,606
+105,1997-98,14921,Mitch McConnell,Republican,KY,610
+105,1997-98,14922,Jay Rockefeller IV,Democrat,WV,575
+105,1997-98,15011,Barbara Boxer,Democrat,CA,598
+105,1997-98,15020,Michael Dewine,Republican,OH,612
+105,1997-98,15021,Richard Durbin,Democrat,IL,606
+105,1997-98,15037,Connie Mack III,Republican,FL,604
+105,1997-98,15039,John McCain III,Republican,AZ,585
+105,1997-98,15054,Harry Reid,Democrat,NV,606
+105,1997-98,15071,Robert Torricelli,Democrat,NJ,606
+105,1997-98,15116,Robert Smith,Republican,NH,609
+105,1997-98,15424,James Inhofe,Republican,OK,591
+105,1997-98,15425,Tim Johnson,Democrat,SD,606
+105,1997-98,15429,Jon Kyl,Republican,AZ,593
+105,1997-98,15501,Kit Bond,Republican,MO,603
+105,1997-98,15502,Kent Conrad,Democrat,ND,607
+105,1997-98,15503,Bob Graham,Democrat,FL,611
+105,1997-98,15633,Craig Thomas,Republican,WY,610
+105,1997-98,15700,Richard Bryan,Democrat,NV,609
+105,1997-98,15701,Conrad Burns,Republican,MT,597
+105,1997-98,15702,J. Kerrey,Democrat,NE,605
+105,1997-98,15703,Herbert Kohl,Democrat,WI,611
+105,1997-98,15704,Joseph Lieberman,Democrat,CT,608
+105,1997-98,15705,Charles Robb,Democrat,VA,612
+105,1997-98,29108,A. Allard,Republican,CO,611
+105,1997-98,29141,Rick Santorum,Republican,PA,606
+105,1997-98,29142,Jack Reed,Democrat,RI,610
+105,1997-98,29306,Timothy Hutchinson,Republican,AR,592
+105,1997-98,29367,Rod Grams,Republican,MN,605
+105,1997-98,29523,Sam Brownback,Republican,KS,610
+105,1997-98,49101,Paul Wellstone,Democrat,MN,592
+105,1997-98,49300,Dianne Feinstein,Democrat,CA,606
+105,1997-98,49301,Paul Coverdell,Republican,GA,604
+105,1997-98,49302,Dirk Kempthorne,Republican,ID,604
+105,1997-98,49303,Carol Moseley Braun,Democrat,IL,585
+105,1997-98,49304,Lauch Faircloth,Republican,NC,588
+105,1997-98,49306,Kay Hutchison,Republican,TX,596
+105,1997-98,49307,Bob Bennett,Republican,UT,585
+105,1997-98,49308,Patty Murray,Democrat,WA,610
+105,1997-98,49309,Russell Feingold,Democrat,WI,612
+105,1997-98,49500,Spencer Abraham,Republican,MI,612
+105,1997-98,49501,John Ashcroft,Republican,MO,609
+105,1997-98,49502,William Frist,Republican,TN,611
+105,1997-98,49503,Fred Thompson,Republican,TN,612
+105,1997-98,49700,Jeff Sessions III,Republican,AL,602
+105,1997-98,49701,Max Cleland,Democrat,GA,611
+105,1997-98,49702,Mary Landrieu,Democrat,LA,604
+105,1997-98,49703,Susan Collins,Republican,ME,612
+105,1997-98,49704,Chuck Hagel,Republican,NE,609
+105,1997-98,49705,Gordon Smith,Republican,OR,607
+105,1997-98,49706,Michael Enzi,Republican,WY,605
+105,1997-98,94659,Richard Shelby,Republican,AL,607
+105,1997-98,95407,Ben Campbell,Republican,CO,609
+109,2005-06,1366,Robert Byrd,Democrat,WV,628
+109,2005-06,4812,Daniel Inouye,Democrat,HI,574
+109,2005-06,10808,Ted Kennedy,Democrat,MA,626
+109,2005-06,12109,Ted Stevens,Republican,AK,636
+109,2005-06,13039,Paul Sarbanes,Democrat,MD,638
+109,2005-06,14009,William Cochran,Republican,MS,632
+109,2005-06,14031,Chester Lott,Republican,MS,595
+109,2005-06,14101,Joe Biden Jr.,Democrat,DE,581
+109,2005-06,14103,Pete Domenici,Republican,NM,617
+109,2005-06,14203,Max Baucus,Democrat,MT,623
+109,2005-06,14213,Christopher Dodd,Democrat,CT,616
+109,2005-06,14226,Charles Grassley,Republican,IA,645
+109,2005-06,14230,Tom Harkin,Democrat,IA,633
+109,2005-06,14307,Patrick Leahy,Democrat,VT,642
+109,2005-06,14400,Daniel Akaka,Democrat,HI,629
+109,2005-06,14440,Barbara Mikulski,Democrat,MD,613
+109,2005-06,14503,Orrin Hatch,Republican,UT,624
+109,2005-06,14506,Richard Lugar,Republican,IN,638
+109,2005-06,14651,Bill Nelson,Democrat,FL,635
+109,2005-06,14661,Olympia Snowe,Republican,ME,637
+109,2005-06,14709,Carl Levin,Democrat,MI,643
+109,2005-06,14712,John Warner,Republican,VA,633
+109,2005-06,14809,Larry Craig,Republican,ID,635
+109,2005-06,14812,Byron Dorgan,Democrat,ND,631
+109,2005-06,14826,Judd Gregg,Republican,NH,631
+109,2005-06,14852,Pat Roberts,Republican,KS,636
+109,2005-06,14858,Chuck Schumer,Democrat,NY,637
+109,2005-06,14871,Ronald Wyden,Democrat,OR,641
+109,2005-06,14910,Arlen Specter,Republican,PA,628
+109,2005-06,14912,Jeff Bingaman Jr.,Democrat,NM,629
+109,2005-06,14914,Frank Lautenberg,Democrat,NJ,630
+109,2005-06,14920,John Kerry,Democrat,MA,619
+109,2005-06,14921,Mitch McConnell,Republican,KY,644
+109,2005-06,14922,Jay Rockefeller IV,Democrat,WV,502
+109,2005-06,15011,Barbara Boxer,Democrat,CA,618
+109,2005-06,15015,Thomas Carper,Democrat,DE,643
+109,2005-06,15020,Michael Dewine,Republican,OH,642
+109,2005-06,15021,Richard Durbin,Democrat,IL,638
+109,2005-06,15039,John McCain III,Republican,AZ,587
+109,2005-06,15054,Harry Reid,Democrat,NV,644
+109,2005-06,15406,James Bunning,Republican,KY,625
+109,2005-06,15424,James Inhofe,Republican,OK,633
+109,2005-06,15425,Tim Johnson,Democrat,SD,636
+109,2005-06,15429,Jon Kyl,Republican,AZ,641
+109,2005-06,15501,Kit Bond,Republican,MO,643
+109,2005-06,15502,Kent Conrad,Democrat,ND,626
+109,2005-06,15633,Craig Thomas,Republican,WY,620
+109,2005-06,15701,Conrad Burns,Republican,MT,627
+109,2005-06,15703,Herbert Kohl,Democrat,WI,639
+109,2005-06,15704,Joseph Lieberman,Democrat,CT,597
+109,2005-06,29108,A. Allard,Republican,CO,641
+109,2005-06,29141,Rick Santorum,Republican,PA,615
+109,2005-06,29142,Jack Reed,Democrat,RI,644
+109,2005-06,29148,George Allen,Republican,VA,643
+109,2005-06,29305,Blanche Lincoln,Democrat,AR,639
+109,2005-06,29345,Michael Crapo,Republican,ID,641
+109,2005-06,29369,James Talent,Republican,MO,641
+109,2005-06,29512,Saxby Chambliss,Republican,GA,628
+109,2005-06,29523,Sam Brownback,Republican,KS,632
+109,2005-06,29537,John Ensign,Republican,NV,633
+109,2005-06,29548,Richard Burr,Republican,NC,635
+109,2005-06,29555,Thomas Coburn,Republican,OK,636
+109,2005-06,29566,Lindsey Graham,Republican,SC,623
+109,2005-06,29732,Deborah Stabenow,Democrat,MI,637
+109,2005-06,29740,John Sununu,Republican,NH,628
+109,2005-06,29754,John Thune,Republican,SD,628
+109,2005-06,29909,Johnny Isakson,Republican,GA,635
+109,2005-06,29918,David Vitter,Republican,LA,621
+109,2005-06,29936,James Demint,Republican,SC,634
+109,2005-06,39310,Maria Cantwell,Democrat,WA,637
+109,2005-06,40101,Mark Dayton,Democrat,MN,613
+109,2005-06,40103,Ben Nelson,Democrat,NE,643
+109,2005-06,40105,Hillary Clinton,Democrat,NY,629
+109,2005-06,40300,Lisa Murkowski,Republican,AK,620
+109,2005-06,40301,Mark Pryor,Democrat,AR,643
+109,2005-06,40302,Norm Coleman,Republican,MN,620
+109,2005-06,40303,Elizabeth Dole,Republican,NC,638
+109,2005-06,40304,Lamar Alexander,Republican,TN,630
+109,2005-06,40305,John Cornyn,Republican,TX,637
+109,2005-06,40500,Kenneth Salazar,Democrat,CO,633
+109,2005-06,40501,Mel Martinez,Republican,FL,623
+109,2005-06,40502,Barack Obama,Democrat,IL,634
+109,2005-06,49300,Dianne Feinstein,Democrat,CA,634
+109,2005-06,49306,Kay Hutchison,Republican,TX,638
+109,2005-06,49307,Bob Bennett,Republican,UT,634
+109,2005-06,49308,Patty Murray,Democrat,WA,640
+109,2005-06,49309,Russell Feingold,Democrat,WI,637
+109,2005-06,49502,William Frist,Republican,TN,641
+109,2005-06,49700,Jeff Sessions III,Republican,AL,638
+109,2005-06,49702,Mary Landrieu,Democrat,LA,623
+109,2005-06,49703,Susan Collins,Republican,ME,645
+109,2005-06,49704,Chuck Hagel,Republican,NE,635
+109,2005-06,49705,Gordon Smith,Republican,OR,636
+109,2005-06,49706,Michael Enzi,Republican,WY,609
+109,2005-06,49901,Evan Bayh,Democrat,IN,631
+109,2005-06,49903,George Voinovich,Republican,OH,640
+109,2005-06,49905,Lincoln Chafee,Republican,RI,625
+109,2005-06,94240,James Jeffords,Independent,VT,611
+109,2005-06,94659,Richard Shelby,Republican,AL,635
+113,2013-14,14009,William Cochran,Republican,MS,544
+113,2013-14,14226,Charles Grassley,Republican,IA,657
+113,2013-14,14230,Tom Harkin,Democrat,IA,628
+113,2013-14,14307,Patrick Leahy,Democrat,VT,650
+113,2013-14,14435,Edward Markey,Democrat,MA,473
+113,2013-14,14440,Barbara Mikulski,Democrat,MD,629
+113,2013-14,14503,Orrin Hatch,Republican,UT,628
+113,2013-14,14651,Bill Nelson,Democrat,FL,638
+113,2013-14,14709,Carl Levin,Democrat,MI,642
+113,2013-14,14806,Daniel Coats,Republican,IN,641
+113,2013-14,14852,Pat Roberts,Republican,KS,617
+113,2013-14,14858,Chuck Schumer,Democrat,NY,656
+113,2013-14,14871,Ronald Wyden,Democrat,OR,656
+113,2013-14,14921,Mitch McConnell,Republican,KY,654
+113,2013-14,14922,Jay Rockefeller IV,Democrat,WV,575
+113,2013-14,15011,Barbara Boxer,Democrat,CA,612
+113,2013-14,15015,Thomas Carper,Democrat,DE,655
+113,2013-14,15021,Richard Durbin,Democrat,IL,655
+113,2013-14,15039,John McCain III,Republican,AZ,626
+113,2013-14,15054,Harry Reid,Democrat,NV,648
+113,2013-14,15408,Benjamin Cardin,Democrat,MD,654
+113,2013-14,15424,James Inhofe,Republican,OK,581
+113,2013-14,15425,Tim Johnson,Democrat,SD,653
+113,2013-14,20100,Jeff Flake,Republican,AZ,635
+113,2013-14,20101,John Boozman,Republican,AR,589
+113,2013-14,20115,Mark Kirk,Republican,IL,610
+113,2013-14,20707,Christopher Murphy,Democrat,CT,653
+113,2013-14,20713,Mazie Hirono,Democrat,HI,656
+113,2013-14,20717,Joe Donnelly,Democrat,IN,654
+113,2013-14,20730,Dean Heller,Republican,NV,643
+113,2013-14,20735,Kirsten Gillibrand,Democrat,NY,649
+113,2013-14,20930,Martin Heinrich,Democrat,NM,653
+113,2013-14,21173,Tim Scott,Republican,SC,639
+113,2013-14,29142,Jack Reed,Democrat,RI,653
+113,2013-14,29147,Bernard Sanders,Independent,VT,614
+113,2013-14,29345,Michael Crapo,Republican,ID,650
+113,2013-14,29373,Robert Menendez,Democrat,NJ,649
+113,2013-14,29386,Rob Portman,Republican,OH,642
+113,2013-14,29389,Sherrod Brown,Democrat,OH,647
+113,2013-14,29512,Saxby Chambliss,Republican,GA,576
+113,2013-14,29534,Roger Wicker,Republican,MS,640
+113,2013-14,29548,Richard Burr,Republican,NC,638
+113,2013-14,29555,Thomas Coburn,Republican,OK,526
+113,2013-14,29566,Lindsey Graham,Republican,SC,609
+113,2013-14,29722,Jerry Moran,Republican,KS,590
+113,2013-14,29732,Deborah Stabenow,Democrat,MI,646
+113,2013-14,29735,Roy Blunt,Republican,MO,618
+113,2013-14,29754,John Thune,Republican,SD,653
+113,2013-14,29906,Mark Udall,Democrat,CO,620
+113,2013-14,29909,Johnny Isakson,Republican,GA,629
+113,2013-14,29918,David Vitter,Republican,LA,593
+113,2013-14,29924,Tom Udall,Democrat,NM,655
+113,2013-14,29935,Patrick Toomey,Republican,PA,635
+113,2013-14,29940,Tammy Baldwin,Democrat,WI,654
+113,2013-14,39310,Maria Cantwell,Democrat,WA,654
+113,2013-14,40300,Lisa Murkowski,Republican,AK,610
+113,2013-14,40301,Mark Pryor,Democrat,AR,621
+113,2013-14,40304,Lamar Alexander,Republican,TN,613
+113,2013-14,40305,John Cornyn,Republican,TX,635
+113,2013-14,40700,Amy Klobuchar,Democrat,MN,652
+113,2013-14,40701,Claire McCaskill,Democrat,MO,620
+113,2013-14,40702,Jon Tester,Democrat,MT,650
+113,2013-14,40703,Bob Casey Jr.,Democrat,PA,637
+113,2013-14,40704,Sheldon Whitehouse,Democrat,RI,649
+113,2013-14,40705,Bob Corker,Republican,TN,641
+113,2013-14,40707,John Barrasso,Republican,WY,651
+113,2013-14,40900,Mark Begich,Democrat,AK,608
+113,2013-14,40902,James Risch,Republican,ID,644
+113,2013-14,40904,Al Franken,Democrat,MN,654
+113,2013-14,40905,Mike Johanns,Republican,NE,619
+113,2013-14,40906,Jeanne Shaheen,Democrat,NH,650
+113,2013-14,40907,Kay Hagan,Democrat,NC,640
+113,2013-14,40908,Jeff Merkley,Democrat,OR,648
+113,2013-14,40909,Mark Warner,Democrat,VA,643
+113,2013-14,40910,Michael Bennet,Democrat,CO,649
+113,2013-14,40915,Joe Manchin III,Democrat,WV,644
+113,2013-14,40916,Christopher Coons,Democrat,DE,644
+113,2013-14,41101,Richard Blumenthal,Democrat,CT,655
+113,2013-14,41102,Marco Rubio,Republican,FL,612
+113,2013-14,41104,Rand Paul,Republican,KY,639
+113,2013-14,41106,Kelly Ayotte,Republican,NH,647
+113,2013-14,41107,John Hoeven,Republican,ND,651
+113,2013-14,41110,Mike Lee,Republican,UT,634
+113,2013-14,41111,Ron Johnson,Republican,WI,638
+113,2013-14,41112,Brian Schatz,Democrat,HI,607
+113,2013-14,41300,Angus King Jr.,Independent,ME,652
+113,2013-14,41301,Elizabeth Warren,Democrat,MA,645
+113,2013-14,41302,Deb Fischer,Republican,NE,657
+113,2013-14,41303,Heidi Heitkamp,Democrat,ND,642
+113,2013-14,41304,Ted Cruz,Republican,TX,613
+113,2013-14,41305,Tim Kaine,Democrat,VA,648
+113,2013-14,41308,Cory Booker,Democrat,NJ,420
+113,2013-14,41309,John Walsh,Democrat,MT,339
+113,2013-14,49300,Dianne Feinstein,Democrat,CA,627
+113,2013-14,49308,Patty Murray,Democrat,WA,640
+113,2013-14,49700,Jeff Sessions III,Republican,AL,644
+113,2013-14,49702,Mary Landrieu,Democrat,LA,585
+113,2013-14,49703,Susan Collins,Republican,ME,657
+113,2013-14,49706,Michael Enzi,Republican,WY,651
+113,2013-14,94659,Richard Shelby,Republican,AL,648
+118,2023-24,14226,Charles Grassley,Republican,IA,686
+118,2023-24,14435,Edward Markey,Democrat,MA,668
+118,2023-24,14858,Chuck Schumer,Democrat,NY,688
+118,2023-24,14871,Ronald Wyden,Democrat,OR,683
+118,2023-24,14921,Mitch McConnell,Republican,KY,653
+118,2023-24,15015,Thomas Carper,Democrat,DE,687
+118,2023-24,15021,Richard Durbin,Democrat,IL,641
+118,2023-24,15408,Benjamin Cardin,Democrat,MD,673
+118,2023-24,20101,John Boozman,Republican,AR,680
+118,2023-24,20146,Shelley Capito,Republican,WV,660
+118,2023-24,20330,Christopher Van Hollen,Democrat,MD,672
+118,2023-24,20351,Marsha Blackburn,Republican,TN,645
+118,2023-24,20707,Christopher Murphy,Democrat,CT,687
+118,2023-24,20713,Mazie Hirono,Democrat,HI,689
+118,2023-24,20735,Kirsten Gillibrand,Democrat,NY,682
+118,2023-24,20750,Peter Welch,Democrat,VT,681
+118,2023-24,20919,Bill Cassidy,Republican,LA,648
+118,2023-24,20923,Gary Peters,Democrat,MI,687
+118,2023-24,20930,Martin Heinrich,Democrat,NM,685
+118,2023-24,20932,Ben Luján,Democrat,NM,684
+118,2023-24,20953,Cynthia Lummis,Republican,WY,659
+118,2023-24,21133,Todd Young,Republican,IN,683
+118,2023-24,21166,James Lankford,Republican,OK,686
+118,2023-24,21173,Tim Scott,Republican,SC,538
+118,2023-24,21301,Tom Cotton,Republican,AR,656
+118,2023-24,21325,Tammy Duckworth,Democrat,IL,683
+118,2023-24,21338,Steve Daines,Republican,MT,652
+118,2023-24,21350,Kevin Cramer,Republican,ND,615
+118,2023-24,21355,Markwayne Mullin,Republican,OK,652
+118,2023-24,21708,Theodore Budd,Republican,NC,672
+118,2023-24,21734,Roger Marshall,Republican,KS,648
+118,2023-24,21743,Jacklyn Rosen,Democrat,NV,689
+118,2023-24,29142,Jack Reed,Democrat,RI,691
+118,2023-24,29147,Bernard Sanders,Independent,VT,625
+118,2023-24,29345,Michael Crapo,Republican,ID,656
+118,2023-24,29373,Robert Menendez,Democrat,NJ,501
+118,2023-24,29389,Sherrod Brown,Democrat,OH,681
+118,2023-24,29534,Roger Wicker,Republican,MS,678
+118,2023-24,29566,Lindsey Graham,Republican,SC,655
+118,2023-24,29722,Jerry Moran,Republican,KS,632
+118,2023-24,29732,Deborah Stabenow,Democrat,MI,670
+118,2023-24,29754,John Thune,Republican,SD,691
+118,2023-24,29940,Tammy Baldwin,Democrat,WI,685
+118,2023-24,39310,Maria Cantwell,Democrat,WA,684
+118,2023-24,40300,Lisa Murkowski,Republican,AK,666
+118,2023-24,40305,John Cornyn,Republican,TX,675
+118,2023-24,40700,Amy Klobuchar,Democrat,MN,680
+118,2023-24,40702,Jon Tester,Democrat,MT,667
+118,2023-24,40703,Bob Casey Jr.,Democrat,PA,673
+118,2023-24,40704,Sheldon Whitehouse,Democrat,RI,676
+118,2023-24,40707,John Barrasso,Republican,WY,577
+118,2023-24,40902,James Risch,Republican,ID,623
+118,2023-24,40906,Jeanne Shaheen,Democrat,NH,665
+118,2023-24,40908,Jeff Merkley,Democrat,OR,674
+118,2023-24,40909,Mark Warner,Democrat,VA,673
+118,2023-24,40910,Michael Bennet,Democrat,CO,687
+118,2023-24,40915,Joe Manchin III,Democrat,WV,496
+118,2023-24,40916,Christopher Coons,Democrat,DE,657
+118,2023-24,41101,Richard Blumenthal,Democrat,CT,687
+118,2023-24,41102,Marco Rubio,Republican,FL,602
+118,2023-24,41104,Rand Paul,Republican,KY,662
+118,2023-24,41107,John Hoeven,Republican,ND,664
+118,2023-24,41110,Mike Lee,Republican,UT,650
+118,2023-24,41111,Ron Johnson,Republican,WI,672
+118,2023-24,41112,Brian Schatz,Democrat,HI,679
+118,2023-24,41300,Angus King Jr.,Independent,ME,676
+118,2023-24,41301,Elizabeth Warren,Democrat,MA,685
+118,2023-24,41302,Deb Fischer,Republican,NE,687
+118,2023-24,41304,Ted Cruz,Republican,TX,633
+118,2023-24,41305,Tim Kaine,Democrat,VA,687
+118,2023-24,41308,Cory Booker,Democrat,NJ,658
+118,2023-24,41500,Daniel Sullivan,Republican,AK,653
+118,2023-24,41502,Joni Ernst,Republican,IA,654
+118,2023-24,41504,Thom Tillis,Republican,NC,618
+118,2023-24,41505,Mike Rounds,Republican,SD,657
+118,2023-24,41700,Catherine Cortez Masto,Democrat,NV,681
+118,2023-24,41702,Maggie Hassan,Democrat,NH,685
+118,2023-24,41703,John Kennedy,Republican,LA,662
+118,2023-24,41706,Tina Smith,Democrat,MN,675
+118,2023-24,41707,Cindy Hyde-Smith,Republican,MS,666
+118,2023-24,41900,Michael Braun,Republican,IN,606
+118,2023-24,41901,Joshua Hawley,Republican,MO,640
+118,2023-24,41902,Mitt Romney,Republican,UT,617
+118,2023-24,41903,Rick Scott,Republican,FL,636
+118,2023-24,41905,Mark Kelly,Democrat,AZ,665
+118,2023-24,42100,Bill Hagerty,Republican,TN,606
+118,2023-24,42101,John Hickenlooper,Democrat,CO,677
+118,2023-24,42102,Tommy Tuberville,Republican,AL,642
+118,2023-24,42103,Jon Ossoff,Democrat,GA,681
+118,2023-24,42104,Alex Padilla,Democrat,CA,659
+118,2023-24,42105,Raphael Warnock,Democrat,GA,663
+118,2023-24,42300,Katie Britt,Republican,AL,655
+118,2023-24,42301,John Fetterman,Democrat,PA,546
+118,2023-24,42302,Pete Ricketts,Republican,NE,669
+118,2023-24,42303,Eric Schmitt,Republican,MO,662
+118,2023-24,42304,James Vance,Republican,OH,540
+118,2023-24,42305,Laphonza Butler,Democrat,CA,402
+118,2023-24,49308,Patty Murray,Democrat,WA,679
+118,2023-24,49703,Susan Collins,Republican,ME,691
+118,2023-24,91300,Kyrsten Sinema,Independent,AZ,616
