@@ -112,7 +112,7 @@ WEEKS = [
          deadline=[("Lab 9 due Sun", None)]),
   ]),
   dict(n=12, days=[
-    dict(date=d(11,9), lecture=[("Science visualizations", None)]),
+    dict(date=d(11,9), lecture=[("Science visualizations", S+"pdf/20-Science Visualizations.pdf")]),
     dict(date=d(11,11), lecture=[("Data journalism", None)]),
     dict(date=d(11,13), lab=[("Lab 10 (light): annotating charts in matplotlib", L+"Lab10/Lab10_blank_annotation.ipynb")],
          data=["titanic", "gapminder"],
