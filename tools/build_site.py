@@ -82,6 +82,9 @@ nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
 .ds img { max-width: 100%; height: auto; border: 1px solid var(--line); margin: 8px 12px 4px 0; vertical-align: top; }
 .ds .imgs { display: flex; flex-wrap: wrap; align-items: flex-start; }
 .ds .imgs img { max-width: min(100%, 560px); }
+.ds figure { margin: 8px 12px 4px 0; max-width: min(100%, 720px); }
+.ds figure img { max-width: 100%; margin: 0; }
+.ds figcaption { font-size: 13px; color: var(--mute); }
 @media (max-width: 760px) {
   .grid { grid-template-columns: 1fr; } .grid .hd { display: none; }
   .grid > div + div { border-left: none; } .grid .wk { background: var(--bg); border-top: 2px solid var(--ink); }
@@ -101,7 +104,8 @@ UPCOMING_JS = """<script>
 
 def page(active, content):
     tabs = "".join(f'<a href="{h}"{" class=on" if k == active else ""}>{n}</a>'
-                   for k, n, h in [("schedule", "Schedule", "index.html"), ("data", "Datasets", "datasets.html")])
+                   for k, n, h in [("schedule", "Schedule", "index.html"), ("data", "Datasets", "datasets.html"),
+                                 ("figures", "Figures", "figures.html")])
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -198,8 +202,68 @@ def bad_charts():
 <p class="blurb" style="margin-top:14px">The four charts for the <a href="{href("Class activities/data_for_bad_charts/9_31_Fixing bad charts.docx")}">Fixing bad charts</a> activity (Wed 9/30) and Lab 5 <span class="sub">({nb_links("Labs/Lab05/Lab05_blank_fixing_bad_design.ipynb")})</span>. Pick one to redesign. The data behind each chart is on the <a href="datasets.html#bad-charts">Datasets</a> page.</p>
 {chr(10).join(secs)}""")
 
+# ---------------------------------------------------------------- Figures page
+FG = "Class activities/Science visualization figures/"
+# (id, title, story, [(image, figure label)], citation, doi)
+FIGURES = [
+  ("hubble", "Hubble 1929: galaxies moving away",
+   "The farther away a galaxy is, the faster it is moving away from us.",
+   [("hubble_fig1.png", "Figure 1")],
+   "Hubble, E. (1929). A relation between distance and radial velocity among extra-galactic nebulae. <i>Proceedings of the National Academy of Sciences</i> 15(3), 168&ndash;173.",
+   "10.1073/pnas.15.3.168"),
+  ("birds", "Rosenberg et al. 2019: North America's birds",
+   "North America has about 3 billion fewer birds than in 1970, and the losses are mostly common, familiar species.",
+   [("birds_fig1.png", "Figure 1")],
+   "Rosenberg, K.V. et al. (2019). Decline of the North American avifauna. <i>Science</i> 366(6461), 120&ndash;124.",
+   "10.1126/science.aaw1313"),
+  ("pfizer", "Polack et al. 2020: the Pfizer-BioNTech vaccine trial",
+   "The vaccine prevented most COVID-19 cases, with protection beginning about 12 days after the first dose.",
+   [("pfizer_fig3.jpg", "Figure 3")],
+   "Polack, F.P. et al. (2020). Safety and efficacy of the BNT162b2 mRNA Covid-19 vaccine. <i>New England Journal of Medicine</i> 383(27), 2603&ndash;2615.",
+   "10.1056/NEJMoa2034577"),
+  ("chetty", "Chetty et al. 2022: friendships across income lines",
+   "Kids from low-income families do better as adults in places where lower- and higher-income people are friends.",
+   [("chetty_fig4.png", "Figure 4")],
+   "Chetty, R. et al. (2022). Social capital I: measurement and associations with economic mobility. <i>Nature</i> 608, 108&ndash;121.",
+   "10.1038/s41586-022-04996-4"),
+  ("costello", "Costello, Pennycook &amp; Rand 2024: talking with AI about conspiracies",
+   "A short conversation with an AI chatbot made people believe a conspiracy theory they held less, and the drop was still there two months later.",
+   [("costello_fig2.png", "Figure 2")],
+   "Costello, T.H., Pennycook, G. &amp; Rand, D.G. (2024). Durably reducing conspiracy beliefs through dialogues with AI. <i>Science</i> 385(6714), eadq1814. Some numbers were corrected in a 2026 erratum, <i>Science</i> 394(6822), eaem1178.",
+   "10.1126/science.adq1814"),
+  ("tomasetti", "Tomasetti &amp; Vogelstein 2015: stem cell divisions and cancer risk",
+   "Body tissues with more total stem cell divisions over a lifetime (more stem cells, dividing more often) tend to have a higher risk of cancer.",
+   [("tomasetti_fig1.png", "Figure 1")],
+   "Tomasetti, C. &amp; Vogelstein, B. (2015). Variation in cancer risk among tissues can be explained by the number of stem cell divisions. <i>Science</i> 347(6217), 78&ndash;81.",
+   "10.1126/science.1260825"),
+  ("elephants", "Abegglen et al. 2015: why elephants rarely get cancer",
+   "Elephants die of cancer far less often than people, carry about 20 copies of the cancer-fighting gene TP53, and in lab tests their damaged cells died more readily.",
+   [("elephants_fig1.png", "Figure 1"), ("elephants_fig4.png", "Figure 4")],
+   "Abegglen, L.M. et al. (2015). Potential mechanisms for cancer resistance in elephants and comparative cellular response to DNA damage in humans. <i>JAMA</i> 314(17), 1850&ndash;1860.",
+   "10.1001/jama.2015.13134"),
+  ("leap", "Du Toit et al. 2015: the peanut allergy trial",
+   "Babies at high risk who ate peanut regularly were much less likely to have a peanut allergy at age 5 than babies who avoided it.",
+   [("leap_fig2.png", "Figure 2")],
+   "Du Toit, G. et al., for the LEAP Study Team (2015). Randomized trial of peanut consumption in infants at risk for peanut allergy. <i>New England Journal of Medicine</i> 372(9), 803&ndash;813.",
+   "10.1056/NEJMoa1414850"),
+]
+
+def figures():
+    secs = []
+    for k, title, story, imgs, cit, doi in FIGURES:
+        im = "".join(f'<figure><img src="{href(FG + f)}" alt="{lab} of {escape(title)}"><figcaption>{lab}</figcaption></figure>'
+                     for f, lab in imgs)
+        secs.append(f'<section class="ds" id="{k}"><h2>{title}</h2>'
+                    f'<p><b>Story:</b> {escape(story)}</p>'
+                    f'<p class="used">{cit} <a href="https://doi.org/{doi}">doi:{doi}</a></p>'
+                    f'<div class="imgs">{im}</div></section>')
+    return page("figures", f"""
+<p class="blurb" style="margin-top:14px">The published figures for the science visualization panel activity, one per paper. Compare each with the figure your group built from the cut-out panels. Figures are reproduced from the papers for teaching; see each paper for the full figure legend.</p>
+{chr(10).join(secs)}""")
+
 if __name__ == "__main__":
     open(f"{OUT}/index.html", "w").write(schedule())
     open(f"{OUT}/datasets.html", "w").write(datasets())
     open(f"{OUT}/bad-charts.html", "w").write(bad_charts())
+    open(f"{OUT}/figures.html", "w").write(figures())
     print("built")

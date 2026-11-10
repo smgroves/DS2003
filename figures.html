@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DS 2003 &middot; Communicating with Data</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@700&display=swap">
+<style>
+:root {
+  --ink: #1c1c1c; --mute: #6f6f6f; --line: #dcdcdc; --paper: #ffffff; --bg: #f6f6f6;
+  --purple: #b509ac; --purple-dark: #7d0677; --purple-tint: #fbeefa; --purple-light: #ecc2e9;
+  --due: #b71c1c;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 "Source Sans 3", "Segoe UI", system-ui, sans-serif; }
+main { max-width: 1100px; margin: 0 auto; padding: 28px 18px 60px; }
+h1 { font: 700 30px/1.15 "Source Serif 4", Georgia, serif; margin: 0; }
+.info { margin: 6px 0 2px; } .oh { color: var(--mute); font-size: 13.5px; margin: 0 0 10px; }
+a { color: var(--purple); text-underline-offset: 2px; }
+a:hover { color: var(--purple-dark); }
+.blurb { max-width: 720px; }
+nav.tabs { display: flex; gap: 4px; margin: 18px 0 0; border-bottom: 2px solid var(--ink); }
+nav.tabs a { padding: 7px 16px; text-decoration: none; color: var(--ink); font-weight: 600;
+  border: 1px solid var(--line); border-bottom: none; border-radius: 6px 6px 0 0; background: var(--paper); }
+nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.grid { display: grid; grid-template-columns: 110px repeat(3, 1fr); border: 1px solid var(--line); border-top: none; background: var(--paper); }
+.grid > div { border-bottom: 1px solid var(--line); padding: 8px 10px; min-width: 0; }
+.grid > div + div { border-left: 1px solid var(--line); }
+.grid .wk { font-weight: 700; } .grid .wk small { display: block; font-weight: normal; color: var(--mute); }
+.grid .wk .unit { display: block; font-weight: normal; font-size: 12px; color: var(--mute); margin-top: 4px; }
+.grid .hd { font-weight: 700; font-size: 13px; border-bottom: 2px solid var(--ink); background: var(--bg); }
+.cell .dt { font: 12px/1 ui-monospace, Menlo, monospace; color: var(--mute); margin-bottom: 4px; }
+.cell .t { font-weight: 600; }
+.cell .t a { color: var(--ink); text-decoration-color: var(--line); }
+.cell .t a:hover { color: var(--purple); text-decoration-color: currentColor; }
+.cell p { margin: 3px 0 0; font-size: 13.5px; }
+.cell p i { font-style: normal; font-size: 11px; font-weight: 700; color: var(--mute); margin-right: 4px; }
+.cell p.dl, .cell p.dl i { color: var(--due); }
+.sub { font-size: 12.5px; }
+.cell.off { color: var(--mute); font-style: italic; background: repeating-linear-gradient(135deg, #fafafa 0 6px, #f0f0f0 6px 12px); }
+.cell.later { color: #555; }
+.cell.next { box-shadow: inset 3px 0 0 var(--purple); background: #f3f3f3; }
+.ds { background: var(--paper); border: 1px solid var(--line); border-top: none; padding: 16px 18px; }
+.ds h2 { font: 700 19px/1.2 "Source Serif 4", Georgia, serif; margin: 0 0 4px; }
+.ds .size { font: 12px ui-monospace, Menlo, monospace; color: var(--mute); }
+.ds p { margin: 6px 0; max-width: 760px; }
+.ds ul { margin: 6px 0; padding-left: 20px; }
+.ds .used { font-size: 13.5px; color: var(--mute); }
+.ds code { font-size: 13px; background: var(--bg); padding: 1px 4px; border-radius: 3px; }
+.ds h3 { font-size: 14.5px; margin: 10px 0 2px; }
+.ds:target { box-shadow: inset 4px 0 0 var(--purple); }
+.ds img { max-width: 100%; height: auto; border: 1px solid var(--line); margin: 8px 12px 4px 0; vertical-align: top; }
+.ds .imgs { display: flex; flex-wrap: wrap; align-items: flex-start; }
+.ds .imgs img { max-width: min(100%, 560px); }
+.ds figure { margin: 8px 12px 4px 0; max-width: min(100%, 720px); }
+.ds figure img { max-width: 100%; margin: 0; }
+.ds figcaption { font-size: 13px; color: var(--mute); }
+@media (max-width: 760px) {
+  .grid { grid-template-columns: 1fr; } .grid .hd { display: none; }
+  .grid > div + div { border-left: none; } .grid .wk { background: var(--bg); border-top: 2px solid var(--ink); }
+}
+</style>
+</head>
+<body>
+<main>
+<h1>DS 2003: Communicating with Data</h1>
+<p class="info">Fall 2026 &middot; Mon/Wed/Fri &middot; Sarah Groves &middot; <a href="DS2003_Syllabus%20Fall%202026.pdf">Syllabus</a> &middot; <a href="DS2003_Computer_Setup_Guide.pdf">Computer setup guide</a> &middot; <a href="https://canvas.instructure.com">Canvas</a></p>
+<p class="oh">Office hours: Fri 1&ndash;2 pm, Rm 437 (Sarah) &middot; Wed 1&ndash;2 pm, Capital One Hub (Isabelle Lee, TA)</p>
+<nav class="tabs"><a href="index.html">Schedule</a><a href="datasets.html">Datasets</a><a href="figures.html" class=on>Figures</a></nav>
+
+<p class="blurb" style="margin-top:14px">The published figures for the science visualization panel activity, one per paper. Compare each with the figure your group built from the cut-out panels. Figures are reproduced from the papers for teaching; see each paper for the full figure legend.</p>
+<section class="ds" id="hubble"><h2>Hubble 1929: galaxies moving away</h2><p><b>Story:</b> The farther away a galaxy is, the faster it is moving away from us.</p><p class="used">Hubble, E. (1929). A relation between distance and radial velocity among extra-galactic nebulae. <i>Proceedings of the National Academy of Sciences</i> 15(3), 168&ndash;173. <a href="https://doi.org/10.1073/pnas.15.3.168">doi:10.1073/pnas.15.3.168</a></p><div class="imgs"><figure><img src="Class%20activities/Science%20visualization%20figures/hubble_fig1.png" alt="Figure 1 of Hubble 1929: galaxies moving away"><figcaption>Figure 1</figcaption></figure></div></section>
+<section class="ds" id="birds"><h2>Rosenberg et al. 2019: North America's birds</h2><p><b>Story:</b> North America has about 3 billion fewer birds than in 1970, and the losses are mostly common, familiar species.</p><p class="used">Rosenberg, K.V. et al. (2019). Decline of the North American avifauna. <i>Science</i> 366(6461), 120&ndash;124. <a href="https://doi.org/10.1126/science.aaw1313">doi:10.1126/science.aaw1313</a></p><div class="imgs"><figure><img src="Class%20activities/Science%20visualization%20figures/birds_fig1.png" alt="Figure 1 of Rosenberg et al. 2019: North America&#x27;s birds"><figcaption>Figure 1</figcaption></figure></div></section>
+<section class="ds" id="pfizer"><h2>Polack et al. 2020: the Pfizer-BioNTech vaccine trial</h2><p><b>Story:</b> The vaccine prevented most COVID-19 cases, with protection beginning about 12 days after the first dose.</p><p class="used">Polack, F.P. et al. (2020). Safety and efficacy of the BNT162b2 mRNA Covid-19 vaccine. <i>New England Journal of Medicine</i> 383(27), 2603&ndash;2615. <a href="https://doi.org/10.1056/NEJMoa2034577">doi:10.1056/NEJMoa2034577</a></p><div class="imgs"><figure><img src="Class%20activities/Science%20visualization%20figures/pfizer_fig3.jpg" alt="Figure 3 of Polack et al. 2020: the Pfizer-BioNTech vaccine trial"><figcaption>Figure 3</figcaption></figure></div></section>
+<section class="ds" id="chetty"><h2>Chetty et al. 2022: friendships across income lines</h2><p><b>Story:</b> Kids from low-income families do better as adults in places where lower- and higher-income people are friends.</p><p class="used">Chetty, R. et al. (2022). Social capital I: measurement and associations with economic mobility. <i>Nature</i> 608, 108&ndash;121. <a href="https://doi.org/10.1038/s41586-022-04996-4">doi:10.1038/s41586-022-04996-4</a></p><div class="imgs"><figure><img src="Class%20activities/Science%20visualization%20figures/chetty_fig4.png" alt="Figure 4 of Chetty et al. 2022: friendships across income lines"><figcaption>Figure 4</figcaption></figure></div></section>
+<section class="ds" id="costello"><h2>Costello, Pennycook &amp; Rand 2024: talking with AI about conspiracies</h2><p><b>Story:</b> A short conversation with an AI chatbot made people believe a conspiracy theory they held less, and the drop was still there two months later.</p><p class="used">Costello, T.H., Pennycook, G. &amp; Rand, D.G. (2024). Durably reducing conspiracy beliefs through dialogues with AI. <i>Science</i> 385(6714), eadq1814. Some numbers were corrected in a 2026 erratum, <i>Science</i> 394(6822), eaem1178. <a href="https://doi.org/10.1126/science.adq1814">doi:10.1126/science.adq1814</a></p><div class="imgs"><figure><img src="Class%20activities/Science%20visualization%20figures/costello_fig2.png" alt="Figure 2 of Costello, Pennycook &amp;amp; Rand 2024: talking with AI about conspiracies"><figcaption>Figure 2</figcaption></figure></div></section>
+<section class="ds" id="tomasetti"><h2>Tomasetti &amp; Vogelstein 2015: stem cell divisions and cancer risk</h2><p><b>Story:</b> Body tissues with more total stem cell divisions over a lifetime (more stem cells, dividing more often) tend to have a higher risk of cancer.</p><p class="used">Tomasetti, C. &amp; Vogelstein, B. (2015). Variation in cancer risk among tissues can be explained by the number of stem cell divisions. <i>Science</i> 347(6217), 78&ndash;81. <a href="https://doi.org/10.1126/science.1260825">doi:10.1126/science.1260825</a></p><div class="imgs"><figure><img src="Class%20activities/Science%20visualization%20figures/tomasetti_fig1.png" alt="Figure 1 of Tomasetti &amp;amp; Vogelstein 2015: stem cell divisions and cancer risk"><figcaption>Figure 1</figcaption></figure></div></section>
+<section class="ds" id="elephants"><h2>Abegglen et al. 2015: why elephants rarely get cancer</h2><p><b>Story:</b> Elephants die of cancer far less often than people, carry about 20 copies of the cancer-fighting gene TP53, and in lab tests their damaged cells died more readily.</p><p class="used">Abegglen, L.M. et al. (2015). Potential mechanisms for cancer resistance in elephants and comparative cellular response to DNA damage in humans. <i>JAMA</i> 314(17), 1850&ndash;1860. <a href="https://doi.org/10.1001/jama.2015.13134">doi:10.1001/jama.2015.13134</a></p><div class="imgs"><figure><img src="Class%20activities/Science%20visualization%20figures/elephants_fig1.png" alt="Figure 1 of Abegglen et al. 2015: why elephants rarely get cancer"><figcaption>Figure 1</figcaption></figure><figure><img src="Class%20activities/Science%20visualization%20figures/elephants_fig4.png" alt="Figure 4 of Abegglen et al. 2015: why elephants rarely get cancer"><figcaption>Figure 4</figcaption></figure></div></section>
+<section class="ds" id="leap"><h2>Du Toit et al. 2015: the peanut allergy trial</h2><p><b>Story:</b> Babies at high risk who ate peanut regularly were much less likely to have a peanut allergy at age 5 than babies who avoided it.</p><p class="used">Du Toit, G. et al., for the LEAP Study Team (2015). Randomized trial of peanut consumption in infants at risk for peanut allergy. <i>New England Journal of Medicine</i> 372(9), 803&ndash;813. <a href="https://doi.org/10.1056/NEJMoa1414850">doi:10.1056/NEJMoa1414850</a></p><div class="imgs"><figure><img src="Class%20activities/Science%20visualization%20figures/leap_fig2.png" alt="Figure 2 of Du Toit et al. 2015: the peanut allergy trial"><figcaption>Figure 2</figcaption></figure></div></section>
+</main>
+
+</body>
+</html>
