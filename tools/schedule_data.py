@@ -79,7 +79,7 @@ WEEKS = [
   dict(n=7, days=[
     dict(date=d(10,5), noclass="No class (Fall break)"),
     dict(date=d(10,7), lecture=[("Statistical plots & uncertainty", S+"pdf/14-Statistical Plots and Uncertainty.pdf")]),
-    dict(date=d(10,9), lab=[("Lab 6: statistical plots", None)]),
+    dict(date=d(10,9), lab=[("Lab 6: statistical plots", None)], data=["penguins"]),
   ]),
   dict(n=8, unit="Unit 2: Explanatory visualization: storytelling", days=[
     dict(date=d(10,12), activity=[("Project 1 presentations, day 1", None)]),
@@ -126,8 +126,7 @@ WEEKS = [
   ]),
   dict(n=14, days=[
     dict(date=d(11,23), activity=[("Project 2 work session", None),
-                                  ("optional: alluvial diagrams", A+"Alluvial diagrams/alluvial_diagrams.ipynb")],
-         data=["titanic", "superstore"]),
+                                  ("optional: alluvial diagrams", A+"Alluvial diagrams/alluvial_diagrams.ipynb")]),
     dict(date=d(11,25), noclass="No class (Thanksgiving)"),
     dict(date=d(11,27), noclass="No class (Thanksgiving)"),
   ]),

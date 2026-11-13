@@ -19,7 +19,7 @@ h1 { font: 700 30px/1.15 "Source Serif 4", Georgia, serif; margin: 0; }
 a { color: var(--purple); text-underline-offset: 2px; }
 a:hover { color: var(--purple-dark); }
 .blurb { max-width: 720px; }
-nav.tabs { display: flex; gap: 4px; margin: 18px 0 0; border-bottom: 2px solid var(--ink); }
+nav.tabs { display: flex; flex-wrap: wrap; gap: 4px; margin: 18px 0 0; border-bottom: 2px solid var(--ink); }
 nav.tabs a { padding: 7px 16px; text-decoration: none; color: var(--ink); font-weight: 600;
   border: 1px solid var(--line); border-bottom: none; border-radius: 6px 6px 0 0; background: var(--paper); }
 nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
@@ -49,6 +49,8 @@ nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
 .ds code { font-size: 13px; background: var(--bg); padding: 1px 4px; border-radius: 3px; }
 .ds h3 { font-size: 14.5px; margin: 10px 0 2px; }
 .ds:target { box-shadow: inset 4px 0 0 var(--purple); }
+.unit-h { font: 700 21px/1.2 "Source Serif 4", Georgia, serif; margin: 28px 0 8px; }
+.when { background: var(--paper); border: 1px solid var(--line); border-bottom: 2px solid var(--ink); padding: 7px 18px; margin-top: 14px; font-weight: 700; }
 .ds img { max-width: 100%; height: auto; border: 1px solid var(--line); margin: 8px 12px 4px 0; vertical-align: top; }
 .ds .imgs { display: flex; flex-wrap: wrap; align-items: flex-start; }
 .ds .imgs img { max-width: min(100%, 560px); }
@@ -66,7 +68,7 @@ nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
 <h1>DS 2003: Communicating with Data</h1>
 <p class="info">Fall 2026 &middot; Mon/Wed/Fri &middot; Sarah Groves &middot; <a href="DS2003_Syllabus%20Fall%202026.pdf">Syllabus</a> &middot; <a href="DS2003_Computer_Setup_Guide.pdf">Computer setup guide</a> &middot; <a href="https://canvas.instructure.com">Canvas</a></p>
 <p class="oh">Office hours: Fri 1&ndash;2 pm, Rm 437 (Sarah) &middot; Wed 1&ndash;2 pm, Capital One Hub (Isabelle Lee, TA)</p>
-<nav class="tabs"><a href="index.html">Schedule</a><a href="datasets.html">Datasets</a><a href="figures.html" class=on>Figures</a></nav>
+<nav class="tabs"><a href="index.html">Schedule</a><a href="datasets.html">Datasets</a><a href="bad-charts.html">Bad Chart Examples</a><a href="figures.html" class=on>Scientific Figures</a></nav>
 
 <p class="blurb" style="margin-top:14px">The published figures for the science visualization panel activity, one per paper. Compare each with the figure your group built from the cut-out panels. Figures are reproduced from the papers for teaching; see each paper for the full figure legend.</p>
 <section class="ds" id="hubble"><h2>Hubble 1929: galaxies moving away</h2><p><b>Story:</b> The farther away a galaxy is, the faster it is moving away from us.</p><p class="used">Hubble, E. (1929). A relation between distance and radial velocity among extra-galactic nebulae. <i>Proceedings of the National Academy of Sciences</i> 15(3), 168&ndash;173. <a href="https://doi.org/10.1073/pnas.15.3.168">doi:10.1073/pnas.15.3.168</a></p><div class="imgs"><figure><img src="Class%20activities/Science%20visualization%20figures/hubble_fig1.png" alt="Figure 1 of Hubble 1929: galaxies moving away"><figcaption>Figure 1</figcaption></figure></div></section>

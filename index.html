@@ -19,7 +19,7 @@ h1 { font: 700 30px/1.15 "Source Serif 4", Georgia, serif; margin: 0; }
 a { color: var(--purple); text-underline-offset: 2px; }
 a:hover { color: var(--purple-dark); }
 .blurb { max-width: 720px; }
-nav.tabs { display: flex; gap: 4px; margin: 18px 0 0; border-bottom: 2px solid var(--ink); }
+nav.tabs { display: flex; flex-wrap: wrap; gap: 4px; margin: 18px 0 0; border-bottom: 2px solid var(--ink); }
 nav.tabs a { padding: 7px 16px; text-decoration: none; color: var(--ink); font-weight: 600;
   border: 1px solid var(--line); border-bottom: none; border-radius: 6px 6px 0 0; background: var(--paper); }
 nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
@@ -49,6 +49,8 @@ nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
 .ds code { font-size: 13px; background: var(--bg); padding: 1px 4px; border-radius: 3px; }
 .ds h3 { font-size: 14.5px; margin: 10px 0 2px; }
 .ds:target { box-shadow: inset 4px 0 0 var(--purple); }
+.unit-h { font: 700 21px/1.2 "Source Serif 4", Georgia, serif; margin: 28px 0 8px; }
+.when { background: var(--paper); border: 1px solid var(--line); border-bottom: 2px solid var(--ink); padding: 7px 18px; margin-top: 14px; font-weight: 700; }
 .ds img { max-width: 100%; height: auto; border: 1px solid var(--line); margin: 8px 12px 4px 0; vertical-align: top; }
 .ds .imgs { display: flex; flex-wrap: wrap; align-items: flex-start; }
 .ds .imgs img { max-width: min(100%, 560px); }
@@ -66,7 +68,7 @@ nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
 <h1>DS 2003: Communicating with Data</h1>
 <p class="info">Fall 2026 &middot; Mon/Wed/Fri &middot; Sarah Groves &middot; <a href="DS2003_Syllabus%20Fall%202026.pdf">Syllabus</a> &middot; <a href="DS2003_Computer_Setup_Guide.pdf">Computer setup guide</a> &middot; <a href="https://canvas.instructure.com">Canvas</a></p>
 <p class="oh">Office hours: Fri 1&ndash;2 pm, Rm 437 (Sarah) &middot; Wed 1&ndash;2 pm, Capital One Hub (Isabelle Lee, TA)</p>
-<nav class="tabs"><a href="index.html" class=on>Schedule</a><a href="datasets.html">Datasets</a><a href="figures.html">Figures</a></nav>
+<nav class="tabs"><a href="index.html" class=on>Schedule</a><a href="datasets.html">Datasets</a><a href="bad-charts.html">Bad Chart Examples</a><a href="figures.html">Scientific Figures</a></nav>
 
 <p class="blurb">Slides, labs, and in-class activities go up here after each class. Submissions and grades are on <a href="https://canvas.instructure.com">Canvas</a>. Anything past this week is tentative and will probably move around.</p>
 <div class="grid">
@@ -98,7 +100,7 @@ nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
 <div class="wk">Week 7<small>Oct 5–9</small></div>
 <div class="cell off" data-date="2026-10-05"><div class="dt">Oct 5</div>No class (Fall break)</div>
 <div class="cell" data-date="2026-10-07"><div class="dt">Oct 7 &middot; #17</div><div class="t"><a href="Lectures/pdf/14-Statistical%20Plots%20and%20Uncertainty.pdf">Statistical plots &amp; uncertainty</a></div></div>
-<div class="cell" data-date="2026-10-09"><div class="dt">Oct 9 &middot; #18</div><div class="t">Lab 6: statistical plots</div></div>
+<div class="cell" data-date="2026-10-09"><div class="dt">Oct 9 &middot; #18</div><div class="t">Lab 6: statistical plots</div><p><i>DATA</i><a href="datasets.html#penguins">penguins</a></p></div>
 <div class="wk">Week 8<small>Oct 12–16</small><span class="unit">Unit 2: Explanatory visualization: storytelling</span></div>
 <div class="cell" data-date="2026-10-12"><div class="dt">Oct 12 &middot; #19</div><div class="t">Project 1 presentations, day 1</div></div>
 <div class="cell" data-date="2026-10-14"><div class="dt">Oct 14 &middot; #20</div><div class="t">Project 1 presentations, day 2</div></div>
@@ -124,7 +126,7 @@ nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
 <div class="cell" data-date="2026-11-18"><div class="dt">Nov 18 &middot; #35</div><div class="t">Ethics &amp; rhetoric</div></div>
 <div class="cell" data-date="2026-11-20"><div class="dt">Nov 20 &middot; #36</div><div class="t">Project 2 design critique</div><p class="dl"><i>DUE</i>P2 sketches in class; P2 critique reflection due Sun</p></div>
 <div class="wk">Week 14<small>Nov 23–27</small></div>
-<div class="cell" data-date="2026-11-23"><div class="dt">Nov 23 &middot; #37</div><div class="t">Project 2 work session <span class="sub">(optional: alluvial diagrams: <a href="https://nbviewer.org/github/smgroves/DS2003/blob/main/Class%20activities/Alluvial%20diagrams/alluvial_diagrams.ipynb">nbviewer</a> &middot; <a href="Class%20activities/Alluvial%20diagrams/alluvial_diagrams.ipynb" download>download .ipynb</a>)</span></div><p><i>DATA</i><a href="datasets.html#titanic">titanic</a>, <a href="datasets.html#superstore">superstore</a></p></div>
+<div class="cell" data-date="2026-11-23"><div class="dt">Nov 23 &middot; #37</div><div class="t">Project 2 work session <span class="sub">(optional: alluvial diagrams: <a href="https://nbviewer.org/github/smgroves/DS2003/blob/main/Class%20activities/Alluvial%20diagrams/alluvial_diagrams.ipynb">nbviewer</a> &middot; <a href="Class%20activities/Alluvial%20diagrams/alluvial_diagrams.ipynb" download>download .ipynb</a>)</span></div></div>
 <div class="cell off" data-date="2026-11-25"><div class="dt">Nov 25</div>No class (Thanksgiving)</div>
 <div class="cell off" data-date="2026-11-27"><div class="dt">Nov 27</div>No class (Thanksgiving)</div>
 <div class="wk">Week 15<small>Nov 30 – Dec 4</small></div>

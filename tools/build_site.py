@@ -49,7 +49,7 @@ h1 { font: 700 30px/1.15 "Source Serif 4", Georgia, serif; margin: 0; }
 a { color: var(--purple); text-underline-offset: 2px; }
 a:hover { color: var(--purple-dark); }
 .blurb { max-width: 720px; }
-nav.tabs { display: flex; gap: 4px; margin: 18px 0 0; border-bottom: 2px solid var(--ink); }
+nav.tabs { display: flex; flex-wrap: wrap; gap: 4px; margin: 18px 0 0; border-bottom: 2px solid var(--ink); }
 nav.tabs a { padding: 7px 16px; text-decoration: none; color: var(--ink); font-weight: 600;
   border: 1px solid var(--line); border-bottom: none; border-radius: 6px 6px 0 0; background: var(--paper); }
 nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
@@ -79,6 +79,8 @@ nav.tabs a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
 .ds code { font-size: 13px; background: var(--bg); padding: 1px 4px; border-radius: 3px; }
 .ds h3 { font-size: 14.5px; margin: 10px 0 2px; }
 .ds:target { box-shadow: inset 4px 0 0 var(--purple); }
+.unit-h { font: 700 21px/1.2 "Source Serif 4", Georgia, serif; margin: 28px 0 8px; }
+.when { background: var(--paper); border: 1px solid var(--line); border-bottom: 2px solid var(--ink); padding: 7px 18px; margin-top: 14px; font-weight: 700; }
 .ds img { max-width: 100%; height: auto; border: 1px solid var(--line); margin: 8px 12px 4px 0; vertical-align: top; }
 .ds .imgs { display: flex; flex-wrap: wrap; align-items: flex-start; }
 .ds .imgs img { max-width: min(100%, 560px); }
@@ -105,7 +107,8 @@ UPCOMING_JS = """<script>
 def page(active, content):
     tabs = "".join(f'<a href="{h}"{" class=on" if k == active else ""}>{n}</a>'
                    for k, n, h in [("schedule", "Schedule", "index.html"), ("data", "Datasets", "datasets.html"),
-                                 ("figures", "Figures", "figures.html")])
+                                 ("bad", "Bad Chart Examples", "bad-charts.html"),
+                                 ("figures", "Scientific Figures", "figures.html")])
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -156,9 +159,32 @@ def schedule():
 {chr(10).join(cells)}
 </div>""")
 
+def week_of(date):
+    """Week number and unit (carried forward from the last week that names one) for a class date."""
+    unit = None
+    for w in WEEKS:
+        unit = w.get("unit", unit)
+        if any(x["date"] == date for x in w["days"]):
+            return w["n"], unit
+    return None, unit
+
 def datasets():
-    secs = []
-    for d in DATASETS:
+    # group datasets by the class where they're first used, in course order, under unit headings
+    first = {d["id"]: used_in(d["id"])[0] if used_in(d["id"]) else None for d in DATASETS}
+    # datasets not used by any class (no DATA line points to them) are left off the page
+    ordered = sorted((d for d in DATASETS if first[d["id"]]), key=lambda d: first[d["id"]][0])
+    secs, last_unit, last_when = [], None, None
+    for d in ordered:
+        f = first[d["id"]]
+        if f:
+            wk, unit = week_of(f[0])
+            if unit != last_unit:
+                secs.append(f'<h2 class="unit-h">{escape(unit)}</h2>')
+                last_unit = unit
+            if f != last_when:
+                what = f[1].replace(" (notebook + data, .zip)", "")
+                secs.append(f'<div class="when">Week {wk} &middot; {f[0].strftime("%a %b %-d")} &middot; {escape(what)}</div>')
+                last_when = f
         if d.get("groups"):
             files = "".join(f'<h3>{escape(g)} <span class="sub">(<a href="bad-charts.html#chart-{g.split()[1][0].lower()}">see chart</a>)</span></h3><ul>{"".join(f"<li>{link(t, h)}</li>" for t, h in fs)}</ul>' for g, fs in d["groups"])
         else:
@@ -170,7 +196,7 @@ def datasets():
         secs.append(f'<section class="ds" id="{d["id"]}"><h2>{escape(d["name"])}</h2>{size}'
                     f'<p>{escape(d["desc"])}</p>{files}{load}<p class="used">Used in: {uses}</p></section>')
     return page("data", f"""
-<p class="blurb" style="margin-top:14px">Every dataset we've used so far, in one place. If a lab reads a CSV, save it in the same folder as the notebook. The penguins and volcano data load straight from the web, so you don't need to download them.</p>
+<p class="blurb" style="margin-top:14px">Every dataset we've used so far, grouped by the class where we first use it. The "Used in" line under each one lists every class that uses it. If a lab reads a CSV, save it in the same folder as the notebook. The penguins and volcano data load straight from the web, so you don't need to download them.</p>
 {chr(10).join(secs)}""")
 
 CH = "Class activities/data_for_bad_charts/charts/"
@@ -198,7 +224,7 @@ def bad_charts():
         im = "".join(f'<img src="{href(CH + f)}" alt="Chart {k}">' for f in imgs)
         secs.append(f'<section class="ds" id="chart-{k.lower()}"><h2>Chart {k}: {title}</h2>'
                     f'<p>{desc}</p>{ctx_html}<div class="imgs">{im}</div></section>')
-    return page(None, f"""
+    return page("bad", f"""
 <p class="blurb" style="margin-top:14px">The four charts for the <a href="{href("Class activities/data_for_bad_charts/9_31_Fixing bad charts.docx")}">Fixing bad charts</a> activity (Wed 9/30) and Lab 5 <span class="sub">({nb_links("Labs/Lab05/Lab05_blank_fixing_bad_design.ipynb")})</span>. Pick one to redesign. The data behind each chart is on the <a href="datasets.html#bad-charts">Datasets</a> page.</p>
 {chr(10).join(secs)}""")
 
